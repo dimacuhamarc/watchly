@@ -14,12 +14,13 @@ Watchly is designed to streamline your entertainment experience, offering a seam
 
 # TODO
 
-- [ ] Setup deployment ( vercel )
+- [x] Setup deployment ( vercel )
+- [x] improve build 
+- [ ] add mock data 
 - [ ] Setup basic ui
 - [ ] Setup db ( vercel postgres )
 - [ ] add db
 - [ ] add auth ( next auth )
-- [ ] add mock data 
 - [ ] setup user profile
 - [ ] add search
 - [ ] add watchlist
