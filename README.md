@@ -1,3 +1,31 @@
+# Watchly
+
+Watchly is your ultimate destination for finding where to watch your favorite movies and shows. Whether you're searching for the latest releases or revisiting old classics, Watchly simplifies the process by providing accurate streaming availability tailored to your region.
+
+With features like:
+
+Search and Discover: Easily find movies and shows with detailed descriptions, trailers, and cast information.
+Personal Watchlist: Track what you’ve watched, manage your favorites, and organize your next binge-worthy journey.
+Streaming Availability: Get real-time updates on where content is available across multiple platforms (Netflix, Hulu, Amazon, and more).
+Smart Recommendations: Receive personalized suggestions based on your viewing history, genres, and preferences.
+Region-Specific Access: Filter content based on what’s available in your location, ensuring you never miss out.
+Watchly is designed to streamline your entertainment experience, offering a seamless, intuitive way to enjoy the content you love, hassle-free.
+
+
+# TODO
+
+- [ ] Setup deployment ( vercel )
+- [ ] Setup basic ui
+- [ ] Setup db ( vercel postgres )
+- [ ] add db
+- [ ] add auth ( next auth )
+- [ ] add mock data 
+- [ ] setup user profile
+- [ ] add search
+- [ ] add watchlist
+- [ ] add recommendations
+- 
+
 # Create T3 App
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
