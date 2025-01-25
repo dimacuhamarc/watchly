@@ -17,6 +17,14 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
+    POSTGRES_URL_UNPOOLED: z.string().url(),
+    PGHOST: z.string(),
+    PGHOST_UNPOOLED: z.string(),
+    PGUSER: z.string(),
+    PGDATABASE: z.string(),
+    PGPASSWORD: z.string(),
+    POSTGRES_URL_NO_SSL: z.string().url(),
+    POSTGRES_PRISMA_URL: z.string().url(),
   },
 
   /**
@@ -38,6 +46,14 @@ export const env = createEnv({
     // AUTH_DISCORD_SECRET: process.env.AUTH_DISCORD_SECRET,
     POSTGRES_URL: process.env.POSTGRES_URL,
     NODE_ENV: process.env.NODE_ENV,
+    POSTGRES_URL_UNPOOLED: process.env.POSTGRES_URL_UNPOOLED,
+    PGHOST: process.env.PGHOST,
+    PGHOST_UNPOOLED: process.env.PGHOST_UNPOOLED,
+    PGUSER: process.env.PGUSER,
+    PGDATABASE: process.env.PGDATABASE,
+    PGPASSWORD: process.env.PGPASSWORD,
+    POSTGRES_URL_NO_SSL: process.env.POSTGRES_URL_NO_SSL,
+    POSTGRES_PRISMA_URL: process.env.POSTGRES_PRISMA_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
