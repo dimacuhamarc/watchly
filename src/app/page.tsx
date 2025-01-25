@@ -1,9 +1,10 @@
-import Link from "next/link";
-
 import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
+
   const userlist = await db.select().from(users);
 
   console.log(userlist);
