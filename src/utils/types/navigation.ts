@@ -43,7 +43,7 @@ const navigationLinks: NavLink[] = [
 
 const onboardingLinks: OnboardingLink[] = [
   {
-    name: 'Create an account',
+    name: 'Get Started',
     href: '/signup',
     showWhen: 'unauthenticated',
     withStyle: false
