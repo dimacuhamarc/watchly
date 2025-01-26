@@ -2,6 +2,7 @@ import { relations, sql } from "drizzle-orm";
 import {
   index,
   integer,
+  jsonb,
   pgTableCreator,
   primaryKey,
   text,
@@ -10,6 +11,10 @@ import {
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
+
+import { WatchlistItemStatusType } from "~/utils/types/data";
+import { MediaType } from "~/utils/types/data";
+
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
  * database instance for multiple projects.
@@ -17,6 +22,8 @@ import { type AdapterAccount } from "next-auth/adapters";
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
 export const createTable = pgTableCreator((name) => `watchly_${name}`);
+
+
 
 export const posts = createTable(
   "post",
@@ -44,13 +51,61 @@ export const users = createTable("user", {
     .notNull()
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  name: varchar("name", { length: 255 }),
   email: varchar("email", { length: 255 }).notNull(),
+  password_hash: varchar("password_hash", { length: 255 }).notNull(),
+  username: varchar("username", { length: 255 }),
+  first_name: varchar("first_name", { length: 255 }),
+  last_name: varchar("last_name", { length: 255 }),
+  display_name: varchar("display_name", { length: 255 }),
+  profile_picture: varchar("profile_picture", { length: 255 }),
+  created_at: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updated_at: timestamp("updated_at", { withTimezone: true })
+    .$onUpdate(() => new Date()),
   emailVerified: timestamp("email_verified", {
     mode: "date",
     withTimezone: true,
   }).default(sql`CURRENT_TIMESTAMP`),
   image: varchar("image", { length: 255 }),
+});
+
+export const watchlist = createTable("watchlist", {
+  id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+  userId: varchar("user_id", { length: 255 })
+    .notNull()
+    .references(() => users.id),
+  movieIds: jsonb("movie_ids").array(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .$onUpdate(() => new Date()),
+});
+
+export const watchlistItems = createTable("watchlist_item", {
+  id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+  watchlistId: integer("watchlist_id")
+    .notNull()
+    .references(() => watchlist.id),
+  movieId: integer("movie_id").notNull(),
+  status: varchar("status", { length: 255 })
+    .$type<WatchlistItemStatusType>()
+    .notNull(),
+  notes: text("notes"),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .$onUpdate(() => new Date()),
+});
+
+export const movies = createTable("movie", {
+  id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+  tmdbId: integer("tmdb_id").notNull(),
+  type: varchar("type", { length: 255 })
+    .$type<MediaType>()
+    .notNull(),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
