@@ -16,7 +16,7 @@ const copy = {
 
 export default function Footer() {
   return (
-    <div className="w-full bg-slate-900 flex flex-row py-[82px] px-[90px] justify-center">
+    <div className="w-full bg-slate-900 flex flex-row py-[82px] px-[90px] justify-center border-t border-t-slate-primary">
       <div className="flex flex-col w-[1014px]">
         <div className="flex flex-row px-[50px] justify-between">
           <FooterLinks />
