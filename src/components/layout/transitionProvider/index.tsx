@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react'
 
-function TransitionProvider({ children }: { children: React.ReactNode }) {
+function TransitionProvider({ children, className }: { children: React.ReactNode, className?: string }) {
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -31,7 +31,7 @@ function TransitionProvider({ children }: { children: React.ReactNode }) {
   return (
     <div 
       ref={ref} 
-      className="opacity-0 transition-opacity duration-700"
+      className={`opacity-0 transition-opacity duration-700 ${className}`}
       style={{ willChange: 'opacity' }}
     >
       {children}
