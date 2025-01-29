@@ -11,7 +11,7 @@ export default function Navbar() {
       <div className="flex flex-row items-center gap-4">
         {navigationLinks.map((link) => (
           link.showWhen !== 'authenticated' && (
-            <Link key={link.href} className="text-md tracking-wide uppercase text-slate-300 hover:text-white transition-colors duration-300" href={link.href}>
+            <Link key={link.href} className="text-md tracking-wide uppercase text-link" href={link.href}>
               {link.name}
             </Link>
           )
@@ -20,7 +20,7 @@ export default function Navbar() {
       <div className="flex flex-row items-center gap-4">
         {onboardingLinks.map((link) => (
           link.showWhen !== 'authenticated' && (
-            <Link key={link.href} className={`${link.withStyle ? 'btn-primary btn' : 'text-md tracking-wide uppercase text-slate-300 hover:text-white transition-colors duration-300'}`} href={link.href}>
+            <Link key={link.href} className={`${link.withStyle ? 'btn-primary btn' : 'text-link'}`} href={link.href}>
               {link.name}
             </Link>
           )

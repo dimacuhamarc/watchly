@@ -41,6 +41,29 @@ const navigationLinks: NavLink[] = [
   }
 ];
 
+const footerLinks: NavLink[] = [
+  {
+    name: 'Terms of Service',
+    href: '/terms',
+    showWhen: 'always',
+  },
+  {
+    name: 'Privacy Policy',
+    href: '/privacy',
+    showWhen: 'always',
+  },
+  {
+    name: 'About Us',
+    href: '/about',
+    showWhen: 'always',
+  },
+  {
+    name: 'TMDb',
+    href: 'https://www.themoviedb.org/',
+    showWhen: 'always',
+  }
+];
+
 const onboardingLinks: OnboardingLink[] = [
   {
     name: 'Get Started',
@@ -56,4 +79,4 @@ const onboardingLinks: OnboardingLink[] = [
   }
 ];
 
-export { navigationLinks, onboardingLinks };
+export { navigationLinks, onboardingLinks, footerLinks };
