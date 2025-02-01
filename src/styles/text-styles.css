@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.text-link {
+  @apply text-slate-300 transition-colors duration-300;
+}
+
+.text-link:hover {
+  @apply text-white;
+}
