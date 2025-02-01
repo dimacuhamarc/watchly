@@ -5,6 +5,7 @@ import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
 import TransitionProvider from "~/components/layout/transitionProvider";
 import { useTextRotation } from "~/hooks/useTextRotation";
+import { IoRocket } from "react-icons/io5";
 
 export default function Hero() {
   const rotatingWords = ["Faster", "Accurately", "With Watchly"];
@@ -32,7 +33,7 @@ export default function Hero() {
 
       <div className="flex flex-row items-center gap-4">
         <Link className="btn btn-primary" href="/signup">
-          Waitlist Now!
+          <IoRocket className="h-4 w-4" /> Get Started
         </Link>
         <Link
           className="btn btn-secondary flex flex-row items-center gap-2"

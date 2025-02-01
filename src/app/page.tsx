@@ -5,6 +5,7 @@ import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
 import Features from "~/components/resource/sections/features";
 import MainLayoutProvider from "~/components/layout/mainLayoutProvider";
+import CTA from "~/components/resource/sections/cta";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +14,7 @@ export default async function HomePage() {
     <MainLayoutProvider>
       <Hero />
       <Features />
+      <CTA />
     </MainLayoutProvider>
   );
 }
