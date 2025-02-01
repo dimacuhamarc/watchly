@@ -30,6 +30,15 @@ export default {
         normal: '400',
         bold: '700',
       },
+      keyframes: {
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(-3deg) scale(1.25)' },
+          '50%': { transform: 'rotate(3deg) scale(1.25)' },
+        }
+      },
+      animation: {
+        wiggle: 'wiggle 1s ease-in-out infinite',
+      },
     },
   },
   plugins: [

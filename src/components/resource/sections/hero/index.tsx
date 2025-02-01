@@ -15,7 +15,7 @@ export default function Hero() {
       <h1 className="text-7xl font-bold">
         Find Your Next Watch,{" "}
         <span
-          className={`text-blue-500 transition-opacity duration-700 ease-in-out ${
+          className={`text-blue-500/80 transition-all duration-300 hover:text-blue-500 ease-in-out${
             isVisible ? "opacity-100" : "opacity-0"
           }`}
         >
