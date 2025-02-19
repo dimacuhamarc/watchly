@@ -38,7 +38,7 @@ export default function Navbar() {
     }`}>
       <div className="w-2/3 mx-auto flex flex-row justify-between items-center px-10 py-8">
         <Link className="text-3xl font-bold" href="/">
-          <Image src={"/assets/brand-light.svg"} alt="Brand" width={144} height={37} />
+          <Image src={"/assets/brand-light.svg"} alt="Brand" width={144} height={37} priority />
         </Link>
         <div className="flex flex-row items-center gap-4">
           {navigationLinks.map((link) => (

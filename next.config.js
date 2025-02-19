@@ -12,6 +12,9 @@ const config = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  images: {
+    domains: ['image.tmdb.org']
+  }
 };
 
 export default config;

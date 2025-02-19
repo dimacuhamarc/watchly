@@ -34,6 +34,8 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
+    NEXT_PUBLIC_TMDB_API_KEY: z.string(),
+    NEXT_PUBLIC_TMDB_API_LONGKEY: z.string(),
   },
 
   /**
@@ -54,6 +56,8 @@ export const env = createEnv({
     PGPASSWORD: process.env.PGPASSWORD,
     POSTGRES_URL_NO_SSL: process.env.POSTGRES_URL_NO_SSL,
     POSTGRES_PRISMA_URL: process.env.POSTGRES_PRISMA_URL,
+    NEXT_PUBLIC_TMDB_API_KEY: process.env.NEXT_PUBLIC_TMDB_API_KEY,
+    NEXT_PUBLIC_TMDB_API_LONGKEY: process.env.NEXT_PUBLIC_TMDB_API_LONGKEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
