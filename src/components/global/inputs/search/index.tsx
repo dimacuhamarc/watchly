@@ -2,13 +2,12 @@
 "use client"
 
 import React, { useState } from 'react'
-import { FaSearch, FaArrowRight, FaTimes } from 'react-icons/fa'
+import { FaSearch, FaArrowRight } from 'react-icons/fa'
 import { searchMovie, getSearchSuggestions } from '~/utils/api/tmdb'
-import { searchResult, show } from '~/utils/types/tmdb-types'
+import type { searchResult, show } from '~/utils/types/tmdb-types'
 
 interface props {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onSearchResults: (results: any) => void
+  onSearchResults: (results: searchResult) => void
 }
 
 export default function SearchComponent({ onSearchResults }: props) {
@@ -23,13 +22,17 @@ export default function SearchComponent({ onSearchResults }: props) {
   const handleClear = () => {
     setSearch("")
     setSuggestions([])
-    onSearchResults({})
+    onSearchResults({
+      page: 1,
+      results: [],
+      total_pages: 1,
+      total_results: 0
+    })
   }
 
   const handleSuggestions = async () => {
     const data = await getSearchSuggestions(search)
     
-    // Filter out duplicate titles using Set
     const uniqueTitles = Array.from(
       new Set(data.map((item) => item.title))
     ).map((title) => {
