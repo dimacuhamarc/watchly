@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function SearchPage() {
   return (
     <MainLayoutProvider>
-      <div className="mx-auto flex min-h-screen max-w-screen-lg flex-col gap-4 px-14 py-44 md:px-0">
+      <div className="mx-auto flex min-h-screen max-w-screen-lg flex-col justify-start items-center gap-4 px-14 py-44 md:px-0">
         <SearchPageComponent />
       </div>
     </MainLayoutProvider>

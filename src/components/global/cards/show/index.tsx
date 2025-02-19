@@ -9,22 +9,22 @@ interface ShowProps {
 
 function Show({ result }: ShowProps) {
   return (
-    <div className="card-wrapper h-[600px] max-w-[400px]" key={result.id}>
+    <div className="card-wrapper h-[600px] max-w-[400px] min-md:max-w-[268px]" key={result.id}>
       <div className="group card transition-all duration-300 hover:scale-95 hover:bg-gray-100/20">
-        <div className="card-body">
+        <div className="card-body flex flex-col items-center justify-center">
           <Image
             src={`https://image.tmdb.org/t/p/w500/${result.poster_path}`}
             alt={result.title}
             width={500}
             height={500}
-            className="max-h-[402px] min-h-[402px] rounded-2xl transition-all duration-300 group-hover:translate-y-2 group-hover:scale-110"
+            className="max-h-[402px] min-h-[402px] max-w-[268px] rounded-2xl transition-all duration-300 group-hover:translate-y-2 group-hover:scale-110"
           />
           <div className="card-section flex w-full flex-row items-center justify-between transition-all duration-300 group-hover:-mb-2 group-hover:mt-8">
             <div className="w-full">
-              <h2 className="w-full truncate text-xl font-bold">
+              <h2 className="w-full truncate text-md md:text-xl font-bold">
                 {result.title}
               </h2>
-              <p className="text-base">
+              <p className="text-sm md:text-base">
                 {" "}
                 {new Date(result.release_date).toLocaleString("en-US", {
                   month: "long",
@@ -32,7 +32,7 @@ function Show({ result }: ShowProps) {
                   year: "numeric",
                 })}
               </p>
-              <p className="text-md flex flex-row items-center gap-1">
+              <p className="text-sm md:text-base flex flex-row items-center gap-1">
                 {" "}
                 {result.vote_average} <FaStar className="text-yellow-500" />
               </p>

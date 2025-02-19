@@ -19,7 +19,7 @@ export default function SearchComponent({ onSearchResults }: props) {
   }
   
   return (
-    <label className="input input-bordered flex w-full md:input-md input-lg items-center gap-2 transition-all duration-300 rounded-full">
+    <label className="input input-bordered flex w-full md:input-lg input-md items-center gap-2 transition-all duration-300 rounded-full">
       <FaSearch className="text-gray-400" />
       <input type="text" className="grow" placeholder="Search Shows and Movies" value={search} onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => {
         if (e.key === 'Enter') {

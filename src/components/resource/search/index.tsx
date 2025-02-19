@@ -5,12 +5,15 @@ import { SearchBar } from '~/components/global/inputs'
 import { ShowCard, SkeletonCard } from '~/components/global/cards'
 import type { searchResult, show } from '~/utils/types/tmdb-types'
 import useArtificialDelay from '~/hooks/useArtificialDelay'
+import MovieQuotes from '~/utils/constants/movie-quotes'
+import useMovieQuote from '~/hooks/useMovieQuote'
 
 function SearchPageComponent() {
   const [searchResults, setSearchResults] = useState<searchResult | null>(null);
   const [searchLength, setSearchLength] = useState<number>(0);
   const [shouldStartDelay, setShouldStartDelay] = useState(false);
-  const [isEmpty, setIsEmpty] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(true);
+  const quote = useMovieQuote();
   const isLoading = useArtificialDelay(shouldStartDelay ? 1000 : 0);
 
   useEffect(() => {
@@ -47,8 +50,6 @@ function SearchPageComponent() {
             <ShowCard key={result.id} result={result} />
           ),
       );
-    } else if (isEmpty) {
-      return <div className="text-center text-2xl">No results found</div>;
     }
 
     return null;
@@ -57,9 +58,20 @@ function SearchPageComponent() {
   return (
     <>
       <SearchBar onSearchResults={handleSearchResults} />
+      { isEmpty ? (
+        <div className="w-3/4 text-center my-auto">
+          <p className="text-2xl">
+            &quot;{quote.quote}&quot;
+          </p>
+          <span className="text-base">
+            - {quote.movie}
+          </span>
+        </div>
+      ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        {renderContent()}
-      </div>
+          {renderContent()}
+        </div>
+      )}
     </>
   )
 }
