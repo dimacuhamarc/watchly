@@ -5,7 +5,6 @@ import { SearchBar } from '~/components/global/inputs'
 import { ShowCard, SkeletonCard } from '~/components/global/cards'
 import type { searchResult, show } from '~/utils/types/tmdb-types'
 import useArtificialDelay from '~/hooks/useArtificialDelay'
-import MovieQuotes from '~/utils/constants/movie-quotes'
 import useMovieQuote from '~/hooks/useMovieQuote'
 
 function SearchPageComponent() {

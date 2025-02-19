@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { FaStar, FaArrowRight } from "react-icons/fa";
-import { show } from "~/utils/types/tmdb-types";
+import type { show } from "~/utils/types/tmdb-types";
 
 interface ShowProps {
   result: show;
@@ -26,15 +26,15 @@ function Show({ result }: ShowProps) {
               </h2>
               <p className="text-sm md:text-base">
                 {" "}
-                {new Date(result.release_date).toLocaleString("en-US", {
+                {result.release_date ? new Date(result.release_date).toLocaleString("en-US", {
                   month: "long",
                   day: "numeric",
                   year: "numeric",
-                })}
+                }) : null}
               </p>
               <p className="text-sm md:text-base flex flex-row items-center gap-1">
                 {" "}
-                {result.vote_average} <FaStar className="text-yellow-500" />
+                {result.vote_average === 0 ? "No Rating" : result.vote_average} <FaStar className="text-yellow-500" />
               </p>
             </div>
             <div className="card-actions hidden transition-all duration-300 group-hover:block">
