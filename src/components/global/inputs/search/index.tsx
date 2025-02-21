@@ -7,16 +7,17 @@ import { searchMovie, getSearchSuggestions } from '~/utils/api/tmdb'
 import type { searchResult, show } from '~/utils/types/tmdb-types'
 
 interface props {
-  onSearchResults: (results: searchResult) => void
+  onSearchResults: (results: searchResult, searchQuery: string) => void,
+  onClear: () => void
 }
 
-export default function SearchComponent({ onSearchResults }: props) {
+export default function SearchComponent({ onSearchResults, onClear }: props) {
   const [search, setSearch] = useState("")
   const [suggestions, setSuggestions] = useState<show[]>([])
 
   const handleSearch = async () => {
     const data = await searchMovie(search)
-    onSearchResults(data)
+    onSearchResults(data, search)
   }
 
   const handleClear = () => {
@@ -27,7 +28,8 @@ export default function SearchComponent({ onSearchResults }: props) {
       results: [],
       total_pages: 1,
       total_results: 0
-    })
+    }, "")
+    onClear?.()
   }
 
   const handleSuggestions = async () => {
@@ -60,11 +62,14 @@ export default function SearchComponent({ onSearchResults }: props) {
           }} 
           onKeyUp={handleSuggestions}
         />
-        <button className="btn btn-circle btn-sm" onClick={handleSearch}>
-          <FaArrowRight />
-        </button>
+        
         {search.length > 0 && 
-          <button className="btn btn-sm" onClick={handleClear}>Clear</button>
+          <>
+            <button className="btn btn-circle btn-sm" onClick={handleSearch}>
+              <FaArrowRight />
+            </button>
+            <button className="btn btn-sm" onClick={handleClear}>Clear</button>
+          </>
         }
       </label>
 

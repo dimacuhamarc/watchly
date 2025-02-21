@@ -17,11 +17,11 @@ export const tmdbApiLong = axios.create({
 
 
 
-export const searchMovie = async (query: string) => {
+export const searchMovie = async (query: string, page = 1) => {
   const options = {
     method: 'GET',
     url: 'https://api.themoviedb.org/3/search/movie',
-    params: {query: query, include_adult: 'true', language: 'en-US', page: '1'},
+    params: {query: query, language: 'en-US', page: page.toString()},
     headers: {
       accept: 'application/json',
       Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmNiNjhlZTQ4NWE1MDA5MTYxM2IyZjc3Mzc0MDhjZiIsIm5iZiI6MTczNzc5NjczMC4yNDMsInN1YiI6IjY3OTRhYzdhYzUwODEzNDZmMTQ4NTkxNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.psP_wvsAy0OoUVrdvJidVn--Dbn8XbmSaJxLP7t2Ijo'
