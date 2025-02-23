@@ -1,11 +1,5 @@
-import React from 'react'
+import {default as RoundedChip} from "./rounded";
+import {default as RectangleChip} from "./rectangle";
 
-function Chip({ label }: { label: string }) {
-  return (
-    <div className='badge badge-outline'>
-      {label}
-    </div>
-  )
-}
 
-export default Chip
+export { RoundedChip, RectangleChip };

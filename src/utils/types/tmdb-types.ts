@@ -28,6 +28,16 @@ type genre = {
   name: string;
 }
 
+type keywords = {
+  id: number;
+  keywords: keyword[];
+}
+
+type keyword = {
+  id: number;
+  name: string;
+}
+
 // {
 //   "adult": false,
 //   "backdrop_path": "/cyecB7godJ6kNHGONFjUyVN9OX5.jpg",
@@ -167,35 +177,38 @@ type movieDetails = {
   vote_count: number;
 }
 
+type cast = {
+  adult: boolean;
+  gender: number;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string;
+  cast_id: number;
+  character: string;
+  credit_id: string;
+}
+
+type crew = {
+  adult: boolean;
+  gender: number;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string;
+  credit_id: string;
+  department: string;
+  job: string;
+}
+
 type movieCredits = {
   id: number;
-  cast: {
-    adult: boolean;
-    gender: number;
-    id: number;
-    known_for_department: string;
-    name: string;
-    original_name: string;
-    popularity: number;
-    profile_path: string;
-    cast_id: number;
-    character: string;
-    credit_id: string;
-    order: number;
-  }[];
-  crew: {
-    adult: boolean;
-    gender: number;
-    id: number;
-    known_for_department: string;
-    name: string;
-    original_name: string;
-    popularity: number;
-    profile_path: string;
-    credit_id: string;
-    department: string;
-    job: string;
-  }[];
+  cast: cast[];
+  crew: crew[];
 }
 
 type movieVideos = {
@@ -216,6 +229,6 @@ type movieVideos = {
 
 
 
-export type { searchResult, show, genre, movieDetails, movieCredits, movieVideos };
+export type { searchResult, show, genre, keyword, keywords, movieDetails, movieCredits, movieVideos, cast, crew };
 
 

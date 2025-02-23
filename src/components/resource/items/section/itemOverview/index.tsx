@@ -9,7 +9,7 @@ import {
   FaHeart,
 } from "react-icons/fa";
 import { formatDate, formatRuntime } from "~/utils/data-formatting/date";
-import Chip from "~/components/global/chips";
+import { RoundedChip, RectangleChip } from "~/components/global/chips";
 import { DecoratedTextWithIcon } from "~/components/global/decorated-text";
 import Link from "next/link";
 import {
@@ -17,7 +17,7 @@ import {
   type movieCredits,
   type movieVideos,
 } from "~/utils/types/tmdb-types";
-
+import { DisplayAvatar } from "~/components/global/avatars";
 interface ItemOverviewProps {
   movie: movieDetails;
   credits: movieCredits;
@@ -44,20 +44,21 @@ function ItemOverview({
   };
 
   return (
-    <div className="flex flex-row justify-center gap-4">
+    <div className="flex flex-col justify-center gap-8 md:flex-row md:gap-4">
       <Image
         src={`https://image.tmdb.org/t/p/w500/${movie?.poster_path}`}
+        priority={true}
         alt={movie?.title || ""}
         width={400}
-        height={500}
-        className="max-h-[502px] min-h-[402px] rounded-2xl transition-all duration-300"
+        height={600}
+        className="h-auto w-full rounded-2xl transition-all duration-300 md:h-[502px] md:min-h-[402px]"
       />
-      <div className="flex flex-col gap-4 px-8">
+      <div className="flex flex-col gap-4 px-0 md:px-8">
         <div className="flex flex-col">
-          <span className="text-4xl font-bold">{movie?.title}</span>
-          <span className="font text-xl">{movie?.tagline}</span>
+          <span className="text-2xl font-bold md:text-4xl">{movie?.title}</span>
+          <span className="font text-lg md:text-xl">{movie?.tagline}</span>
         </div>
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-row gap-2 md:gap-4">
           <DecoratedTextWithIcon
             text={
               movie?.vote_average === 0
@@ -85,10 +86,10 @@ function ItemOverview({
         </div>
         <div className="flex flex-wrap gap-2">
           {movie?.genres.map((genre) => (
-            <Chip key={genre.id} label={genre.name} />
+            <RoundedChip key={genre.id} label={genre.name} />
           ))}
         </div>
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-col gap-4 md:flex-row">
           <Link
             className="btn btn-primary"
             href={`https://www.google.com/search?q=${movie?.title} where to watch`}
@@ -114,14 +115,46 @@ function ItemOverview({
           </button>
         </div>
         <p>{movie?.overview}</p>
-        <h1>Directed by</h1>
-        <a
-          href={`https://www.google.com/search?q=${credits?.crew.find((crew) => crew.job === "Director")?.name}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {credits?.crew.find((crew) => crew.job === "Director")?.name}
-        </a>
+        
+        <div className="flex flex-col md:flex-row md:justify-between gap-2">
+          <div>
+            <h1 className="text-base mb-2">Directed by</h1>
+            <DisplayAvatar
+              name={
+                credits?.crew.find((crew) => crew.job === "Director")?.name ?? ""
+              }
+              image={
+                credits?.crew.find((crew) => crew.job === "Director")?.profile_path ??
+                ""
+              }
+            />
+          </div>
+          <div>
+            <h1 className="text-base mb-2">Produced by</h1>
+            <DisplayAvatar
+              name={
+                credits?.crew.find((crew) => crew.job === "Producer")?.name ?? ""
+              }
+              image={
+                credits?.crew.find((crew) => crew.job === "Producer")?.profile_path ??
+                ""
+              }
+            />
+          </div>
+          <div>
+            <h1 className="text-base mb-2">Story by</h1>
+            <DisplayAvatar
+              name={
+                credits?.crew.find((crew) => crew.job === "Novel" || crew.job === "Writer")?.name ?? ""
+              }
+              image={
+                credits?.crew.find((crew) => crew.job === "Novel" || crew.job === "Writer")?.profile_path ??
+                ""
+              }
+            />
+          </div>
+          
+        </div>
       </div>
     </div>
   );

@@ -5,14 +5,16 @@ import {
   type movieDetails,
   type movieCredits,
   type movieVideos,
+  type keywords,
 } from "~/utils/types/tmdb-types";
 import {
   getMovieDetails,
   getMovieCredits,
   getMovieVideos,
+  getKeywords,
 } from "~/utils/api/tmdb";
 import { useRouter } from "next/navigation";
-import { ItemOverview } from "~/components/resource/items/section";
+import { ItemOverview, KeywordsSection, CastSection } from "~/components/resource/items/section";
 import { TrailerModal } from "~/components/global/modals";
 import { findBestVideo } from "~/utils/data-formatting/item-data";
 interface MoviePageComponentProps {
@@ -23,6 +25,7 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
   const [movie, setMovie] = useState<movieDetails | null>(null);
   const [credits, setCredits] = useState<movieCredits | null>(null);
   const [videos, setVideos] = useState<movieVideos | null>(null);
+  const [keywords, setKeywords] = useState<keywords | null>(null);
   const [isTrailerModalOpen, setIsTrailerModalOpen] = useState(false);
 
   const router = useRouter();
@@ -30,10 +33,11 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [movieData, creditsData, videosData] = await Promise.all([
+        const [movieData, creditsData, videosData, keywordsData] = await Promise.all([
           getMovieDetails(id),
           getMovieCredits(id),
           getMovieVideos(id),
+          getKeywords(id),
         ]);
 
         if (!movieData) {
@@ -44,7 +48,7 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
         setMovie(movieData);
         setCredits(creditsData);
         setVideos(videosData);
-        console.log(creditsData);
+        setKeywords(keywordsData);
       } catch (error) {
         console.error("Error fetching movie data:", error);
         router.push("/404");
@@ -64,6 +68,8 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
           setShowTrailerModal={setIsTrailerModalOpen}
         />
       )}
+      {keywords && <KeywordsSection keywords={keywords} />}
+      {credits && <CastSection credits={credits} />}
       {videos?.results?.length && isTrailerModalOpen && (
         <TrailerModal
           videoKey={findBestVideo(videos)}
