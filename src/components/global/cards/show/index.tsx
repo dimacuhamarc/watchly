@@ -5,11 +5,12 @@ import type { show } from "~/utils/types/tmdb-types";
 
 interface ShowProps {
   result: show;
+  onClick: () => void;
 }
 
-function Show({ result }: ShowProps) {
+function Show({ result, onClick }: ShowProps) {
   return (
-    <div className="card-wrapper h-[600px] max-w-[400px] min-md:max-w-[268px]" key={result.id}>
+    <div className="card-wrapper h-[600px] max-w-[400px] min-md:max-w-[268px]" key={result.id} onClick={onClick}>
       <div className="group card transition-all duration-300 hover:scale-95 hover:bg-gray-100/20">
         <div className="card-body flex flex-col items-center justify-center">
           <Image
