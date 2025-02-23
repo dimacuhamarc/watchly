@@ -66,6 +66,7 @@ export const getMovieDetails = async (id: string) => {
     const response = await axios.request(options);
     return response.data as movieDetails;
   } catch (error) {
+    console.error(error);
     return null;
   }
 }
@@ -84,6 +85,7 @@ export const getMovieCredits = async (id: string) => {
     const response = await axios.request(options);
     return response.data as movieCredits;
   } catch (error) {
+    console.error(error);
     return null;
   }
 }
@@ -102,6 +104,7 @@ export const getMovieVideos = async (id: string) => {
     const response = await axios.request(options);
     return response.data as movieVideos;
   } catch (error) {
+    console.error(error);
     return null;
   }
 }
