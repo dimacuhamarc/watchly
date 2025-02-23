@@ -15,8 +15,9 @@ import {
 } from "~/utils/api/tmdb";
 import { useRouter } from "next/navigation";
 import { ItemOverview, KeywordsSection, CastSection } from "~/components/resource/items/section";
-import { TrailerModal } from "~/components/global/modals";
+import { TrailerModal, WatchProviderModal } from "~/components/global/modals";
 import { findBestVideo } from "~/utils/data-formatting/item-data";
+
 interface MoviePageComponentProps {
   id: string;
 }
@@ -27,7 +28,8 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
   const [videos, setVideos] = useState<movieVideos | null>(null);
   const [keywords, setKeywords] = useState<keywords | null>(null);
   const [isTrailerModalOpen, setIsTrailerModalOpen] = useState(false);
-
+  const [isWatchProviderModalOpen, setIsWatchProviderModalOpen] = useState(false);
+  
   const router = useRouter();
 
   useEffect(() => {
@@ -66,6 +68,7 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
           credits={credits}
           videos={videos}
           setShowTrailerModal={setIsTrailerModalOpen}
+          setShowWatchProviderModal={setIsWatchProviderModalOpen}
         />
       )}
       {keywords && <KeywordsSection keywords={keywords} />}
@@ -75,6 +78,13 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
           videoKey={findBestVideo(videos)}
           isOpen={isTrailerModalOpen}
           onClose={() => setIsTrailerModalOpen(false)}
+        />
+      )}
+      {isWatchProviderModalOpen && (
+        <WatchProviderModal
+          isOpen={isWatchProviderModalOpen}
+          onClose={() => setIsWatchProviderModalOpen(false)}
+          title={movie?.title || ""}
         />
       )}
     </>

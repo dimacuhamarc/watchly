@@ -23,6 +23,7 @@ interface ItemOverviewProps {
   credits: movieCredits;
   videos: movieVideos;
   setShowTrailerModal: (show: boolean) => void;
+  setShowWatchProviderModal: (show: boolean) => void;
 }
 
 function ItemOverview({
@@ -30,6 +31,7 @@ function ItemOverview({
   credits,
   videos,
   setShowTrailerModal,
+  setShowWatchProviderModal,
 }: ItemOverviewProps) {
   const onTrailerClick = () => {
     setShowTrailerModal(true);
@@ -40,7 +42,7 @@ function ItemOverview({
   };
 
   const onWhereToWatchClick = () => {
-    console.log("Where to watch clicked");
+    setShowWatchProviderModal(true);
   };
 
   return (
@@ -91,15 +93,12 @@ function ItemOverview({
           ))}
         </div>
         <div className="flex flex-col gap-4 md:flex-row">
-          <Link
+          <button
             className="btn btn-primary"
-            href={`https://www.google.com/search?q=${movie?.title} where to watch`}
             onClick={onWhereToWatchClick}
-            target="_blank"
-            rel="noopener noreferrer"
           >
             <FaExternalLinkAlt /> Where to Watch
-          </Link>
+          </button>
           <button
             className="btn btn-primary"
             disabled={!videos?.results?.length}
