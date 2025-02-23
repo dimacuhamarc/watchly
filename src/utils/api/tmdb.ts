@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { searchResult, genre } from "~/utils/types/tmdb-types";
+import type { searchResult, genre, movieDetails } from "~/utils/types/tmdb-types";
 export const tmdbApi = axios.create({
   baseURL: "https://api.themoviedb.org/3",
   headers: {
@@ -49,6 +49,26 @@ export const getGenres = async (genres_ids: number[]) => {
   }
   const response = await axios.request(options);
   return response.data as genre[];
+}
+
+export const getMovieDetails = async (id: string) => {
+  const options = {
+    method: 'GET',
+    url: `https://api.themoviedb.org/3/movie/${id}`,
+    params: {language: 'en-US'},
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmNiNjhlZTQ4NWE1MDA5MTYxM2IyZjc3Mzc0MDhjZiIsIm5iZiI6MTczNzc5NjczMC4yNDMsInN1YiI6IjY3OTRhYzdhYzUwODEzNDZmMTQ4NTkxNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.psP_wvsAy0OoUVrdvJidVn--Dbn8XbmSaJxLP7t2Ijo'
+    }
+  };
+
+  try {
+    const response = await axios.request(options);
+    return response.data as movieDetails;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 export const getSearchSuggestions = async (query: string) => {
