@@ -45,15 +45,16 @@ function ItemOverview({
 
   return (
     <div className="flex flex-col justify-center gap-8 md:flex-row md:gap-4">
-      <Image
-        src={`https://image.tmdb.org/t/p/w500/${movie?.poster_path}`}
-        priority={true}
-        alt={movie?.title || ""}
-        width={400}
-        height={600}
-        className="h-auto w-full rounded-2xl transition-all duration-300 md:h-[502px] md:min-h-[402px]"
-      />
-      <div className="flex flex-col gap-4 px-0 md:px-8">
+      <div className="relative h-[500px] w-[300px] md:h-[600px] md:w-[400px] flex-shrink-0">
+        <Image
+          src={`https://image.tmdb.org/t/p/w500/${movie?.poster_path}`}
+          priority={true}
+          alt={movie?.title || ""}
+          fill
+          className="rounded-2xl object-cover transition-all duration-300"
+        />
+      </div>
+      <div className="flex flex-col gap-6 px-0 md:px-8">
         <div className="flex flex-col">
           <span className="text-2xl font-bold md:text-4xl">{movie?.title}</span>
           <span className="font text-lg md:text-xl">{movie?.tagline}</span>
@@ -114,46 +115,50 @@ function ItemOverview({
             <FaHeart /> Add to Watchlist
           </button>
         </div>
-        <p>{movie?.overview}</p>
-        
-        <div className="flex flex-col md:flex-row md:justify-between gap-2">
+        <p className="text-base text-balance">{movie?.overview}</p>
+
+        <div className="flex flex-col gap-2 md:flex-row md:justify-between">
           <div>
-            <h1 className="text-base mb-2">Directed by</h1>
+            <h1 className="mb-2 text-base">Directed by</h1>
             <DisplayAvatar
               name={
-                credits?.crew.find((crew) => crew.job === "Director")?.name ?? ""
+                credits?.crew.find((crew) => crew.job === "Director")?.name ??
+                ""
               }
               image={
-                credits?.crew.find((crew) => crew.job === "Director")?.profile_path ??
-                ""
+                credits?.crew.find((crew) => crew.job === "Director")
+                  ?.profile_path ?? ""
               }
             />
           </div>
           <div>
-            <h1 className="text-base mb-2">Produced by</h1>
+            <h1 className="mb-2 text-base">Produced by</h1>
             <DisplayAvatar
               name={
-                credits?.crew.find((crew) => crew.job === "Producer")?.name ?? ""
+                credits?.crew.find((crew) => crew.job === "Producer")?.name ??
+                ""
               }
               image={
-                credits?.crew.find((crew) => crew.job === "Producer")?.profile_path ??
-                ""
+                credits?.crew.find((crew) => crew.job === "Producer")
+                  ?.profile_path ?? ""
               }
             />
           </div>
           <div>
-            <h1 className="text-base mb-2">Story by</h1>
+            <h1 className="mb-2 text-base">Story by</h1>
             <DisplayAvatar
               name={
-                credits?.crew.find((crew) => crew.job === "Novel" || crew.job === "Writer")?.name ?? ""
+                credits?.crew.find(
+                  (crew) => crew.job === "Novel" || crew.job === "Writer",
+                )?.name ?? ""
               }
               image={
-                credits?.crew.find((crew) => crew.job === "Novel" || crew.job === "Writer")?.profile_path ??
-                ""
+                credits?.crew.find(
+                  (crew) => crew.job === "Novel" || crew.job === "Writer",
+                )?.profile_path ?? ""
               }
             />
           </div>
-          
         </div>
       </div>
     </div>
@@ -161,25 +166,3 @@ function ItemOverview({
 }
 
 export default ItemOverview;
-
-{
-  /* <h1>Cast</h1>
-        <div className="flex w-full flex-row">
-          {credits?.cast.slice(0, 5).map((cast) => (
-            <div key={cast.id} className="flex w-full flex-row items-center gap-2">
-              <div className="avatar">
-                <div className="h-8 w-8 rounded-full ring ring-primary ring-offset-2 ring-offset-base-100">
-                  <Image
-                    src={`https://image.tmdb.org/t/p/w500/${cast.profile_path}`}
-                    alt={cast.name}
-                    width={50}
-                    height={50}
-                    className="rounded-full"
-                  />
-                </div>
-              </div>
-              <span>{cast.name}</span>
-            </div>
-          ))}
-        </div> */
-}
