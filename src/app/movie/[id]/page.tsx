@@ -1,35 +1,30 @@
-"use client"
+import React from "react";
+import MainLayoutProvider from "~/components/layout/mainLayoutProvider";
+import { MovieItemComponent } from "~/components/resource/items";
+import { getMovieDetails } from "~/utils/api/tmdb";
 
-import React, { useEffect, useState } from 'react'
-import { getMovieDetails } from '~/utils/api/tmdb'
-import { movieDetails } from '~/utils/types/tmdb-types';
-
-function MovieItemPage({ params }: { params: { id: string } }) {
-  const { id }: { id: string } = React.use(params);
-  const [movie, setMovie] = useState<movieDetails | null>(null);
-
-  useEffect(() => {
-    const fetchMovie = async () => {
-      const movie = await getMovieDetails(id);
-      setMovie(movie);
-    }
-    void fetchMovie();
-  }, [id]);
-
-  console.log(movie);
-
-  return (
-    <div>
-      <h1>Movie Item Page</h1>
-      <p>{id} == {movie?.id}</p>
-      <h1>{movie?.title}</h1>
-      <p>{movie?.overview}</p>
-      <p>{movie?.release_date}</p>
-      <p>{movie?.vote_average}</p>
-      <p>{movie?.vote_count}</p>
-      <p>{movie?.runtime}</p>
-    </div>
-  )
+export async function generateMetadata({ params }: { params: { id: string } }) {
+  const movie = await getMovieDetails(params.id);
+  return {
+    title: `${movie?.title || "Not Found"} | Watchly`,
+    description: movie?.overview || "Not Found",
+  };
 }
 
-export default MovieItemPage
+interface MovieItemPageProps {
+  params: { id: string };
+}
+
+function MovieItemPage({ params }: MovieItemPageProps) {
+  const { id }: { id: string } = React.use(Promise.resolve(params));
+
+  return (
+    <MainLayoutProvider>
+      <div className="mx-auto flex min-h-screen max-w-screen-lg flex-col items-center justify-start gap-4 px-14 py-44 md:px-0">
+        <MovieItemComponent id={id} />
+      </div>
+    </MainLayoutProvider>
+  );
+}
+
+export default MovieItemPage;

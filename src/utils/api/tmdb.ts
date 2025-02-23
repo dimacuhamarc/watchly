@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { searchResult, genre, movieDetails } from "~/utils/types/tmdb-types";
+import type { searchResult, genre, movieDetails, movieCredits, movieVideos } from "~/utils/types/tmdb-types";
 export const tmdbApi = axios.create({
   baseURL: "https://api.themoviedb.org/3",
   headers: {
@@ -66,8 +66,43 @@ export const getMovieDetails = async (id: string) => {
     const response = await axios.request(options);
     return response.data as movieDetails;
   } catch (error) {
-    console.error(error);
-    throw error;
+    return null;
+  }
+}
+
+export const getMovieCredits = async (id: string) => {
+  const options = {
+    method: 'GET',
+    url: `https://api.themoviedb.org/3/movie/${id}/credits`,
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmNiNjhlZTQ4NWE1MDA5MTYxM2IyZjc3Mzc0MDhjZiIsIm5iZiI6MTczNzc5NjczMC4yNDMsInN1YiI6IjY3OTRhYzdhYzUwODEzNDZmMTQ4NTkxNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.psP_wvsAy0OoUVrdvJidVn--Dbn8XbmSaJxLP7t2Ijo'
+    }
+  };
+
+  try {
+    const response = await axios.request(options);
+    return response.data as movieCredits;
+  } catch (error) {
+    return null;
+  }
+}
+
+export const getMovieVideos = async (id: string) => {
+  const options = {
+    method: 'GET',
+    url: `https://api.themoviedb.org/3/movie/${id}/videos`,
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmNiNjhlZTQ4NWE1MDA5MTYxM2IyZjc3Mzc0MDhjZiIsIm5iZiI6MTczNzc5NjczMC4yNDMsInN1YiI6IjY3OTRhYzdhYzUwODEzNDZmMTQ4NTkxNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.psP_wvsAy0OoUVrdvJidVn--Dbn8XbmSaJxLP7t2Ijo'
+    }
+  };
+
+  try {
+    const response = await axios.request(options);
+    return response.data as movieVideos;
+  } catch (error) {
+    return null;
   }
 }
 
