@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { FaTimes } from "react-icons/fa";
 import { useFadeIn } from "~/hooks/useFadeIn/useFadeIn";
 import { useRegion } from "~/hooks/useRegion/useRegion";
-import { watchProviders, watchProvider } from "~/utils/types/tmdb-types";
+import { type watchProviders, type watchProvider } from "~/utils/types/tmdb-types";
 import { DecoratedTextWithPhoto } from "../../decorated-text";
 import { disableScroll, enableScroll } from "~/utils/dom/scroll-lock";
 interface WatchProviderProps {
@@ -32,7 +32,7 @@ function WatchProvider({
     if (watchProviders && countryCode) {
       setWatchProvider(
         watchProviders.results[countryCode] ||
-          watchProviders.results["US"] ||
+          watchProviders.results.US ||
           null,
       );
     }

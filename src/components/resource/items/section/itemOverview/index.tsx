@@ -9,9 +9,8 @@ import {
   FaHeart,
 } from "react-icons/fa";
 import { formatDate, formatRuntime } from "~/utils/data-formatting/date";
-import { RoundedChip, RectangleChip } from "~/components/global/chips";
+import { RoundedChip } from "~/components/global/chips";
 import { DecoratedTextWithIcon } from "~/components/global/decorated-text";
-import Link from "next/link";
 import {
   type movieDetails,
   type movieCredits,

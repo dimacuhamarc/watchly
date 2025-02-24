@@ -1,6 +1,6 @@
 import React from "react";
 import { RectangleChip } from "~/components/global/chips";
-import { keywords } from "~/utils/types/tmdb-types";
+import { type keywords } from "~/utils/types/tmdb-types";
 
 type KeywordsSectionProps = {
   keywords: keywords;

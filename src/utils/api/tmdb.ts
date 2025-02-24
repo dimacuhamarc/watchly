@@ -9,7 +9,6 @@ import type {
   watchProviders,
 } from "~/utils/types/tmdb-types";
 
-const tmdbApiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const tmdbApiLongKey = process.env.NEXT_PUBLIC_TMDB_API_LONGKEY;
 
 export const tmdbApi = axios.create({

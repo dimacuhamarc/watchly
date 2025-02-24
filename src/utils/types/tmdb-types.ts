@@ -228,9 +228,7 @@ type movieVideos = {
 
 type watchProviders = {
   id: number;
-  results: {
-    [countryCode: string]: watchProvider;
-  };
+  results: Record<string, watchProvider>;
 };
 
 type watchProvider = {

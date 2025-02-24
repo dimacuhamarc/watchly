@@ -1,5 +1,5 @@
 import React from "react";
-import { cast } from "~/utils/types/tmdb-types";
+import { type cast } from "~/utils/types/tmdb-types";
 import Image from "next/image";
 
 function PersonCard({ person }: { person: cast }) {

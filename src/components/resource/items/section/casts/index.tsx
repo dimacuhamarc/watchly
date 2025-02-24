@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import PersonCard from "~/components/global/cards/person";
-import { movieCredits } from "~/utils/types/tmdb-types";
+import { type movieCredits } from "~/utils/types/tmdb-types";
 
 function CastSection({ credits }: { credits: movieCredits }) {
   const [isHovered, setIsHovered] = useState(false);
