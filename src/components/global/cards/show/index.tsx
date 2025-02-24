@@ -1,12 +1,13 @@
 import React from "react";
 import Image from "next/image";
 import { FaStar, FaArrowRight } from "react-icons/fa";
-import type { show } from "~/utils/types/tmdb-types";
+import type { show, tvShow } from "~/utils/types/tmdb-types";
 import { DecoratedTextWithIcon } from "../../decorated-text";
 import { formatDate } from "~/utils/data-formatting/date";
+import { getTitle, getReleaseDate } from "~/utils/data-formatting/item-data";
 
 interface ShowProps {
-  result: show;
+  result: show | tvShow;
   onClick: () => void;
 }
 
@@ -17,7 +18,7 @@ function Show({ result, onClick }: ShowProps) {
         <div className="card-body flex flex-col items-center justify-center">
           <Image
             src={`https://image.tmdb.org/t/p/w500/${result.poster_path}`}
-            alt={result.title}
+            alt={getTitle(result)}
             width={500}
             height={500}
             className="max-h-[402px] min-h-[402px] max-w-[268px] rounded-2xl transition-all duration-300 group-hover:translate-y-2 group-hover:scale-110"
@@ -25,11 +26,11 @@ function Show({ result, onClick }: ShowProps) {
           <div className="card-section flex w-full flex-row items-center justify-between transition-all duration-300 group-hover:-mb-2 group-hover:mt-8">
             <div className="w-full">
               <h2 className="w-full truncate text-md md:text-xl font-bold">
-                {result.title}
+                {getTitle(result)}
               </h2>
               <p className="text-sm md:text-base">
                 {" "}
-                {result.release_date ? formatDate(result.release_date) : null}
+                {getReleaseDate(result) ? formatDate(getReleaseDate(result)!) : null}
               </p>
               <DecoratedTextWithIcon
                 text={

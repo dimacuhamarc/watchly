@@ -1,4 +1,4 @@
-import { type movieVideos } from "../types/tmdb-types";
+import { show, tvShow, type movieVideos } from "../types/tmdb-types";
 
 const findBestVideo = (videos: movieVideos | null) => {
   if (!videos?.results?.length) return "";
@@ -18,4 +18,18 @@ const findBestVideo = (videos: movieVideos | null) => {
   return videos.results[0]?.key ?? "";
 };
 
-export { findBestVideo };
+const getTitle = (result: show | tvShow): string => {
+  if ('title' in result) {
+    return result.title;
+  }
+  return result.name;
+};
+
+const getReleaseDate = (result: show | tvShow): string | null => {
+  if ('release_date' in result) {
+    return result.release_date;
+  }
+  return result.first_air_date;
+};
+
+export { findBestVideo, getTitle, getReleaseDate };

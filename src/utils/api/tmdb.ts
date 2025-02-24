@@ -46,6 +46,26 @@ export const searchMovie = async (query: string, page = 1) => {
   }
 };
 
+export const searchTv = async (query: string, page = 1) => {
+  const options = {
+    method: "GET",
+    url: "https://api.themoviedb.org/3/search/tv",
+    params: { query: query, language: "en-US", page: page.toString() },
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${tmdbApiLongKey}`,
+    },
+  };
+
+  try {
+    const response = await axios.request(options);
+    return response.data as searchResult;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 export const getGenres = async (genres_ids: number[]) => {
   const options = {
     method: "GET",
@@ -141,12 +161,12 @@ export const getMovieVideos = async (id: string) => {
   }
 };
 
-export const getSearchSuggestions = async (query: string) => {
+export const getSearchSuggestions = async (query: string, type: "movie" | "tv") => {
   if (!query || query.length < 2) return [];
 
   const options = {
     method: "GET",
-    url: "https://api.themoviedb.org/3/search/movie",
+    url: type === "movie" ? "https://api.themoviedb.org/3/search/movie" : "https://api.themoviedb.org/3/search/tv",
     params: {
       query: query,
       include_adult: "true",
@@ -162,6 +182,7 @@ export const getSearchSuggestions = async (query: string) => {
   try {
     const response = await axios.request(options);
     const results = response.data as searchResult;
+    console.log(results);
     return results.results.slice(0, 5);
   } catch (error) {
     console.error(error);
