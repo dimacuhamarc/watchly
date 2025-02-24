@@ -182,7 +182,6 @@ export const getSearchSuggestions = async (query: string, type: "movie" | "tv") 
   try {
     const response = await axios.request(options);
     const results = response.data as searchResult;
-    console.log(results);
     return results.results.slice(0, 5);
   } catch (error) {
     console.error(error);

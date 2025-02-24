@@ -9,7 +9,7 @@ interface RegionData {
 
 export function useRegion() {
   const [regionData, setRegionData] = useState<RegionData>({
-    countryCode: null, // Default to US
+    countryCode: null,
     countryName: null,
     loading: true,
     error: null

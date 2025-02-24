@@ -15,9 +15,9 @@ export default function Navbar() {
       
       if (currentScrollY === 0) {
         setIsVisible(true);
-      } else if (currentScrollY > lastScrollY) { // scrolling down
+      } else if (currentScrollY > lastScrollY) {
         setIsVisible(false);
-      } else { // scrolling up
+      } else {
         setIsVisible(true);
       }
 
@@ -26,7 +26,6 @@ export default function Navbar() {
 
     window.addEventListener('scroll', controlNavbar);
 
-    // cleanup function
     return () => {
       window.removeEventListener('scroll', controlNavbar);
     };
