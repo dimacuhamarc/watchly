@@ -46,6 +46,8 @@ export default {
     require('daisyui'),
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     require("tailwindcss-animate"),
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    require('tailwind-scrollbar-hide'),
   ],
   daisyui: {
     themes: [

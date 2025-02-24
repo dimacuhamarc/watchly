@@ -2,14 +2,17 @@ import React from "react";
 import Image from "next/image";
 import { FaStar, FaArrowRight } from "react-icons/fa";
 import type { show } from "~/utils/types/tmdb-types";
+import { DecoratedTextWithIcon } from "../../decorated-text";
+import { formatDate } from "~/utils/data-formatting/date";
 
 interface ShowProps {
   result: show;
+  onClick: () => void;
 }
 
-function Show({ result }: ShowProps) {
+function Show({ result, onClick }: ShowProps) {
   return (
-    <div className="card-wrapper h-[600px] max-w-[400px] min-md:max-w-[268px]" key={result.id}>
+    <div className="card-wrapper h-[600px] max-w-[400px] min-md:max-w-[268px]" key={result.id} onClick={onClick}>
       <div className="group card transition-all duration-300 hover:scale-95 hover:bg-gray-100/20">
         <div className="card-body flex flex-col items-center justify-center">
           <Image
@@ -26,16 +29,16 @@ function Show({ result }: ShowProps) {
               </h2>
               <p className="text-sm md:text-base">
                 {" "}
-                {result.release_date ? new Date(result.release_date).toLocaleString("en-US", {
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                }) : null}
+                {result.release_date ? formatDate(result.release_date) : null}
               </p>
-              <p className="text-sm md:text-base flex flex-row items-center gap-1">
-                {" "}
-                {result.vote_average === 0 ? "No Rating" : result.vote_average} <FaStar className="text-yellow-500" />
-              </p>
+              <DecoratedTextWithIcon
+                text={
+                  result.vote_average === 0
+                    ? "No Rating"
+                    : result.vote_average + "/10" || "No Rating"
+                }
+                icon={<FaStar className="text-yellow-500" />}
+              />
             </div>
             <div className="card-actions hidden transition-all duration-300 group-hover:block">
               <FaArrowRight />

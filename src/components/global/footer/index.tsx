@@ -11,6 +11,11 @@ const copy = {
     copy: 'Film and Show data from ',
     link: 'TMDb',
     url: 'https://www.themoviedb.org/'
+  },
+  justwatch: {
+    copy: 'Watching options from',
+    url: 'https://www.justwatch.com/',
+    link: 'JustWatch'
   }
 };
 
@@ -34,7 +39,10 @@ export default function Footer() {
         <div className="divider before:bg-t-dark after:bg-t-dark"></div>
         <div className="flex flex-row justify-between text-slate-300">
           <span>{copy.footer}</span>
-          <span>{copy.tmdb.copy} <Link href={copy.tmdb.url} className="text-link">{copy.tmdb.link}</Link></span>
+          <div className="flex flex-col gap-2">
+            <span>{copy.tmdb.copy} <Link href={copy.tmdb.url} className="text-link">{copy.tmdb.link}</Link></span>
+            <span>{copy.justwatch.copy} <Link href={copy.justwatch.url} className="text-link">{copy.justwatch.link}</Link></span>
+          </div>
         </div>
       </div>
     </div>

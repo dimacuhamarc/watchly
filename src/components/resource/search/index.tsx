@@ -7,6 +7,7 @@ import type { searchResult, show } from '~/utils/types/tmdb-types'
 import useArtificialDelay from '~/hooks/useArtificialDelay'
 import useMovieQuote from '~/hooks/useMovieQuote'
 import { searchMovie } from '~/utils/api/tmdb'
+import { useRouter } from 'next/navigation'
 
 function SearchPageComponent() {
   const [search, setSearch] = useState<string>("");
@@ -17,7 +18,8 @@ function SearchPageComponent() {
   const [isEmpty, setIsEmpty] = useState(true);
   const quote = useMovieQuote();
   const isLoading = useArtificialDelay(shouldStartDelay ? 1000 : 0);
-
+  const router = useRouter();
+  
   useEffect(() => {
     if (!isLoading && shouldStartDelay) {
       setShouldStartDelay(false);
@@ -58,7 +60,7 @@ function SearchPageComponent() {
       return searchResults.results.map(
         (result: show) =>
           result.poster_path !== null && (
-            <ShowCard key={result.id} result={result} />
+            <ShowCard key={result.id} result={result} onClick={() => router.push(`/movie/${result.id}`)} />
           ),
       );
     }

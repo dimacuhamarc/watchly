@@ -12,8 +12,8 @@ import {
 import { type AdapterAccount } from "next-auth/adapters";
 
 
-import { WatchlistItemStatusType } from "~/utils/types/data";
-import { MediaType } from "~/utils/types/data";
+import { type WatchlistItemStatusType } from "~/utils/types/data";
+import { type MediaType } from "~/utils/types/data";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
