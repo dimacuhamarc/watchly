@@ -33,9 +33,11 @@ function SearchPageComponent() {
       setIsEmpty(true);
     } else {
       setIsEmpty(false);
-      results.results.sort(
-        (a: show, b: show) => b.vote_average - a.vote_average,
-      );
+      results.results.sort((a, b) => {
+        const aRating = 'vote_average' in a ? a.vote_average : 0;
+        const bRating = 'vote_average' in b ? b.vote_average : 0;
+        return bRating - aRating;
+      });
       setSearchResults(results);
       setSearchLength(results.results.length);
     }
@@ -57,12 +59,12 @@ function SearchPageComponent() {
     }
 
     if (searchResults?.results) {
-      return searchResults.results.map(
-        (result: show) =>
-          result.poster_path !== null && (
-            <ShowCard key={result.id} result={result} onClick={() => router.push(`/movie/${result.id}`)} />
-          ),
-      );
+      return searchResults.results.map((result) => {
+        if ('poster_path' in result && result.poster_path !== null) {
+          return <ShowCard key={result.id} result={result} onClick={() => router.push(`/movie/${result.id}`)} />;
+        }
+        return null;
+      }).filter(Boolean);
     }
 
     return null;
