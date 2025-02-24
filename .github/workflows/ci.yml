@@ -20,9 +20,38 @@ env:
   NEXT_PUBLIC_TMDB_API_LONGKEY: "dummy_key"
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'yarn'
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+    - name: Lint check
+      run: yarn lint
+    - name: Format check
+      run: yarn format:check
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'yarn'
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+    - name: Type check
+      run: yarn typecheck
+
   build:
     runs-on: ubuntu-latest
-
     services:
       postgres:
         image: postgres:latest
@@ -40,39 +69,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
         cache: 'yarn'
-
-    - name: Get yarn cache directory path
-      id: yarn-cache-dir-path
-      run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-
-    - name: Cache yarn dependencies
-      uses: actions/cache@v3
-      with:
-        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
-
     - name: Install dependencies
       run: yarn install --frozen-lockfile
-
-    - name: Type check
-      run: yarn typecheck
-
-    - name: Lint check
-      run: yarn lint
-
-    - name: Format check
-      run: yarn format:check
-
     - name: Generate Database Types
       run: yarn db:generate
-
     - name: Build
       run: yarn build
