@@ -1,10 +1,9 @@
-
 type searchResult = {
   page: number;
   results: show[];
   total_pages: number;
   total_results: number;
-}
+};
 
 type show = {
   adult: boolean;
@@ -21,22 +20,22 @@ type show = {
   video: boolean;
   vote_average: number;
   vote_count: number;
-}
+};
 
 type genre = {
   id: number;
   name: string;
-}
+};
 
 type keywords = {
   id: number;
   keywords: keyword[];
-}
+};
 
 type keyword = {
   id: number;
   name: string;
-}
+};
 
 // {
 //   "adult": false,
@@ -175,7 +174,7 @@ type movieDetails = {
   video: boolean;
   vote_average: number;
   vote_count: number;
-}
+};
 
 type cast = {
   adult: boolean;
@@ -189,7 +188,7 @@ type cast = {
   cast_id: number;
   character: string;
   credit_id: string;
-}
+};
 
 type crew = {
   adult: boolean;
@@ -203,13 +202,13 @@ type crew = {
   credit_id: string;
   department: string;
   job: string;
-}
+};
 
 type movieCredits = {
   id: number;
   cast: cast[];
   crew: crew[];
-}
+};
 
 type movieVideos = {
   id: number;
@@ -225,10 +224,48 @@ type movieVideos = {
     iso_3166_1: string;
     iso_639_1: string;
   }[];
-}
+};
 
+type watchProviders = {
+  id: number;
+  results: {
+    [countryCode: string]: watchProvider;
+  };
+};
 
+type watchProvider = {
+  link: string;
+  flatrate?: {
+    logo_path: string;
+    provider_name: string;
+    display_priority: number;
+    provider_id: number;
+  }[];
+  buy?: {
+    logo_path: string;
+    provider_name: string;
+    display_priority: number;
+    provider_id: number;
+  }[];
+  rent?: {
+    logo_path: string;
+    provider_name: string;
+    display_priority: number;
+    provider_id: number;
+  }[];
+};
 
-export type { searchResult, show, genre, keyword, keywords, movieDetails, movieCredits, movieVideos, cast, crew };
-
-
+export type {
+  searchResult,
+  show,
+  genre,
+  keyword,
+  keywords,
+  movieDetails,
+  movieCredits,
+  movieVideos,
+  cast,
+  crew,
+  watchProviders,
+  watchProvider,
+};

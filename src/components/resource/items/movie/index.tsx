@@ -6,12 +6,14 @@ import {
   type movieCredits,
   type movieVideos,
   type keywords,
+  type watchProviders,
 } from "~/utils/types/tmdb-types";
 import {
   getMovieDetails,
   getMovieCredits,
   getMovieVideos,
   getKeywords,
+  getWatchProviders,
 } from "~/utils/api/tmdb";
 import { useRouter } from "next/navigation";
 import { ItemOverview, KeywordsSection, CastSection } from "~/components/resource/items/section";
@@ -27,6 +29,7 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
   const [credits, setCredits] = useState<movieCredits | null>(null);
   const [videos, setVideos] = useState<movieVideos | null>(null);
   const [keywords, setKeywords] = useState<keywords | null>(null);
+  const [watchProviders, setWatchProviders] = useState<watchProviders | null>(null);
   const [isTrailerModalOpen, setIsTrailerModalOpen] = useState(false);
   const [isWatchProviderModalOpen, setIsWatchProviderModalOpen] = useState(false);
   
@@ -35,11 +38,12 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [movieData, creditsData, videosData, keywordsData] = await Promise.all([
+        const [movieData, creditsData, videosData, keywordsData, watchProvidersData] = await Promise.all([
           getMovieDetails(id),
           getMovieCredits(id),
           getMovieVideos(id),
           getKeywords(id),
+          getWatchProviders(id),
         ]);
 
         if (!movieData) {
@@ -51,6 +55,8 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
         setCredits(creditsData);
         setVideos(videosData);
         setKeywords(keywordsData);
+        setWatchProviders(watchProvidersData);
+        console.log(watchProvidersData);
       } catch (error) {
         console.error("Error fetching movie data:", error);
         router.push("/404");
@@ -85,6 +91,7 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
           isOpen={isWatchProviderModalOpen}
           onClose={() => setIsWatchProviderModalOpen(false)}
           title={movie?.title || ""}
+          watchProviders={watchProviders}
         />
       )}
     </>

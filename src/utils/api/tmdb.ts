@@ -6,7 +6,12 @@ import type {
   movieDetails,
   movieCredits,
   movieVideos,
+  watchProviders,
 } from "~/utils/types/tmdb-types";
+
+const tmdbApiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+const tmdbApiLongKey = process.env.NEXT_PUBLIC_TMDB_API_LONGKEY;
+
 export const tmdbApi = axios.create({
   baseURL: "https://api.themoviedb.org/3",
   headers: {
@@ -29,8 +34,7 @@ export const searchMovie = async (query: string, page = 1) => {
     params: { query: query, language: "en-US", page: page.toString() },
     headers: {
       accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmNiNjhlZTQ4NWE1MDA5MTYxM2IyZjc3Mzc0MDhjZiIsIm5iZiI6MTczNzc5NjczMC4yNDMsInN1YiI6IjY3OTRhYzdhYzUwODEzNDZmMTQ4NTkxNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.psP_wvsAy0OoUVrdvJidVn--Dbn8XbmSaJxLP7t2Ijo",
+      Authorization: `Bearer ${tmdbApiLongKey}`,
     },
   };
 
@@ -50,8 +54,7 @@ export const getGenres = async (genres_ids: number[]) => {
     params: { with_genres: genres_ids.join(",") },
     headers: {
       accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmNiNjhlZTQ4NWE1MDA5MTYxM2IyZjc3Mzc0MDhjZiIsIm5iZiI6MTczNzc5NjczMC4yNDMsInN1YiI6IjY3OTRhYzdhYzUwODEzNDZmMTQ4NTkxNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.psP_wvsAy0OoUVrdvJidVn--Dbn8XbmSaJxLP7t2Ijo",
+      Authorization: `Bearer ${tmdbApiLongKey}`,
     },
   };
   try {
@@ -69,8 +72,7 @@ export const getKeywords = async (id: string) => {
     url: `https://api.themoviedb.org/3/movie/${id}/keywords`,
     headers: {
       accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmNiNjhlZTQ4NWE1MDA5MTYxM2IyZjc3Mzc0MDhjZiIsIm5iZiI6MTczNzc5NjczMC4yNDMsInN1YiI6IjY3OTRhYzdhYzUwODEzNDZmMTQ4NTkxNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.psP_wvsAy0OoUVrdvJidVn--Dbn8XbmSaJxLP7t2Ijo",
+      Authorization: `Bearer ${tmdbApiLongKey}`,
     },
   };
   try {
@@ -89,8 +91,7 @@ export const getMovieDetails = async (id: string) => {
     params: { language: "en-US" },
     headers: {
       accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmNiNjhlZTQ4NWE1MDA5MTYxM2IyZjc3Mzc0MDhjZiIsIm5iZiI6MTczNzc5NjczMC4yNDMsInN1YiI6IjY3OTRhYzdhYzUwODEzNDZmMTQ4NTkxNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.psP_wvsAy0OoUVrdvJidVn--Dbn8XbmSaJxLP7t2Ijo",
+      Authorization: `Bearer ${tmdbApiLongKey}`,
     },
   };
 
@@ -109,8 +110,7 @@ export const getMovieCredits = async (id: string) => {
     url: `https://api.themoviedb.org/3/movie/${id}/credits`,
     headers: {
       accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmNiNjhlZTQ4NWE1MDA5MTYxM2IyZjc3Mzc0MDhjZiIsIm5iZiI6MTczNzc5NjczMC4yNDMsInN1YiI6IjY3OTRhYzdhYzUwODEzNDZmMTQ4NTkxNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.psP_wvsAy0OoUVrdvJidVn--Dbn8XbmSaJxLP7t2Ijo",
+      Authorization: `Bearer ${tmdbApiLongKey}`,
     },
   };
 
@@ -129,8 +129,7 @@ export const getMovieVideos = async (id: string) => {
     url: `https://api.themoviedb.org/3/movie/${id}/videos`,
     headers: {
       accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmNiNjhlZTQ4NWE1MDA5MTYxM2IyZjc3Mzc0MDhjZiIsIm5iZiI6MTczNzc5NjczMC4yNDMsInN1YiI6IjY3OTRhYzdhYzUwODEzNDZmMTQ4NTkxNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.psP_wvsAy0OoUVrdvJidVn--Dbn8XbmSaJxLP7t2Ijo",
+      Authorization: `Bearer ${tmdbApiLongKey}`,
     },
   };
 
@@ -157,8 +156,7 @@ export const getSearchSuggestions = async (query: string) => {
     },
     headers: {
       accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmNiNjhlZTQ4NWE1MDA5MTYxM2IyZjc3Mzc0MDhjZiIsIm5iZiI6MTczNzc5NjczMC4yNDMsInN1YiI6IjY3OTRhYzdhYzUwODEzNDZmMTQ4NTkxNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.psP_wvsAy0OoUVrdvJidVn--Dbn8XbmSaJxLP7t2Ijo",
+      Authorization: `Bearer ${tmdbApiLongKey}`,
     },
   };
 
@@ -169,5 +167,24 @@ export const getSearchSuggestions = async (query: string) => {
   } catch (error) {
     console.error(error);
     throw error;
+  }
+};
+
+export const getWatchProviders = async (id: string) => {
+  const options = {
+    method: "GET",
+    url: `https://api.themoviedb.org/3/movie/${id}/watch/providers`,
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${tmdbApiLongKey}`,
+    },
+  };
+
+  try {
+    const response = await axios.request(options);
+    return response.data as watchProviders;
+  } catch (error) {
+    console.error(error);
+    return null;
   }
 };
