@@ -89,7 +89,7 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
         <WatchProviderModal
           isOpen={isWatchProviderModalOpen}
           onClose={() => setIsWatchProviderModalOpen(false)}
-          title={movie?.title || ""}
+          title={movie?.title ?? ""}
           watchProviders={watchProviders}
         />
       )}

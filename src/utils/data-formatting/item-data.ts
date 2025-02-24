@@ -1,4 +1,4 @@
-import { show, tvShow, type movieVideos } from "../types/tmdb-types";
+import { type show, type tvShow, type movieVideos } from "../types/tmdb-types";
 
 const findBestVideo = (videos: movieVideos | null) => {
   if (!videos?.results?.length) return "";

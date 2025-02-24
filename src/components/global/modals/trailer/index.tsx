@@ -9,8 +9,6 @@ interface TrailerProps {
 }
 
 function Trailer({ videoKey, isOpen, onClose }: TrailerProps) {
-  if (!isOpen) return null;
-
   useEffect(() => {
     if (isOpen) {
       disableScroll();
@@ -23,6 +21,8 @@ function Trailer({ videoKey, isOpen, onClose }: TrailerProps) {
     onClose();
     enableScroll();
   };
+
+  if (!isOpen) return null;
 
   if (!videoKey) {
     return (

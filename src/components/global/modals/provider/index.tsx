@@ -1,10 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
 import { useFadeIn } from "~/hooks/useFadeIn/useFadeIn";
 import { useRegion } from "~/hooks/useRegion/useRegion";
-import { type watchProviders, type watchProvider } from "~/utils/types/tmdb-types";
+import {
+  type watchProviders,
+  type watchProvider,
+} from "~/utils/types/tmdb-types";
 import { DecoratedTextWithPhoto } from "../../decorated-text";
 import { disableScroll, enableScroll } from "~/utils/dom/scroll-lock";
+
 interface WatchProviderProps {
   isOpen: boolean;
   onClose: () => void;
@@ -18,21 +22,15 @@ function WatchProvider({
   title,
   watchProviders,
 }: WatchProviderProps) {
-  if (!isOpen) return null;
-
-  const [watchProvider, setWatchProvider] = useState<watchProvider | null>(
-    null,
-  );
-
+  const [watchProvider, setWatchProvider] = useState<watchProvider | null>(null);
   const ref = useFadeIn<HTMLDivElement>();
-
-  const { countryName, countryCode, loading, error } = useRegion();
+  const { countryName, countryCode, loading } = useRegion();
 
   useEffect(() => {
     if (watchProviders && countryCode) {
       setWatchProvider(
-        watchProviders.results[countryCode] ||
-          watchProviders.results.US ||
+        watchProviders.results[countryCode] ??
+          watchProviders.results.US ??
           null,
       );
     }
@@ -51,6 +49,8 @@ function WatchProvider({
     enableScroll();
   };
 
+  if (!isOpen) return null;
+
   return (
     <div
       ref={ref}
@@ -63,7 +63,7 @@ function WatchProvider({
       <div className="relative z-50 w-full max-w-2xl">
         <div className="rounded-lg bg-white px-12 py-8 text-slate-900 backdrop-blur-sm">
           <button
-            className="group absolute md:right-10 md:top-10 right-2.5 top-2.5 rounded-full p-2 text-white transition-all duration-300 hover:bg-gray-100 hover:text-gray-300"
+            className="group absolute right-2.5 top-2.5 rounded-full p-2 text-white transition-all duration-300 hover:bg-gray-100 hover:text-gray-300 md:right-10 md:top-10"
             onClick={handleClose}
           >
             <div

@@ -7,6 +7,11 @@ interface RegionData {
   error: string | null;
 }
 
+interface IpapiResponse {
+  country_code: string;
+  country_name: string;
+}
+
 export function useRegion() {
   const [regionData, setRegionData] = useState<RegionData>({
     countryCode: null,
@@ -21,7 +26,7 @@ export function useRegion() {
         const response = await fetch('https://ipapi.co/json/');
         if (!response.ok) throw new Error('Failed to fetch region data');
         
-        const data = await response.json();
+        const data = await response.json() as IpapiResponse;
         setRegionData({
           countryCode: data.country_code,
           countryName: data.country_name,

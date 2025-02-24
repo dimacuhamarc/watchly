@@ -50,14 +50,14 @@ export default function SearchComponent({ onSearchResults, onClear }: props) {
         if ('title' in item) {
           return item.title;
         }
-        return (item as tvShow).name;
+        return (item).name;
       })),
     ).map((title) => {
       return data.find((item) => {
         if ('title' in item) {
           return item.title === title;
         }
-        return (item as tvShow).name === title;
+        return (item).name === title;
       });
     });
     setSuggestions(
