@@ -50,7 +50,7 @@ function WatchProvider({
       <div className="relative z-50 w-full max-w-2xl">
         <div className="rounded-lg bg-white px-12 py-8 text-slate-900 backdrop-blur-sm">
           <button
-            className="group absolute right-10 top-10 rounded-full p-2 text-white transition-all duration-300 hover:bg-gray-100 hover:text-gray-300"
+            className="group absolute md:right-10 md:top-10 right-2.5 top-2.5 rounded-full p-2 text-white transition-all duration-300 hover:bg-gray-100 hover:text-gray-300"
             onClick={onClose}
           >
             <div
