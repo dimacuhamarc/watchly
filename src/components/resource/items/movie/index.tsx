@@ -56,7 +56,6 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
         setVideos(videosData);
         setKeywords(keywordsData);
         setWatchProviders(watchProvidersData);
-        console.log(watchProvidersData);
       } catch (error) {
         console.error("Error fetching movie data:", error);
         router.push("/404");

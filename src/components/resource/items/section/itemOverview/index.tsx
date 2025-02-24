@@ -38,7 +38,7 @@ function ItemOverview({
   };
 
   const onWatchlistClick = () => {
-    console.log("Watchlist clicked");
+    // console.log("Watchlist clicked");
   };
 
   const onWhereToWatchClick = () => {
