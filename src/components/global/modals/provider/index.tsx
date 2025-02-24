@@ -4,7 +4,7 @@ import { useFadeIn } from "~/hooks/useFadeIn/useFadeIn";
 import { useRegion } from "~/hooks/useRegion/useRegion";
 import { watchProviders, watchProvider } from "~/utils/types/tmdb-types";
 import { DecoratedTextWithPhoto } from "../../decorated-text";
-
+import { disableScroll, enableScroll } from "~/utils/dom/scroll-lock";
 interface WatchProviderProps {
   isOpen: boolean;
   onClose: () => void;
@@ -38,6 +38,19 @@ function WatchProvider({
     }
   }, [watchProviders, countryCode]);
 
+  useEffect(() => {
+    if (isOpen) {
+      disableScroll();
+    } else {
+      enableScroll();
+    }
+  }, [isOpen]);
+
+  const handleClose = () => {
+    onClose();
+    enableScroll();
+  };
+
   return (
     <div
       ref={ref}
@@ -45,17 +58,17 @@ function WatchProvider({
     >
       <div
         className="fixed inset-0 bg-black/25 backdrop-blur-sm"
-        onClick={onClose}
+        onClick={handleClose}
       ></div>
       <div className="relative z-50 w-full max-w-2xl">
         <div className="rounded-lg bg-white px-12 py-8 text-slate-900 backdrop-blur-sm">
           <button
             className="group absolute md:right-10 md:top-10 right-2.5 top-2.5 rounded-full p-2 text-white transition-all duration-300 hover:bg-gray-100 hover:text-gray-300"
-            onClick={onClose}
+            onClick={handleClose}
           >
             <div
               className="btn btn-circle btn-sm bg-gray-100 text-slate-900 transition-all duration-300 group-hover:bg-gray-200"
-              onClick={onClose}
+              onClick={handleClose}
             >
               <FaTimes />
             </div>
