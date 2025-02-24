@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  POSTGRES_URL: "postgresql://postgres:password@localhost:5432/watchly"
+  POSTGRES_URL_UNPOOLED: "postgresql://postgres:password@localhost:5432/watchly"
+  PGHOST: "localhost"
+  PGHOST_UNPOOLED: "localhost"
+  PGUSER: "postgres"
+  PGDATABASE: "watchly"
+  PGPASSWORD: "password"
+  POSTGRES_URL_NO_SSL: "postgresql://postgres:password@localhost:5432/watchly"
+  POSTGRES_PRISMA_URL: "postgresql://postgres:password@localhost:5432/watchly"
+  NEXT_PUBLIC_TMDB_API_KEY: "dummy_key"
+  NEXT_PUBLIC_TMDB_API_LONGKEY: "dummy_key"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'yarn'
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+    - name: Lint check
+      run: yarn lint --max-warnings 9999
+    - name: Format check
+      continue-on-error: true
+      run: yarn format:check
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'yarn'
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+    - name: Type check
+      run: yarn typecheck
+
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: watchly
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'yarn'
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+    - name: Generate Database Types
+      run: yarn db:generate
+    - name: Build
+      run: yarn build

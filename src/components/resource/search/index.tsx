@@ -7,6 +7,7 @@ import type { searchResult, show } from '~/utils/types/tmdb-types'
 import useArtificialDelay from '~/hooks/useArtificialDelay'
 import useMovieQuote from '~/hooks/useMovieQuote'
 import { searchMovie } from '~/utils/api/tmdb'
+import { useRouter } from 'next/navigation'
 
 function SearchPageComponent() {
   const [search, setSearch] = useState<string>("");
@@ -17,7 +18,8 @@ function SearchPageComponent() {
   const [isEmpty, setIsEmpty] = useState(true);
   const quote = useMovieQuote();
   const isLoading = useArtificialDelay(shouldStartDelay ? 1000 : 0);
-
+  const router = useRouter();
+  
   useEffect(() => {
     if (!isLoading && shouldStartDelay) {
       setShouldStartDelay(false);
@@ -31,9 +33,11 @@ function SearchPageComponent() {
       setIsEmpty(true);
     } else {
       setIsEmpty(false);
-      results.results.sort(
-        (a: show, b: show) => b.vote_average - a.vote_average,
-      );
+      results.results.sort((a, b) => {
+        const aRating = 'vote_average' in a ? a.vote_average : 0;
+        const bRating = 'vote_average' in b ? b.vote_average : 0;
+        return bRating - aRating;
+      });
       setSearchResults(results);
       setSearchLength(results.results.length);
     }
@@ -55,12 +59,12 @@ function SearchPageComponent() {
     }
 
     if (searchResults?.results) {
-      return searchResults.results.map(
-        (result: show) =>
-          result.poster_path !== null && (
-            <ShowCard key={result.id} result={result} />
-          ),
-      );
+      return searchResults.results.map((result) => {
+        if ('poster_path' in result && result.poster_path !== null) {
+          return <ShowCard key={result.id} result={result} onClick={() => router.push(`/movie/${result.id}`)} />;
+        }
+        return null;
+      }).filter(Boolean);
     }
 
     return null;

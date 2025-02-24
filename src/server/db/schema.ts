@@ -12,8 +12,8 @@ import {
 import { type AdapterAccount } from "next-auth/adapters";
 
 
-import { WatchlistItemStatusType } from "~/utils/types/data";
-import { MediaType } from "~/utils/types/data";
+import { type WatchlistItemStatusType } from "~/utils/types/data";
+import { type MediaType } from "~/utils/types/data";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -47,27 +47,19 @@ export const posts = createTable(
 );
 
 export const users = createTable("user", {
-  id: varchar("id", { length: 255 })
-    .notNull()
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  name: varchar("name", { length: 255 }),
   email: varchar("email", { length: 255 }).notNull(),
+  emailVerified: timestamp("emailVerified", { mode: "date" }),
+  image: varchar("image", { length: 255 }),
   password_hash: varchar("password_hash", { length: 255 }).notNull(),
   username: varchar("username", { length: 255 }),
   first_name: varchar("first_name", { length: 255 }),
   last_name: varchar("last_name", { length: 255 }),
   display_name: varchar("display_name", { length: 255 }),
   profile_picture: varchar("profile_picture", { length: 255 }),
-  created_at: timestamp("created_at", { withTimezone: true })
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  updated_at: timestamp("updated_at", { withTimezone: true })
-    .$onUpdate(() => new Date()),
-  emailVerified: timestamp("email_verified", {
-    mode: "date",
-    withTimezone: true,
-  }).default(sql`CURRENT_TIMESTAMP`),
-  image: varchar("image", { length: 255 }),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  updated_at: timestamp("updated_at").$onUpdate(() => new Date()),
 });
 
 export const watchlist = createTable("watchlist", {
