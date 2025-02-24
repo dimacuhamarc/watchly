@@ -11,18 +11,23 @@ Smart Recommendations: Receive personalized suggestions based on your viewing hi
 Region-Specific Access: Filter content based on what’s available in your location, ensuring you never miss out.
 Watchly is designed to streamline your entertainment experience, offering a seamless, intuitive way to enjoy the content you love, hassle-free.
 
+[![CI](https://github.com/dimacuhamarc/watchly/actions/workflows/ci.yml/badge.svg)](https://github.com/dimacuhamarc/watchly/actions/workflows/ci.yml)
 
 # TODO
 
 - [x] Setup deployment ( vercel )
 - [x] improve build 
-- [ ] add mock data 
-- [ ] Setup basic ui
-- [ ] Setup db ( vercel postgres )
-- [ ] add db
+- [x] add ci
+- [x] Setup basic ui
+  - [x] add navbar
+  - [x] add footer
+  - [x] add search
+  - [x] add item page
+- [x] Setup db ( vercel postgres )
+- [x] add db
 - [ ] add auth ( next auth )
 - [ ] setup user profile
-- [ ] add search
+- [x] add search
 - [ ] add watchlist
 - [ ] add recommendations
 - 
