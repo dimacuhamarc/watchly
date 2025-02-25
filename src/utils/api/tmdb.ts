@@ -100,7 +100,7 @@ export const getKeywords = async (id: string, type: "movie" | "tv") => {
     if (type === "tv") {
       return {
         id: parseInt(id),
-        keywords: response.data.results
+        keywords: response.data.results as { id: number; name: string }[]
       } as keywords;
     }
     return response.data as keywords;

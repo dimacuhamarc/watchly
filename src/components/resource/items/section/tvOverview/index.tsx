@@ -1,10 +1,9 @@
 import React from "react";
-import { credits, tvDetails, videos } from "~/utils/types/tmdb-types";
+import type { credits, tvDetails, videos } from "~/utils/types/tmdb-types";
 import Image from "next/image";
 import { DisplayAvatar } from "~/components/global/avatars";
 import {
   FaCalendar,
-  FaClock,
   FaExternalLinkAlt,
   FaHeart,
   FaPlay,

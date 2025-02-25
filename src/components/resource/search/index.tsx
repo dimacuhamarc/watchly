@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { SearchBar } from '~/components/global/inputs'
 import { ShowCard, SkeletonCard } from '~/components/global/cards'
-import type { searchResult, show } from '~/utils/types/tmdb-types'
+import type { searchResult } from '~/utils/types/tmdb-types'
 import useArtificialDelay from '~/hooks/useArtificialDelay'
 import useMovieQuote from '~/hooks/useMovieQuote'
 import { searchMovie } from '~/utils/api/tmdb'
