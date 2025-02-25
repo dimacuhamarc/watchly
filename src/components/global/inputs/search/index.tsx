@@ -9,9 +9,10 @@ import { getTitle } from "~/utils/data-formatting/item-data";
 interface props {
   onSearchResults: (results: searchResult, searchQuery: string) => void;
   onClear: () => void;
+  onSetSearchType: (type: "movie" | "tv") => void;
 }
 
-export default function SearchComponent({ onSearchResults, onClear }: props) {
+export default function SearchComponent({ onSearchResults, onClear, onSetSearchType }: props) {
   const [search, setSearch] = useState("");
   const [suggestions, setSuggestions] = useState<(show | tvShow)[]>([]);
   const [searchType, setSearchType] = useState<"movie" | "tv">("movie");
@@ -31,6 +32,7 @@ export default function SearchComponent({ onSearchResults, onClear }: props) {
     setSearch("");
     setSuggestions([]);
     setSearchType(searchType);
+    onSetSearchType(searchType);
     onSearchResults(
       {
         page: 1,
@@ -76,6 +78,7 @@ export default function SearchComponent({ onSearchResults, onClear }: props) {
     setSearchType(type === "movie" ? "tv" : "movie");
     setSearch("");
     setSuggestions([]);
+    onSetSearchType(type === "movie" ? "tv" : "movie");
   };
 
   return (

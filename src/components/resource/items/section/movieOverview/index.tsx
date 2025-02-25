@@ -13,25 +13,28 @@ import { RoundedChip } from "~/components/global/chips";
 import { DecoratedTextWithIcon } from "~/components/global/decorated-text";
 import {
   type movieDetails,
-  type movieCredits,
-  type movieVideos,
+  type credits,
+  type videos,
 } from "~/utils/types/tmdb-types";
 import { DisplayAvatar } from "~/components/global/avatars";
-interface ItemOverviewProps {
+
+interface MovieOverviewProps {
   movie: movieDetails;
-  credits: movieCredits;
-  videos: movieVideos;
+  credits: credits;
+  videos: videos;
   setShowTrailerModal: (show: boolean) => void;
   setShowWatchProviderModal: (show: boolean) => void;
+  setShowExpandPosterModal: (show: boolean) => void;
 }
 
-function ItemOverview({
+function MovieOverview({
   movie,
   credits,
   videos,
   setShowTrailerModal,
   setShowWatchProviderModal,
-}: ItemOverviewProps) {
+  setShowExpandPosterModal,
+}: MovieOverviewProps) {
   const onTrailerClick = () => {
     setShowTrailerModal(true);
   };
@@ -44,6 +47,10 @@ function ItemOverview({
     setShowWatchProviderModal(true);
   };
 
+  const onExpandPosterClick = () => {
+    setShowExpandPosterModal(true);
+  };
+
   return (
     <div className="flex flex-col justify-center gap-8 md:flex-row md:gap-4">
       <div className="relative h-[500px] w-[300px] md:h-[600px] md:w-[400px] flex-shrink-0">
@@ -53,6 +60,7 @@ function ItemOverview({
           alt={movie?.title || ""}
           fill
           className="rounded-2xl object-cover transition-all duration-300"
+          onClick={onExpandPosterClick}
         />
       </div>
       <div className="flex flex-col gap-6 px-0 md:px-8">
@@ -163,4 +171,4 @@ function ItemOverview({
   );
 }
 
-export default ItemOverview;
+export default MovieOverview;

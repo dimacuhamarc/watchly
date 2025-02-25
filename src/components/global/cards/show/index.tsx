@@ -36,7 +36,7 @@ function Show({ result, onClick }: ShowProps) {
                 text={
                   result.vote_average === 0
                     ? "No Rating"
-                    : result.vote_average + "/10" || "No Rating"
+                    : result.vote_average.toFixed(1) + "/10" || "No Rating"
                 }
                 icon={<FaStar className="text-yellow-500" />}
               />

@@ -4,9 +4,10 @@ import type {
   genre,
   keywords,
   movieDetails,
-  movieCredits,
-  movieVideos,
+  credits,
+  videos,
   watchProviders,
+  tvDetails,
 } from "~/utils/types/tmdb-types";
 
 const tmdbApiLongKey = process.env.NEXT_PUBLIC_TMDB_API_LONGKEY;
@@ -85,10 +86,10 @@ export const getGenres = async (genres_ids: number[]) => {
   }
 };
 
-export const getKeywords = async (id: string) => {
+export const getKeywords = async (id: string, type: "movie" | "tv") => {
   const options = {
     method: "GET",
-    url: `https://api.themoviedb.org/3/movie/${id}/keywords`,
+    url: `https://api.themoviedb.org/3/${type}/${id}/keywords`,
     headers: {
       accept: "application/json",
       Authorization: `Bearer ${tmdbApiLongKey}`,
@@ -96,9 +97,16 @@ export const getKeywords = async (id: string) => {
   };
   try {
     const response = await axios.request(options);
+    if (type === "tv") {
+      const data = response.data as { results: Array<{ id: number; name: string }> };
+      return {
+        id: parseInt(id),
+        keywords: data.results
+      } as keywords;
+    }
     return response.data as keywords;
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching keywords:", error);
     return null;
   }
 };
@@ -123,10 +131,10 @@ export const getMovieDetails = async (id: string) => {
   }
 };
 
-export const getMovieCredits = async (id: string) => {
+export const getCredits = async (id: string, type: "movie" | "tv") => {
   const options = {
     method: "GET",
-    url: `https://api.themoviedb.org/3/movie/${id}/credits`,
+    url: `https://api.themoviedb.org/3/${type}/${id}/credits`,
     headers: {
       accept: "application/json",
       Authorization: `Bearer ${tmdbApiLongKey}`,
@@ -135,17 +143,17 @@ export const getMovieCredits = async (id: string) => {
 
   try {
     const response = await axios.request(options);
-    return response.data as movieCredits;
+    return response.data as credits;
   } catch (error) {
     console.error(error);
     return null;
   }
 };
 
-export const getMovieVideos = async (id: string) => {
+export const getVideos = async (id: string, type: "movie" | "tv") => {
   const options = {
     method: "GET",
-    url: `https://api.themoviedb.org/3/movie/${id}/videos`,
+    url: `https://api.themoviedb.org/3/${type}/${id}/videos`,
     headers: {
       accept: "application/json",
       Authorization: `Bearer ${tmdbApiLongKey}`,
@@ -154,7 +162,7 @@ export const getMovieVideos = async (id: string) => {
 
   try {
     const response = await axios.request(options);
-    return response.data as movieVideos;
+    return response.data as videos;
   } catch (error) {
     console.error(error);
     return null;
@@ -189,10 +197,10 @@ export const getSearchSuggestions = async (query: string, type: "movie" | "tv") 
   }
 };
 
-export const getWatchProviders = async (id: string) => {
+export const getWatchProviders = async (id: string, type: "movie" | "tv") => {
   const options = {
     method: "GET",
-    url: `https://api.themoviedb.org/3/movie/${id}/watch/providers`,
+    url: `https://api.themoviedb.org/3/${type}/${id}/watch/providers`,
     headers: {
       accept: "application/json",
       Authorization: `Bearer ${tmdbApiLongKey}`,
@@ -202,6 +210,26 @@ export const getWatchProviders = async (id: string) => {
   try {
     const response = await axios.request(options);
     return response.data as watchProviders;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const getTvDetails = async (id: string) => {
+  const options = {
+    method: "GET",
+    url: `https://api.themoviedb.org/3/tv/${id}`,
+    params: { language: "en-US" },
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${tmdbApiLongKey}`,
+    },
+  };
+
+  try {
+    const response = await axios.request(options);
+    return response.data as tvDetails;
   } catch (error) {
     console.error(error);
     return null;

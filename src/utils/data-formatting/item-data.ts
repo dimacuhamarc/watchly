@@ -1,21 +1,31 @@
-import { type show, type tvShow, type movieVideos } from "../types/tmdb-types";
+import { type show, type tvShow, type videos } from "../types/tmdb-types";
 
-const findBestVideo = (videos: movieVideos | null) => {
+const findBestVideo = (videos: videos | null) => {
   if (!videos?.results?.length) return "";
-  const officialTrailer = videos.results.find(
+  
+  // Sort videos by published date (oldest first)
+  const sortedVideos = [...videos.results].sort(
+    (a, b) => new Date(a.published_at).getTime() - new Date(b.published_at).getTime()
+  );
+
+  // Find first matching video from sorted results
+  const officialTrailer = sortedVideos.find(
     (video) =>
       video.official && video.type === "Trailer" && video.site === "YouTube",
   );
   if (officialTrailer) return officialTrailer.key;
-  const trailer = videos.results.find(
+
+  const trailer = sortedVideos.find(
     (video) => video.type === "Trailer" && video.site === "YouTube",
   );
   if (trailer) return trailer.key;
-  const teaser = videos.results.find(
+
+  const teaser = sortedVideos.find(
     (video) => video.type === "Teaser" && video.site === "YouTube",
   );
   if (teaser) return teaser.key;
-  return videos.results[0]?.key ?? "";
+
+  return sortedVideos[0]?.key ?? "";
 };
 
 const getTitle = (result: show | tvShow): string => {
