@@ -2,7 +2,14 @@ import React from "react";
 import { credits, tvDetails, videos } from "~/utils/types/tmdb-types";
 import Image from "next/image";
 import { DisplayAvatar } from "~/components/global/avatars";
-import { FaCalendar, FaClock, FaExternalLinkAlt, FaHeart, FaPlay, FaTv } from "react-icons/fa";
+import {
+  FaCalendar,
+  FaClock,
+  FaExternalLinkAlt,
+  FaHeart,
+  FaPlay,
+  FaTv,
+} from "react-icons/fa";
 import { DecoratedTextWithIcon } from "~/components/global/decorated-text";
 import { FaStar } from "react-icons/fa";
 import { formatDate, formatRuntime } from "~/utils/data-formatting/date";
@@ -37,7 +44,7 @@ function TvOverview({
 
   const getCrewMembers = (crew: credits["crew"], jobs: string[]) => {
     return crew
-      .filter(member => jobs.includes(member.job))
+      .filter((member) => jobs.includes(member.job))
       .sort((a, b) => b.popularity - a.popularity);
   };
 
@@ -76,9 +83,11 @@ function TvOverview({
           />
           <DecoratedTextWithIcon
             text={
-              tv?.seasons.length === 0
+              tv?.number_of_seasons === 0
                 ? "No Seasons"
-                : tv?.seasons.length.toString() + (tv?.seasons.length === 1 ? " Season" : " Seasons") || "No Seasons"
+                : tv?.number_of_seasons.toString() +
+                    (tv?.number_of_seasons === 1 ? " Season" : " Seasons") ||
+                  "No Seasons"
             }
             icon={<FaTv className="text-yellow-500" />}
           />
@@ -89,10 +98,7 @@ function TvOverview({
           ))}
         </div>
         <div className="flex flex-col gap-4 md:flex-row">
-          <button
-            className="btn btn-primary"
-            onClick={onWhereToWatchClick}
-          >
+          <button className="btn btn-primary" onClick={onWhereToWatchClick}>
             <FaExternalLinkAlt /> Where to Watch
           </button>
           <button
@@ -110,32 +116,47 @@ function TvOverview({
             <FaHeart /> Add to Watchlist
           </button>
         </div>
-        <p className="text-base text-balance">{tv?.overview}</p>
+        <p className="text-balance text-base">{tv?.overview}</p>
 
         <div className="flex flex-col gap-2 md:flex-row md:justify-between">
-          <div>
-            <h1 className="mb-2 text-base">Executive Producers</h1>
-            <div className="flex flex-col gap-4">
-              {getCrewMembers(credits?.crew ?? [], ["Executive Producer"]).slice(0, 3).map((producer) => (
-                <DisplayAvatar
-                  key={producer.id}
-                  name={producer.name}
-                  image={producer.profile_path ?? ""}
-                />
-              ))}
+          {getCrewMembers(credits?.crew ?? [], ["Executive Producer"]).length >
+            0 && (
+            <div>
+              <h1 className="mb-2 text-base">Executive Producers</h1>
+              <div className="flex flex-col gap-4">
+                {getCrewMembers(credits?.crew ?? [], ["Executive Producer"])
+                  .slice(0, 3)
+                  .map((producer) => (
+                    <DisplayAvatar
+                      key={producer.id}
+                      name={producer.name}
+                      image={producer.profile_path ?? ""}
+                    />
+                  ))}
+              </div>
             </div>
-          </div>
-          {getCrewMembers(credits?.crew ?? [], ["Producer", "Co-Producer", "Writer"]).length > 0 && (
+          )}
+          {getCrewMembers(credits?.crew ?? [], [
+            "Producer",
+            "Co-Producer",
+            "Writer",
+          ]).length > 0 && (
             <div>
               <h1 className="mb-2 text-base">Producers</h1>
               <div className="flex flex-col gap-4">
-                {getCrewMembers(credits?.crew ?? [], ["Producer", "Co-Producer", "Writer"]).slice(0, 3).map((producer) => (
-                  <DisplayAvatar
-                    key={producer.id}
-                    name={producer.name}
-                    image={producer.profile_path ?? ""}
-                  />
-                ))}
+                {getCrewMembers(credits?.crew ?? [], [
+                  "Producer",
+                  "Co-Producer",
+                  "Writer",
+                ])
+                  .slice(0, 3)
+                  .map((producer) => (
+                    <DisplayAvatar
+                      key={producer.id}
+                      name={producer.name}
+                      image={producer.profile_path ?? ""}
+                    />
+                  ))}
               </div>
             </div>
           )}
