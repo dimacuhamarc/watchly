@@ -24,6 +24,7 @@ interface MovieOverviewProps {
   videos: videos;
   setShowTrailerModal: (show: boolean) => void;
   setShowWatchProviderModal: (show: boolean) => void;
+  setShowExpandPosterModal: (show: boolean) => void;
 }
 
 function MovieOverview({
@@ -32,6 +33,7 @@ function MovieOverview({
   videos,
   setShowTrailerModal,
   setShowWatchProviderModal,
+  setShowExpandPosterModal,
 }: MovieOverviewProps) {
   const onTrailerClick = () => {
     setShowTrailerModal(true);
@@ -45,6 +47,10 @@ function MovieOverview({
     setShowWatchProviderModal(true);
   };
 
+  const onExpandPosterClick = () => {
+    setShowExpandPosterModal(true);
+  };
+
   return (
     <div className="flex flex-col justify-center gap-8 md:flex-row md:gap-4">
       <div className="relative h-[500px] w-[300px] md:h-[600px] md:w-[400px] flex-shrink-0">
@@ -54,6 +60,7 @@ function MovieOverview({
           alt={movie?.title || ""}
           fill
           className="rounded-2xl object-cover transition-all duration-300"
+          onClick={onExpandPosterClick}
         />
       </div>
       <div className="flex flex-col gap-6 px-0 md:px-8">

@@ -1,6 +1,7 @@
 import { FaTimes } from "react-icons/fa";
 import { useEffect } from "react";
 import { disableScroll, enableScroll } from "~/utils/dom/scroll-lock";
+import { useFadeIn } from "~/hooks/useFadeIn/useFadeIn";
 
 interface TrailerProps {
   videoKey: string;
@@ -9,6 +10,7 @@ interface TrailerProps {
 }
 
 function Trailer({ videoKey, isOpen, onClose }: TrailerProps) {
+  const ref = useFadeIn<HTMLDivElement>();
   useEffect(() => {
     if (isOpen) {
       disableScroll();
@@ -26,9 +28,9 @@ function Trailer({ videoKey, isOpen, onClose }: TrailerProps) {
 
   if (!videoKey) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div ref={ref} className="fixed inset-0 z-50 flex items-center justify-center opacity-0 transition-opacity duration-700">
         <div
-          className="fixed inset-0 bg-black opacity-75"
+          className="fixed inset-0 bg-black/25 backdrop-blur-sm"
           onClick={handleClose}
         ></div>
         <div className="relative z-50 w-full max-w-6xl p-4 text-center text-white">
@@ -45,9 +47,9 @@ function Trailer({ videoKey, isOpen, onClose }: TrailerProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div ref={ref} className="fixed inset-0 z-50 flex items-center justify-center opacity-0 transition-opacity duration-700">
       <div
-        className="fixed inset-0 bg-black opacity-75"
+        className="fixed inset-0 bg-black/25 backdrop-blur-sm"
         onClick={handleClose}
       ></div>
       <div className="relative z-50 w-full max-w-6xl">

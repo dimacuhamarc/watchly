@@ -17,7 +17,7 @@ import {
 } from "~/utils/api/tmdb";
 import { useRouter } from "next/navigation";
 import { MovieOverview, KeywordsSection, CastSection } from "~/components/resource/items/section";
-import { TrailerModal, WatchProviderModal } from "~/components/global/modals";
+import { TrailerModal, WatchProviderModal, PosterModal } from "~/components/global/modals";
 import { findBestVideo } from "~/utils/data-formatting/item-data";
 
 interface MoviePageComponentProps {
@@ -32,7 +32,7 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
   const [watchProviders, setWatchProviders] = useState<watchProviders | null>(null);
   const [isTrailerModalOpen, setIsTrailerModalOpen] = useState(false);
   const [isWatchProviderModalOpen, setIsWatchProviderModalOpen] = useState(false);
-  
+  const [isExpandPosterModalOpen, setIsExpandPosterModalOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -74,6 +74,7 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
           videos={videos}
           setShowTrailerModal={setIsTrailerModalOpen}
           setShowWatchProviderModal={setIsWatchProviderModalOpen}
+          setShowExpandPosterModal={setIsExpandPosterModalOpen}
         />
       )}
       {keywords && <KeywordsSection keywords={keywords} />}
@@ -91,6 +92,13 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
           onClose={() => setIsWatchProviderModalOpen(false)}
           title={movie?.title ?? ""}
           watchProviders={watchProviders}
+        />
+      )}
+      {isExpandPosterModalOpen && (
+        <PosterModal
+          isOpen={isExpandPosterModalOpen}
+          onClose={() => setIsExpandPosterModalOpen(false)}
+          posterPath={movie?.poster_path ?? ""}
         />
       )}
     </>

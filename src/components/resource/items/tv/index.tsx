@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { getKeywords, getTvDetails, getWatchProviders, getVideos, getCredits } from '~/utils/api/tmdb';
 import { TvOverview, KeywordsSection, CastSection } from "~/components/resource/items/section";
 import { findBestVideo } from '~/utils/data-formatting/item-data';
-import { TrailerModal, WatchProviderModal } from '~/components/global/modals';
+import { TrailerModal, WatchProviderModal, PosterModal } from '~/components/global/modals';
 
 interface TVPageComponentProps {
   id: string;
@@ -26,6 +26,7 @@ function TVPageComponent({ id }: TVPageComponentProps) {
   const [watchProviders, setWatchProviders] = useState<watchProviders | null>(null);
   const [showTrailerModal, setShowTrailerModal] = useState(false);
   const [showWatchProviderModal, setShowWatchProviderModal] = useState(false);
+  const [showExpandPosterModal, setShowExpandPosterModal] = useState(false);
   
 
   const router = useRouter();
@@ -69,6 +70,7 @@ function TVPageComponent({ id }: TVPageComponentProps) {
           videos={videos}
           setShowTrailerModal={setShowTrailerModal}
           setShowWatchProviderModal={setShowWatchProviderModal}
+          setShowExpandPosterModal={setShowExpandPosterModal}
         />
       )}
       {keywords && <KeywordsSection keywords={keywords} />}
@@ -86,6 +88,13 @@ function TVPageComponent({ id }: TVPageComponentProps) {
           onClose={() => setShowWatchProviderModal(false)}
           title={tv?.name ?? ""}
           watchProviders={watchProviders} 
+        />
+      )}
+      {showExpandPosterModal && (
+        <PosterModal
+          isOpen={showExpandPosterModal}
+          onClose={() => setShowExpandPosterModal(false)}
+          posterPath={tv?.poster_path ?? ""}
         />
       )}
     </>

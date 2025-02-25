@@ -20,6 +20,7 @@ interface TvOverviewProps {
   videos: videos;
   setShowTrailerModal: (show: boolean) => void;
   setShowWatchProviderModal: (show: boolean) => void;
+  setShowExpandPosterModal: (show: boolean) => void;
 }
 
 function TvOverview({
@@ -28,6 +29,7 @@ function TvOverview({
   videos,
   setShowTrailerModal,
   setShowWatchProviderModal,
+  setShowExpandPosterModal,
 }: TvOverviewProps) {
   const onTrailerClick = () => {
     setShowTrailerModal(true);
@@ -47,6 +49,10 @@ function TvOverview({
       .sort((a, b) => b.popularity - a.popularity);
   };
 
+  const onExpandPosterClick = () => {
+    setShowExpandPosterModal(true);
+  };
+
   return (
     <div className="flex flex-col justify-center gap-8 md:flex-row md:gap-4">
       <div className="relative h-[500px] w-[300px] flex-shrink-0 md:h-[600px] md:w-[400px]">
@@ -56,6 +62,7 @@ function TvOverview({
           alt={tv?.name || ""}
           fill
           className="rounded-2xl object-cover transition-all duration-300"
+          onClick={onExpandPosterClick}
         />
       </div>
       <div className="flex flex-col gap-6 px-0 md:px-8">
