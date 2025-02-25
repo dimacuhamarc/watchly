@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import PersonCard from "~/components/global/cards/person";
-import { type movieCredits } from "~/utils/types/tmdb-types";
+import { type credits } from "~/utils/types/tmdb-types";
 
-function CastSection({ credits }: { credits: movieCredits }) {
+function CastSection({ credits }: { credits: credits }) {
   const [isHovered, setIsHovered] = useState(false);
   
   const scrollContainerRef = useRef<HTMLDivElement>(null);

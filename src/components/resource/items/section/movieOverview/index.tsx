@@ -13,25 +13,26 @@ import { RoundedChip } from "~/components/global/chips";
 import { DecoratedTextWithIcon } from "~/components/global/decorated-text";
 import {
   type movieDetails,
-  type movieCredits,
-  type movieVideos,
+  type credits,
+  type videos,
 } from "~/utils/types/tmdb-types";
 import { DisplayAvatar } from "~/components/global/avatars";
-interface ItemOverviewProps {
+
+interface MovieOverviewProps {
   movie: movieDetails;
-  credits: movieCredits;
-  videos: movieVideos;
+  credits: credits;
+  videos: videos;
   setShowTrailerModal: (show: boolean) => void;
   setShowWatchProviderModal: (show: boolean) => void;
 }
 
-function ItemOverview({
+function MovieOverview({
   movie,
   credits,
   videos,
   setShowTrailerModal,
   setShowWatchProviderModal,
-}: ItemOverviewProps) {
+}: MovieOverviewProps) {
   const onTrailerClick = () => {
     setShowTrailerModal(true);
   };
@@ -163,4 +164,4 @@ function ItemOverview({
   );
 }
 
-export default ItemOverview;
+export default MovieOverview;

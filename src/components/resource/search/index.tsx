@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation'
 function SearchPageComponent() {
   const [search, setSearch] = useState<string>("");
   const [searchResults, setSearchResults] = useState<searchResult | null>(null);
+  const [searchType, setSearchType] = useState<"movie" | "tv">("movie");
   const [searchLength, setSearchLength] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
   const [shouldStartDelay, setShouldStartDelay] = useState(false);
@@ -51,6 +52,14 @@ function SearchPageComponent() {
     setSearchLength(results.results.length);
   };
 
+  const handleShowCardClick = (id: number) => {
+    if (searchType === "movie") {
+      router.push(`/movie/${id}`);
+    } else {
+      router.push(`/tv/${id}`);
+    }
+  }
+
   const renderContent = () => {
     if (isLoading && shouldStartDelay) {
       return Array.from({ length: searchLength }).map((_, index) => (
@@ -61,7 +70,7 @@ function SearchPageComponent() {
     if (searchResults?.results) {
       return searchResults.results.map((result) => {
         if ('poster_path' in result && result.poster_path !== null) {
-          return <ShowCard key={result.id} result={result} onClick={() => router.push(`/movie/${result.id}`)} />;
+          return <ShowCard key={result.id} result={result} onClick={() => handleShowCardClick(result.id)} />;
         }
         return null;
       }).filter(Boolean);
@@ -72,7 +81,7 @@ function SearchPageComponent() {
   
   return (
     <>
-      <SearchBar onSearchResults={handleSearchResults} onClear={() => setPage(1)} />  
+      <SearchBar onSearchResults={handleSearchResults} onClear={() => setPage(1)} onSetSearchType={setSearchType} />  
       { isEmpty ? (
         <div className="w-3/4 text-center my-auto">
           <p className="text-2xl">

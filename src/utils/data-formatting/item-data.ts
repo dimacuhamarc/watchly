@@ -1,6 +1,6 @@
-import { type show, type tvShow, type movieVideos } from "../types/tmdb-types";
+import { type show, type tvShow, type videos } from "../types/tmdb-types";
 
-const findBestVideo = (videos: movieVideos | null) => {
+const findBestVideo = (videos: videos | null) => {
   if (!videos?.results?.length) return "";
   const officialTrailer = videos.results.find(
     (video) =>

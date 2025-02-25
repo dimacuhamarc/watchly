@@ -3,20 +3,20 @@
 import React, { useEffect, useState } from "react";
 import {
   type movieDetails,
-  type movieCredits,
-  type movieVideos,
+  type credits,
+  type videos,
   type keywords,
   type watchProviders,
 } from "~/utils/types/tmdb-types";
 import {
   getMovieDetails,
-  getMovieCredits,
-  getMovieVideos,
+  getCredits,
+  getVideos,
   getKeywords,
   getWatchProviders,
 } from "~/utils/api/tmdb";
 import { useRouter } from "next/navigation";
-import { ItemOverview, KeywordsSection, CastSection } from "~/components/resource/items/section";
+import { MovieOverview, KeywordsSection, CastSection } from "~/components/resource/items/section";
 import { TrailerModal, WatchProviderModal } from "~/components/global/modals";
 import { findBestVideo } from "~/utils/data-formatting/item-data";
 
@@ -26,8 +26,8 @@ interface MoviePageComponentProps {
 
 function MoviePageComponent({ id }: MoviePageComponentProps) {
   const [movie, setMovie] = useState<movieDetails | null>(null);
-  const [credits, setCredits] = useState<movieCredits | null>(null);
-  const [videos, setVideos] = useState<movieVideos | null>(null);
+  const [credits, setCredits] = useState<credits | null>(null);
+  const [videos, setVideos] = useState<videos | null>(null);
   const [keywords, setKeywords] = useState<keywords | null>(null);
   const [watchProviders, setWatchProviders] = useState<watchProviders | null>(null);
   const [isTrailerModalOpen, setIsTrailerModalOpen] = useState(false);
@@ -40,10 +40,10 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
       try {
         const [movieData, creditsData, videosData, keywordsData, watchProvidersData] = await Promise.all([
           getMovieDetails(id),
-          getMovieCredits(id),
-          getMovieVideos(id),
-          getKeywords(id),
-          getWatchProviders(id),
+          getCredits(id, "movie"),
+          getVideos(id, "movie"),
+          getKeywords(id, "movie"),
+          getWatchProviders(id, "movie"),
         ]);
 
         if (!movieData) {
@@ -68,7 +68,7 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
   return (
     <>
       {movie && credits && videos && (
-        <ItemOverview
+        <MovieOverview
           movie={movie}
           credits={credits}
           videos={videos}
