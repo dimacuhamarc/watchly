@@ -98,9 +98,10 @@ export const getKeywords = async (id: string, type: "movie" | "tv") => {
   try {
     const response = await axios.request(options);
     if (type === "tv") {
+      const data = response.data as { results: Array<{ id: number; name: string }> };
       return {
         id: parseInt(id),
-        keywords: response.data.results as { id: number; name: string }[]
+        keywords: data.results
       } as keywords;
     }
     return response.data as keywords;
