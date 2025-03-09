@@ -1,5 +1,6 @@
 import "~/styles/globals.css";
 import "~/styles/text-styles.css";
+import "~/styles/layout-styles.css";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
