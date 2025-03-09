@@ -63,7 +63,7 @@ function WatchProvider({
       <div className="relative z-50 w-full max-w-2xl">
         <div className="rounded-lg bg-white px-12 py-8 text-slate-900 backdrop-blur-sm">
           <button
-            className="group absolute right-2.5 top-2.5 rounded-full p-2 text-white transition-all duration-300 hover:bg-gray-100 hover:text-gray-300 md:right-10 md:top-10"
+            className="group absolute right-1 top-1 rounded-full p-2 text-white transition-all duration-300 hover:bg-gray-100 hover:text-gray-300 md:right-10 md:top-10"
             onClick={handleClose}
           >
             <div
@@ -80,8 +80,8 @@ function WatchProvider({
           ) : (
             <div className="flex flex-col gap-4">
               <div>
-                <h1 className="text-2xl font-bold">
-                  Where to watch <span className="text-primary">{title}</span>
+                <h1 className="font-bold mb-2">
+                  Where to watch <br/><span className="text-2xl text-primary">{title}</span>
                 </h1>
                 {countryName && countryCode && (
                   <p className="">

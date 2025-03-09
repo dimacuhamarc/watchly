@@ -51,7 +51,7 @@ export default function Navbar() {
         <div className="hidden md:flex flex-row items-center gap-4">
           {onboardingLinks.map((link) => (
             link.showWhen !== 'authenticated' && (
-              <Link key={link.href} className={`${link.withStyle ? 'btn-primary btn' : 'text-link'}`} href={link.href}>
+              <Link key={link.type} className={`${link.withStyle ? 'btn-primary btn' : 'text-link'}`} href={link.href}>
                 {link.name}
               </Link>
             )
