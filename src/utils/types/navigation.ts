@@ -6,7 +6,7 @@ interface NavLink {
 
 interface OnboardingLink extends NavLink {
   withStyle?: boolean;
-  type: 'register' | 'login';
+  type: 'signup' | 'signin';
 }
 
 const navigationLinks: NavLink[] = [
@@ -69,14 +69,14 @@ const onboardingLinks: OnboardingLink[] = [
   {
     name: 'Get Started',
     href: '/onboarding',
-    type: 'register',
+    type: 'signup',
     showWhen: 'unauthenticated',
     withStyle: false
   },
   {
     name: 'Login',
     href: '/onboarding',
-    type: 'login',
+    type: 'signin',
     showWhen: 'unauthenticated',
     withStyle: true
   }

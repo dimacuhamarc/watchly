@@ -5,7 +5,15 @@ import Image from "next/image";
 import { navigationLinks, onboardingLinks } from "~/utils/types/navigation";
 import { useState, useEffect } from "react";
 
-export default function Navbar() {
+type NavbarProps = {
+  options?: {
+    logoOnly?: boolean;
+    mainLinks?: boolean;
+    onboardingLinks?: boolean;
+  }
+}
+
+export default function Navbar({ options }: NavbarProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -35,11 +43,13 @@ export default function Navbar() {
     <div className={`w-full backdrop-blur-sm transition-transform duration-300 ${
       isVisible ? 'translate-y-0' : '-translate-y-full'
     }`}>
-      <div className="w-2/3 mx-auto flex flex-row justify-center md:justify-between items-center px-10 py-8">
+      <div className={`w-2/3 mx-auto flex flex-row ${options?.logoOnly ? 'justify-center' : 'justify-center md:justify-between'} items-center px-10 py-8`}>
         <Link className="text-3xl font-bold" href="/">
           <Image src={"/assets/brand-light.svg"} alt="Brand" width={144} height={37} priority />
         </Link>
-        <div className="hidden md:flex flex-row items-center gap-4">
+        {!options?.logoOnly && (
+          <>
+            <div className="hidden md:flex flex-row items-center gap-4">
           {navigationLinks.map((link) => (
             link.showWhen !== 'authenticated' && (
               <Link key={link.href} className="text-md tracking-wide uppercase text-link" href={link.href}>
@@ -51,12 +61,14 @@ export default function Navbar() {
         <div className="hidden md:flex flex-row items-center gap-4">
           {onboardingLinks.map((link) => (
             link.showWhen !== 'authenticated' && (
-              <Link key={link.type} className={`${link.withStyle ? 'btn-primary btn' : 'text-link'}`} href={link.href}>
+              <Link key={link.type} className={`${link.withStyle ? 'btn-primary btn' : 'text-link'}`} href={link.href + '?type=' + link.type}>
                 {link.name}
               </Link>
             )
-          ))}
-        </div>
+            ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
