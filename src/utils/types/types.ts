@@ -4,4 +4,14 @@ type OnboardingMessageType = Record<string, {
   longDescription: string;
 }>;
 
-export type { OnboardingMessageType };
+interface SignInFormType {
+  username: string;
+  password: string;
+}
+
+interface SignUpFormType extends SignInFormType {
+  email: string;
+  confirmPassword: string;
+}
+
+export type { OnboardingMessageType, SignInFormType, SignUpFormType };

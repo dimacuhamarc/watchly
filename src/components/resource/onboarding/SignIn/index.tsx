@@ -1,11 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LuLock, LuLockOpen, LuEye, LuEyeOff, LuUser } from "react-icons/lu";
+import { useForm } from "react-hook-form";
+import type { SignInFormType } from "~/utils/types/types";
 import Link from "next/link";
 
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
+  const { register, handleSubmit, watch } = useForm<SignInFormType>();
+
+  useEffect(() => {
+    setIsSubmitDisabled(!watch("username") || !watch("password"));
+  }, [watch("username"), watch("password")]);
+
+  const onSubmit = (data: SignInFormType) => {
+    console.log(data);
+  };
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -21,12 +33,19 @@ function SignIn() {
           Sign in to your account to continue
         </p>
       </div>
-      <form className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label className="text-sm font-medium text-gray-500">Username</label>
           <label className="input input-bordered flex items-center gap-2 bg-slate-800">
             <LuUser className="h-4 w-4 opacity-70" />
-            <input type="text" className="grow" placeholder="i.e. rhoadey" />
+            <input
+              type="text"
+              className="grow"
+              placeholder="i.e. rhoadey"
+              autoComplete="off"
+              autoFocus
+              {...register("username")}
+            />
           </label>
         </div>
         <div>
@@ -46,6 +65,8 @@ function SignIn() {
               type={showPassword ? "text" : "password"}
               placeholder="i.e. warmachineRox"
               className="grow"
+              autoComplete="off"
+              {...register("password")}
             />
             <label className="swap swap-rotate">
               <input
@@ -61,7 +82,7 @@ function SignIn() {
         <button
           type="submit"
           className="btn btn-primary disabled:cursor-not-allowed disabled:text-gray-400"
-          // disabled
+          disabled={isSubmitDisabled}
         >
           Continue
         </button>

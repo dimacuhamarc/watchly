@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ searchParams }: { searchParams: { type?: string } }) {
-  const type = searchParams.type ?? 'signin';
+  const type = searchParams.type || 'signin';
 
   return {
     title: `${type === 'signin' ? 'Sign In' : 'Sign Up'} | Watchly`,
@@ -18,7 +18,7 @@ interface OnboardingPageProps {
 }
 
 function OnboardingPage({ searchParams }: OnboardingPageProps) {
-  const type = searchParams.type ?? 'signin';
+  const { type = 'signin' } = React.use(Promise.resolve(searchParams));
 
   if (type !== 'signin' && type !== 'signup') {
     redirect('/onboarding?type=signin');

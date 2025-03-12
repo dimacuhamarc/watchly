@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   LuLock,
   LuLockOpen,
@@ -9,11 +9,19 @@ import {
   LuUser,
   LuMail,
 } from "react-icons/lu";
+import { useForm } from "react-hook-form";
+import type { SignUpFormType } from "~/utils/types/types";
 import Link from "next/link";
 
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
+  const { register, handleSubmit, watch } = useForm<SignUpFormType>();  
+
+  useEffect(() => {
+    setIsSubmitDisabled(!watch("username") || !watch("email") || !watch("password") || !watch("confirmPassword"));
+  }, [watch("username"), watch("email"), watch("password"), watch("confirmPassword")]);
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -21,6 +29,10 @@ function SignUp() {
 
   const handleShowConfirmPassword = () => {
     setShowConfirmPassword(!showConfirmPassword);
+  };
+
+  const onSubmit = (data: SignUpFormType) => {
+    console.log(data);
   };
 
   return (
@@ -33,12 +45,17 @@ function SignUp() {
           Create an account to continue
         </p>
       </div>
-      <form className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label className="text-sm font-medium text-gray-500">Username</label>
           <label className="input input-bordered flex items-center gap-2 bg-slate-800">
             <LuUser className="h-4 w-4 opacity-70" />
-            <input type="text" className="grow" placeholder="i.e. rhoadey" />
+            <input
+              type="text"
+              className="grow"
+              placeholder="i.e. rhoadey"
+              {...register("username")}
+            />
           </label>
         </div>
         <div>
@@ -49,6 +66,7 @@ function SignUp() {
               type="text"
               className="grow"
               placeholder="i.e. rhoadey@gmail.com"
+              {...register("email")}
             />
           </label>
         </div>
@@ -69,6 +87,7 @@ function SignUp() {
               type={showPassword ? "text" : "password"}
               placeholder="i.e. warmachineRox"
               className="grow"
+              {...register("password")}
             />
             <label className="swap swap-rotate">
               <input
@@ -100,6 +119,7 @@ function SignUp() {
               type={showConfirmPassword ? "text" : "password"}
               placeholder="i.e. warmachineRox"
               className="grow"
+              {...register("confirmPassword")}
             />
             <label className="swap swap-rotate">
               <input
@@ -115,17 +135,17 @@ function SignUp() {
         <button
           type="submit"
           className="btn btn-primary disabled:cursor-not-allowed disabled:text-gray-400"
-          // disabled
+          disabled={isSubmitDisabled}
         >
           Continue
         </button>
-        <p className="text-sm text-gray-500 font-medium">
+        <p className="text-sm font-medium text-gray-500">
           By proceeding, you agree to our{" "}
-          <Link href="/terms" className="link link-hover text-primary">
+          <Link href="/terms" className="link-hover link text-primary">
             Terms of Service
           </Link>{" "}
           and{" "}
-          <Link href="/privacy" className="link link-hover text-primary">
+          <Link href="/privacy" className="link-hover link text-primary">
             Privacy Policy
           </Link>
         </p>
