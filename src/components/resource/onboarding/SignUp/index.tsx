@@ -20,8 +20,12 @@ function SignUp() {
   const { register, handleSubmit, watch } = useForm<SignUpFormType>();  
 
   useEffect(() => {
-    setIsSubmitDisabled(!watch("username") || !watch("email") || !watch("password") || !watch("confirmPassword"));
-  }, [watch("username"), watch("email"), watch("password"), watch("confirmPassword")]);
+    const username = watch("username");
+    const email = watch("email");
+    const password = watch("password");
+    const confirmPassword = watch("confirmPassword");
+    setIsSubmitDisabled(!username || !email || !password || !confirmPassword);
+  }, [watch]);
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);

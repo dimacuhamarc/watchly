@@ -12,8 +12,10 @@ function SignIn() {
   const { register, handleSubmit, watch } = useForm<SignInFormType>();
 
   useEffect(() => {
-    setIsSubmitDisabled(!watch("username") || !watch("password"));
-  }, [watch("username"), watch("password")]);
+    const username = watch("username");
+    const password = watch("password");
+    setIsSubmitDisabled(!username || !password);
+  }, [watch]);
 
   const onSubmit = (data: SignInFormType) => {
     console.log(data);
