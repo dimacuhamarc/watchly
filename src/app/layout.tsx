@@ -1,9 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import "~/styles/globals.css";
 import "~/styles/text-styles.css";
 import "~/styles/layout-styles.css";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
+import { SessionProvider } from "next-auth/react";
+import { auth } from "~/utils/api/auth";
 
 export const metadata: Metadata = {
   title: "Watchly | The best way to watch movies",
@@ -11,12 +16,22 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  let session = null;
+  
+  try {
+    session = await auth();
+  } catch (error) {
+    console.error("Auth error:", error);
+  }
+
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
-      <body>{children}</body>
+      <SessionProvider session={session}>
+        <body>{children}</body>
+      </SessionProvider>
     </html>
   );
 }
