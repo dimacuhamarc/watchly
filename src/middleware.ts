@@ -5,12 +5,14 @@ import { type NextRequest } from "next/server";
 const PUBLIC_PATHS = [
   "/auth",
   "/",
-  "/api/auth",
   "/onboarding",
-  "/api/auth"
+  "/api/auth",
+
+  "/search",
 ];
 
 const PRIVATE_PATHS = [
+  "/profile",
   "/search",
 ];
 
