@@ -5,20 +5,49 @@ import { LuLock, LuLockOpen, LuEye, LuEyeOff, LuUser } from "react-icons/lu";
 import { useForm } from "react-hook-form";
 import type { SignInFormType } from "~/utils/types/types";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { register, handleSubmit, watch } = useForm<SignInFormType>();
+  const router = useRouter();
 
   useEffect(() => {
-    const username = watch("username");
-    const password = watch("password");
-    setIsSubmitDisabled(!username || !password);
+    const subscription = watch((value) => {
+      const username = value.username;
+      const password = value.password;
+      setIsSubmitDisabled(!username || !password);
+    });
+    return () => subscription.unsubscribe();
   }, [watch]);
 
-  const onSubmit = (data: SignInFormType) => {
-    console.log(data);
+  const onSubmit = async (data: SignInFormType) => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const result = await signIn("credentials", {
+        username: data.username,
+        password: data.password,
+        redirect: false,
+      });
+      
+      if (result?.error) {
+        setError("Invalid username or password");
+        setIsLoading(false);
+      } else if (result?.ok) {
+        // Redirect to dashboard or home page after successful login
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("An unexpected error occurred. Please try again.");
+      setIsLoading(false);
+    }
   };
 
   const handleShowPassword = () => {
@@ -34,6 +63,9 @@ function SignIn() {
         <p className="text-center text-gray-500">
           Sign in to your account to continue
         </p>
+        {error && (
+          <p className="text-center text-sm text-red-500">{error}</p>
+        )}
       </div>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
         <div>
@@ -84,9 +116,9 @@ function SignIn() {
         <button
           type="submit"
           className="btn btn-primary disabled:cursor-not-allowed disabled:text-gray-400"
-          disabled={isSubmitDisabled}
+          disabled={isSubmitDisabled || isLoading}
         >
-          Continue
+          {isLoading ? "Signing in..." : "Continue"}
         </button>
         <div className="flex flex-row justify-between">
           <Link
