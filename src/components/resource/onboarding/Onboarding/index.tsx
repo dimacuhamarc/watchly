@@ -10,20 +10,21 @@ import TransitionProvider from "~/components/layout/transitionProvider";
 
 type OnboardingWrapperProps = {
   type: string;
+  registrationSuccess?: boolean;
 };
 
 type OnboardingMessageProps = {
   type: string;
 };
 
-function OnboardingWrapper({ type }: OnboardingWrapperProps) {
+function OnboardingWrapper({ type, registrationSuccess }: OnboardingWrapperProps) {
   return (
     <TransitionProvider>
       <div className="mx-auto flex h-screen max-w-screen-lg flex-col items-center justify-start gap-4 px-14 py-44 md:px-0">
         <div className="flex h-full w-full flex-col items-center gap-16 px-10 md:flex-row md:items-start">
           <div className="flex h-full flex-1 flex-col justify-center gap-4">
             {type === "signin" ? (
-              <SignInComponent key={type} />
+              <SignInComponent key={type} registrationSuccess={registrationSuccess} />
             ) : (
               <SignUpComponent key={type} />
             )}

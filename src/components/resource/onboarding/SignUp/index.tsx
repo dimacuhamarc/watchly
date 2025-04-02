@@ -12,19 +12,40 @@ import {
 import { useForm } from "react-hook-form";
 import type { SignUpFormType } from "~/utils/types/types";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
-  const { register, handleSubmit, watch } = useForm<SignUpFormType>();  
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { register, handleSubmit, watch } = useForm<SignUpFormType>();
+  const router = useRouter();
 
   useEffect(() => {
-    const username = watch("username");
-    const email = watch("email");
-    const password = watch("password");
-    const confirmPassword = watch("confirmPassword");
-    setIsSubmitDisabled(!username || !email || !password || !confirmPassword);
+    const subscription = watch((value) => {
+      const username = value.username;
+      const email = value.email;
+      const password = value.password;
+      const confirmPassword = value.confirmPassword;
+      
+      if (!username || !email || !password || !confirmPassword) {
+        setIsSubmitDisabled(true);
+        return;
+      }
+      
+      if (password !== confirmPassword) {
+        setError("Passwords do not match");
+        setIsSubmitDisabled(true);
+        return;
+      }
+      
+      setError(null);
+      setIsSubmitDisabled(false);
+    });
+    
+    return () => subscription.unsubscribe();
   }, [watch]);
 
   const handleShowPassword = () => {
@@ -35,8 +56,46 @@ function SignUp() {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const onSubmit = (data: SignUpFormType) => {
-    console.log(data);
+  const onSubmit = async (data: SignUpFormType) => {
+    if (data.password !== data.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+    
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: data.username,
+          email: data.email,
+          password: data.password,
+        }),
+      });
+      
+      const result = await response.json() as { message: string };
+      
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to register");
+      }
+      
+      // Registration successful - redirect to sign in
+      router.push("/onboarding?type=signin&registered=true");
+    } catch (error) {
+      console.error("Registration error:", error);
+      setError(
+        error instanceof Error 
+          ? error.message 
+          : "An unexpected error occurred. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -48,6 +107,9 @@ function SignUp() {
         <p className="text-center text-gray-500">
           Create an account to continue
         </p>
+        {error && (
+          <p className="text-center text-sm text-red-500">{error}</p>
+        )}
       </div>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
         <div>
@@ -58,6 +120,7 @@ function SignUp() {
               type="text"
               className="grow"
               placeholder="i.e. rhoadey"
+              autoFocus
               {...register("username")}
             />
           </label>
@@ -67,7 +130,7 @@ function SignUp() {
           <label className="input input-bordered flex items-center gap-2 bg-slate-800">
             <LuMail className="h-4 w-4 opacity-70" />
             <input
-              type="text"
+              type="email"
               className="grow"
               placeholder="i.e. rhoadey@gmail.com"
               {...register("email")}
@@ -139,9 +202,9 @@ function SignUp() {
         <button
           type="submit"
           className="btn btn-primary disabled:cursor-not-allowed disabled:text-gray-400"
-          disabled={isSubmitDisabled}
+          disabled={isSubmitDisabled || isLoading}
         >
-          Continue
+          {isLoading ? "Creating account..." : "Continue"}
         </button>
         <p className="text-sm font-medium text-gray-500">
           By proceeding, you agree to our{" "}
