@@ -13,4 +13,10 @@ type AuthUser = {
   updated_at: Date;
 };
 
-export type { AuthUser };
+interface SignUpRequest {
+  username: string;
+  email: string;
+  password: string;
+}
+
+export type { AuthUser, SignUpRequest };
