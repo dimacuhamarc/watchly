@@ -43,38 +43,48 @@ export async function POST(req: Request) {
       );
     }
 
-    // Create a session token using the edge-compatible jose library
-    const token = await signJwtAccessToken({
-      id: user.id,
-      email: user.email,
-      name: user?.name ?? user?.username ?? undefined,
-    });
-
-    // Set the session cookie
-    const cookieStore = await cookies();
-    cookieStore.set({
-      name: "next-auth.session-token",
-      value: token,
-      httpOnly: true,
-      path: "/",
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 30 * 24 * 60 * 60, // 30 days
-    });
-
-    // Return user info (excluding password)
-    return NextResponse.json({
-      user: {
+    try {
+      // Create a session token using the edge-compatible jose library
+      const token = await signJwtAccessToken({
         id: user.id,
         email: user.email,
-        name: user.name ?? user.username,
-        image: user.profile_picture,
-      }
-    });
+        name: user?.name ?? user?.username ?? undefined,
+      });
+
+      // Set the session cookie
+      const cookieStore = await cookies();
+      
+      // Make sure the cookie is set properly
+      cookieStore.set({
+        name: "next-auth.session-token",
+        value: token,
+        httpOnly: true,
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+      });
+
+      // Return user info (excluding password)
+      return NextResponse.json({
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name ?? user.username,
+          image: user.profile_picture,
+        }
+      });
+    } catch (jwtError) {
+      console.error("JWT signing error:", jwtError);
+      return NextResponse.json(
+        { error: "Session creation failed", details: process.env.NODE_ENV !== "production" ? String(jwtError) : undefined },
+        { status: 500 }
+      );
+    }
   } catch (error) {
     console.error("Login error:", error);
     return NextResponse.json(
-      { error: "Authentication failed" },
+      { error: "Authentication failed", details: process.env.NODE_ENV !== "production" ? String(error) : undefined },
       { status: 500 }
     );
   }
