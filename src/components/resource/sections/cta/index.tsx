@@ -17,7 +17,7 @@ export default function CTA() {
           <p className="text-lg">{copy.description}</p>
         </div>
         <div className="flex flex-row items-center gap-4">
-          <Link className="btn btn-primary" href="/signup">
+          <Link className="btn btn-primary" href="/onboarding?type=signup">
             <IoRocket className="h-4 w-4" /> Get Started
           </Link>
           <Link

@@ -12,6 +12,11 @@ const PROTECTED_PATHS = [
   "/my-list",
 ];
 
+const ONBOARDING_PATHS = [
+  "/onboarding",
+  "/onboarding/:path*",
+]
+
 // Convert string to Uint8Array for jose
 function stringToUint8Array(str: string): Uint8Array {
   return new TextEncoder().encode(str);
@@ -38,11 +43,29 @@ async function verifyJwtToken(token: string): Promise<JWTTokenPayload | null> {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
+  // Check if this is an onboarding path
+  const isOnboardingPath = ONBOARDING_PATHS.some(path =>
+    pathname === path || pathname.startsWith(`${path}/`)
+  );
+  
   // Check if this is a path that requires protection
   const isProtectedPath = PROTECTED_PATHS.some(path => 
     pathname === path || pathname.startsWith(`${path}/`)
   );
   
+  // Get the token from cookies - we need to check this early for both path types
+  const token = request.cookies.get("next-auth.session-token")?.value;
+  
+  // If it's an onboarding path and the user is authenticated, redirect to home
+  if (isOnboardingPath && token) {
+    // Verify the token before redirecting
+    const payload = await verifyJwtToken(token);
+    if (payload) {
+      console.log("Authenticated user trying to access onboarding, redirecting to home");
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+  }
+
   // If path doesn't require auth, allow access immediately
   if (!isProtectedPath) {
     return NextResponse.next();
@@ -50,9 +73,7 @@ export async function middleware(request: NextRequest) {
 
   console.log(`Checking auth for protected path: ${pathname}`);
   
-  // Get the token from cookies
-  const token = request.cookies.get("next-auth.session-token")?.value;
-  
+  // Already checked if token exists above, but not for protected paths
   if (!token) {
     console.log("No auth token found, redirecting to signin");
     return NextResponse.redirect(new URL("/onboarding?type=signin", request.url));
@@ -82,5 +103,7 @@ export const config = {
     '/settings/:path*',
     '/watch/:path*',
     '/my-list/:path*',
+    '/onboarding',
+    '/onboarding/:path*',
   ],
 };
