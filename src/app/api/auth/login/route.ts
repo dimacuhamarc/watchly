@@ -65,8 +65,10 @@ export async function POST(req: Request) {
         maxAge: 30 * 24 * 60 * 60, // 30 days
       });
 
-      // Return user info (excluding password)
+      // Return user info (excluding password) and include a callbackUrl for redirection
       return NextResponse.json({
+        ok: true,
+        url: "/", // Provide a default callback URL for redirection
         user: {
           id: user.id,
           email: user.email,
