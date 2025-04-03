@@ -25,7 +25,8 @@ Watchly is designed to streamline your entertainment experience, offering a seam
   - [x] add item page
 - [x] Setup db ( vercel postgres )
 - [x] add db
-- [ ] add auth ( next auth )
+- [x] add auth ( next auth )
+- [x] add jwt, sessions, signin, signup, middlewares
 - [ ] setup user profile
 - [x] add search
 - [ ] add watchlist
