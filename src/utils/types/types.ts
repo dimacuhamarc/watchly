@@ -5,7 +5,7 @@ type OnboardingMessageType = Record<string, {
 }>;
 
 interface SignInFormType {
-  username: string;
+  email: string;
   password: string;
 }
 

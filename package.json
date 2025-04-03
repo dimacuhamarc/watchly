@@ -28,6 +28,7 @@
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.41.0",
     "geist": "^1.3.0",
+    "jsonwebtoken": "^9.0.2",
     "next": "^15.0.1",
     "next-auth": "5.0.0-beta.25",
     "postgres": "^3.4.4",

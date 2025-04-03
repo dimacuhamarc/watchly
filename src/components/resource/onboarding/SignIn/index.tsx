@@ -1,51 +1,79 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { LuLock, LuLockOpen, LuEye, LuEyeOff, LuUser } from "react-icons/lu";
+import { LuLock, LuLockOpen, LuEye, LuEyeOff, LuMail } from "react-icons/lu";
 import { useForm } from "react-hook-form";
 import type { SignInFormType } from "~/utils/types/types";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
-function SignIn() {
+interface SignInProps {
+  registrationSuccess?: boolean;
+}
+
+function SignIn({ registrationSuccess }: SignInProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(
+    registrationSuccess ? "Account created successfully! Please sign in." : null
+  );
   const { register, handleSubmit, watch } = useForm<SignInFormType>();
   const router = useRouter();
+  const { data: session } = useSession();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (session) {
+      router.replace("/");
+    }
+  }, [session, router]);
 
   useEffect(() => {
     const subscription = watch((value) => {
-      const username = value.username;
+      const email = value.email;
       const password = value.password;
-      setIsSubmitDisabled(!username || !password);
+      setIsSubmitDisabled(!email || !password);
     });
     return () => subscription.unsubscribe();
   }, [watch]);
 
   const onSubmit = async (data: SignInFormType) => {
     setIsLoading(true);
-    setError(null);
+    setError("");
+    setSuccessMessage("");
     
     try {
-      const result = await signIn("credentials", {
-        username: data.username,
-        password: data.password,
-        redirect: false,
+      // Direct API call instead of going through NextAuth signIn
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password
+        })
       });
+
+      const result = await res.json();
       
-      if (result?.error) {
-        setError("Invalid username or password");
-        setIsLoading(false);
-      } else if (result?.ok) {
-        // Redirect to dashboard or home page after successful login
-        router.push("/dashboard");
+      if (!res.ok) {
+        setError(result.error || "Authentication failed");
+        console.error("Sign-in error:", result.error);
+      } else {
+        console.log("Sign-in successful");
+        setSuccessMessage("Login successful! Redirecting...");
+        
+        // Refresh the page to update the session
+        window.location.href = "/";
       }
     } catch (error) {
       console.error("Login error:", error);
-      setError("An unexpected error occurred. Please try again.");
+      setError("Authentication failed. Please try again.");
+    } finally {
       setIsLoading(false);
     }
   };
@@ -66,19 +94,21 @@ function SignIn() {
         {error && (
           <p className="text-center text-sm text-red-500">{error}</p>
         )}
+        {successMessage && (
+          <p className="text-center text-sm text-green-500">{successMessage}</p>
+        )}
       </div>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <label className="text-sm font-medium text-gray-500">Username</label>
+          <label className="text-sm font-medium text-gray-500">Email</label>
           <label className="input input-bordered flex items-center gap-2 bg-slate-800">
-            <LuUser className="h-4 w-4 opacity-70" />
+            <LuMail className="h-4 w-4 opacity-70" />
             <input
-              type="text"
+              type="email"
               className="grow"
-              placeholder="i.e. rhoadey"
-              autoComplete="off"
+              placeholder="your.email@example.com"
               autoFocus
-              {...register("username")}
+              {...register("email")}
             />
           </label>
         </div>
