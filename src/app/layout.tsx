@@ -6,6 +6,7 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "~/utils/api/auth";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Watchly | The best way to watch movies",
@@ -17,13 +18,17 @@ export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   let session = null;
-  
-  try {
-    session = await auth();
-  } catch (error) {
-    console.error("Auth error:", error);
-  }
 
+  if ((await cookies()).get("next-auth.session-token") === undefined) {
+    console.log("No session token found in cookies");
+  } else {
+    try {
+      session = await auth();
+    } catch (error) {
+      console.error("Auth error:", error);
+    }
+  }
+  
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <SessionProvider session={session}>
