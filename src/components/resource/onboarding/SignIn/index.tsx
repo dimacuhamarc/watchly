@@ -7,6 +7,7 @@ import type { SignInFormType } from "~/utils/types/types";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import type { LoginResponse } from "~/utils/types/auth";
 
 interface SignInProps {
   registrationSuccess?: boolean;
@@ -58,10 +59,10 @@ function SignIn({ registrationSuccess }: SignInProps) {
         })
       });
 
-      const result = await res.json();
+      const result = await res.json() as LoginResponse;
       
       if (!res.ok) {
-        setError(result.error || "Authentication failed");
+        setError(result.error ?? "Authentication failed");
         console.error("Sign-in error:", result.error);
       } else {
         console.log("Sign-in successful");

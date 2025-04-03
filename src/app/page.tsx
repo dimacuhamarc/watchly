@@ -2,7 +2,6 @@ import Features from "~/components/resource/sections/features";
 import MainLayoutProvider from "~/components/layout/mainLayoutProvider";
 import CTA from "~/components/resource/sections/cta";
 import Hero from "~/components/resource/sections/hero";
-import { cookies } from "next/headers";
 
 export const dynamic = "force-dynamic";
 

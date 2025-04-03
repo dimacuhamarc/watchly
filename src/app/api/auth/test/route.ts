@@ -4,8 +4,8 @@ import { verifyJwt } from "~/utils/jwt";
 
 export async function GET(req: Request) {
   // Get the cookie from the request
-  const cookieStore = cookies();
-  const token = cookieStore.get("next-auth.session-token")?.value;
+  const cookieStore = await cookies();
+  const token = cookieStore?.get("next-auth.session-token")?.value;
   
   if (!token) {
     return NextResponse.json({ 
@@ -30,7 +30,7 @@ export async function GET(req: Request) {
       user: {
         id: payload.id,
         email: payload.email,
-        name: payload.name
+        username: payload.name
       }
     });
   } catch (error) {

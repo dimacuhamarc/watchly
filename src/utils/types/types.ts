@@ -11,6 +11,7 @@ interface SignInFormType {
 
 interface SignUpFormType extends SignInFormType {
   email: string;
+  username: string;
   confirmPassword: string;
 }
 

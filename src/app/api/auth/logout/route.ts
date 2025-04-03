@@ -3,7 +3,8 @@ import { cookies } from "next/headers";
 
 export async function GET() {
   // Clear the auth cookie
-  cookies().set({
+  const cookieStore = await cookies();
+  cookieStore.set({
     name: "next-auth.session-token",
     value: "",
     expires: new Date(0),
@@ -11,7 +12,7 @@ export async function GET() {
   });
 
   // Also clear any secure variants
-  cookies().set({
+  cookieStore.set({
     name: "__Secure-next-auth.session-token",
     value: "",
     expires: new Date(0),

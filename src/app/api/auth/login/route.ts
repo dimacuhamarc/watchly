@@ -6,7 +6,8 @@ import { signJwtAccessToken } from "~/utils/jwt";
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    // Define the expected structure of the request body
+    const body = await req.json() as { email: string; password: string };
     const { email, password } = body;
 
     if (!email || !password) {
@@ -46,11 +47,12 @@ export async function POST(req: Request) {
     const token = await signJwtAccessToken({
       id: user.id,
       email: user.email,
-      name: user.name ?? user.username,
+      name: user?.name ?? user?.username ?? undefined,
     });
 
     // Set the session cookie
-    cookies().set({
+    const cookieStore = await cookies();
+    cookieStore.set({
       name: "next-auth.session-token",
       value: token,
       httpOnly: true,

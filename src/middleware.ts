@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
+import type { JWTTokenPayload } from "./utils/types/auth";
 
 // List of paths that REQUIRE authentication
 const PROTECTED_PATHS = [
@@ -17,7 +18,7 @@ function stringToUint8Array(str: string): Uint8Array {
 }
 
 // Verify JWT token using jose (Edge runtime compatible)
-async function verifyJwtToken(token: string): Promise<any> {
+async function verifyJwtToken(token: string): Promise<JWTTokenPayload | null> {
   try {
     const secret = process.env.NEXTAUTH_SECRET;
     if (!secret) {
@@ -27,7 +28,7 @@ async function verifyJwtToken(token: string): Promise<any> {
 
     const secretKey = stringToUint8Array(secret);
     const { payload } = await jwtVerify(token, secretKey);
-    return payload;
+    return payload as JWTTokenPayload;
   } catch (error) {
     console.error("JWT verification error:", error);
     return null;

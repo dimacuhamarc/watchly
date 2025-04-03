@@ -19,4 +19,25 @@ interface SignUpRequest {
   password: string;
 }
 
-export type { AuthUser, SignUpRequest };
+type JWTTokenPayload = {
+  id: string;
+  email: string;
+  name?: string;
+  iat?: number;
+  exp?: number;
+};
+
+interface LoginResponse {
+  error?: string;
+  success?: boolean;
+}
+
+interface AuthProvider {
+  id: string;
+  name: string;
+  type: string;
+  signinUrl: string;
+  callbackUrl: string;
+}
+
+export type { AuthUser, SignUpRequest, JWTTokenPayload, LoginResponse, AuthProvider };

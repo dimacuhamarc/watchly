@@ -1,12 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
 import { compare } from "bcryptjs";
-import { cookies } from "next/headers";
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, password, callbackUrl = "/" } = await req.json();
+    const { email, password } = await req.json() as { email: string; password: string };
     
     if (!email || !password) {
       return NextResponse.json({ error: "Missing email or password" }, { status: 400 });
@@ -32,7 +31,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       id: user.id,
       email: user.email,
-      name: user.name || user.username
+      name: user.name ?? user.username
     });
   } catch (error) {
     console.error("Sign-in error:", error);

@@ -3,7 +3,7 @@ import * as jose from 'jose';
 interface TokenPayload {
   id: string;
   email: string;
-  name?: string;
+  name?: string | undefined;
   iat?: number;
   exp?: number;
 }
@@ -68,11 +68,15 @@ export async function hasValidSession(cookieString?: string): Promise<boolean> {
   
   const cookies = cookieString.split(';').reduce((acc, cookie) => {
     const [key, value] = cookie.trim().split('=');
-    acc[key] = value;
+    if (key) {
+      if (value !== undefined) {
+        acc[key] = value;
+      }
+    }
     return acc;
   }, {} as Record<string, string>);
   
-  const token = cookies['next-auth.session-token'] || cookies['__Secure-next-auth.session-token'];
+  const token = cookies['next-auth.session-token'] ?? cookies['__Secure-next-auth.session-token'];
   
   if (!token) return false;
   
