@@ -1,38 +1,40 @@
-import {
-  getCookie,
-  getCookies,
-  hasCookie,
-} from 'cookies-next/client';
-import { useEffect, useState } from 'react';
+'use client';
+
+import { useEffect, useState, useCallback } from 'react';
+
+interface AuthState {
+  isAuthenticated: boolean;
+  cookiesLoaded: boolean;
+}
 
 export function useAuthenticated() {
-  // Using state since cookies aren't available during SSR
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [cookiesLoaded, setCookiesLoaded] = useState(false);
 
-  useEffect(() => {
-    // Check for any NextAuth.js session cookie - only runs client-side
-    const hasAuthCookie = 
-      hasCookie('next-auth.session-token') || 
-      hasCookie('__Secure-next-auth.session-token') ||
-      hasCookie('authjs.session-token') ||
-      hasCookie('__Secure-authjs.session-token');
-
-    // Get all cookies and check for chunked session tokens
-    const cookies = getCookies();
-    
-    console.log('Auth Cookies Client-side:', {
-      hasAuthCookie,
-      cookieKeys: Object.keys(cookies ?? {}),
-      documentCookie: typeof document !== 'undefined' ? document.cookie : 'not available'
-    });
-
-    setIsAuthenticated(hasAuthCookie);
-    setCookiesLoaded(true);
+  // Memoize fetchAuthState to prevent recreation on every render
+  const fetchAuthState = useCallback(async () => {
+    try {
+      const response = await fetch('/api/auth/checkAuth');
+      const data = await response.json() as AuthState;
+      setIsAuthenticated(data.isAuthenticated);
+      return data.isAuthenticated;
+    } catch (error) {
+      console.error('Failed to fetch authentication state:', error);
+      return false;
+    } finally {
+      setCookiesLoaded(true);
+    }
   }, []);
+
+  useEffect(() => {
+    // Only fetch auth state once when the component mounts
+    void fetchAuthState();
+    // Empty dependency array ensures this only runs once
+  }, [fetchAuthState]);
 
   return {
     isAuthenticated,
-    cookiesLoaded
+    cookiesLoaded,
+    fetchAuthState,
   };
 }

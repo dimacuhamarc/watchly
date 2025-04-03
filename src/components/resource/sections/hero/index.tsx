@@ -6,13 +6,12 @@ import { FaGithub } from "react-icons/fa";
 import TransitionProvider from "~/components/layout/transitionProvider";
 import { useTextRotation } from "~/hooks/useTextRotation";
 import { IoRocket } from "react-icons/io5";
-import { useAuthenticated } from "~/hooks/useAuth";
+
 
 export default function Hero() {
   const rotatingWords = ["Faster", "Accurately", "With Watchly"];
   const { currentWord, isVisible } = useTextRotation({ words: rotatingWords });
-  const { isAuthenticated } = useAuthenticated()
-  console.log(isAuthenticated)
+  
   return (
     <TransitionProvider className="mx-auto flex min-h-screen max-w-screen-lg flex-col items-start justify-center gap-6 px-10 py-44">
       <h1 className="text-7xl font-bold">

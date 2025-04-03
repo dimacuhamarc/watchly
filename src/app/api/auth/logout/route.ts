@@ -19,9 +19,6 @@ export async function GET() {
     path: "/",
   });
 
-  // Return success
-  return NextResponse.json({ 
-    success: true, 
-    message: "Logged out successfully" 
-  });
+  // Redirect to homepage after logout
+  return NextResponse.redirect(new URL('/', process.env.NEXTAUTH_URL ?? 'http://localhost:3000'));
 }
