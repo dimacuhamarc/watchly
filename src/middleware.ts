@@ -23,6 +23,7 @@ function stringToUint8Array(str: string): Uint8Array {
 }
 
 // Verify JWT token using jose (Edge runtime compatible)
+// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 async function verifyJwtToken(token: string): Promise<JWTTokenPayload | null> {
   try {
     const secret = process.env.NEXTAUTH_SECRET;
@@ -59,6 +60,7 @@ export async function middleware(request: NextRequest) {
   // If it's an onboarding path and the user is authenticated, redirect to home
   if (isOnboardingPath && token) {
     // Verify the token before redirecting
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const payload = await verifyJwtToken(token);
     if (payload) {
       console.log("Authenticated user trying to access onboarding, redirecting to home");
@@ -80,6 +82,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Verify the token
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const payload = await verifyJwtToken(token);
   
   if (!payload) {
