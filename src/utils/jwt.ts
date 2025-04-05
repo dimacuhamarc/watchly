@@ -3,7 +3,7 @@ import * as jose from 'jose';
 interface TokenPayload {
   id: string;
   email: string;
-  name?: string | undefined;
+  username?: string | undefined;
   iat?: number;
   exp?: number;
 }
@@ -54,7 +54,7 @@ export async function verifyJwt(token: string): Promise<TokenPayload | null> {
     return {
       id: payload.id as string,
       email: payload.email as string,
-      name: payload.name as string | undefined
+      username: payload.name as string | undefined
     };
   } catch (error) {
     console.error("JWT verification error:", error);

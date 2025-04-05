@@ -19,7 +19,6 @@ export default async function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   let session = null;
   if ((await cookies()).get("next-auth.session-token") === undefined) {
-    console.log("No session token found in cookies");
   } else {
     try {
       session = await auth();

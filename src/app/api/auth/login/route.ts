@@ -48,7 +48,7 @@ export async function POST(req: Request) {
       const token = await signJwtAccessToken({
         id: user.id,
         email: user.email,
-        name: user?.name ?? user?.username ?? undefined,
+        username: user?.name ?? user?.username ?? undefined,
       });
 
       // Set the session cookie
