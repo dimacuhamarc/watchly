@@ -21,3 +21,21 @@ const Media = {
 type MediaType = (typeof Media)[keyof typeof Media];
 
 export { Media, type MediaType };
+
+interface SanitizedUserData {
+  id: string;
+  email: string;
+  username: string;
+  image?: string;
+  first_name?: string;
+  last_name?: string;
+  created_at?: Date;
+}
+
+interface CookieUserData {
+  id: string;
+  email: string;
+  username: string;
+}
+
+export type { SanitizedUserData, CookieUserData };
