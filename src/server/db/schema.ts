@@ -34,6 +34,19 @@ export const users = createTable("user", {
   updated_at: timestamp("updated_at").$onUpdate(() => new Date()),
 });
 
+export const follow = createTable("follow", {
+  id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+  userId: varchar("user_id", { length: 255 })
+    .notNull()
+    .references(() => users.id),
+  followedUserId: varchar("followed_user_id", { length: 255 })
+    .notNull()
+    .references(() => users.id),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
+
 export const watchlist = createTable("watchlist", {
   id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
   userId: varchar("user_id", { length: 255 })

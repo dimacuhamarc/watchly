@@ -13,7 +13,7 @@ import UserAbout from "~/components/resource/profile/About";
 import UserMilestones from "~/components/resource/profile/Milestones";
 
 function ProfileComponent() {
-  const { userData: userDataFromCookie } = useAuthenticated();
+  const { userData: userDataFromCookie, userFollowData } = useAuthenticated();
   const [userData, setUserData] = useState<SanitizedUserData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<boolean>(false);
@@ -93,8 +93,8 @@ function ProfileComponent() {
             </span>
           </h2>
           <h2 className="text-md flex flex-row gap-2">
-            <span className="text-primary">22 Followers</span>
-            <span className="text-slate-900">10 Following</span>
+            <span className="text-primary">{userFollowData?.followers} Followers</span>
+            <span className="text-slate-900">{userFollowData?.following} Following</span>
           </h2>
         </div>
         <div className="mb-auto ml-auto flex flex-col gap-2 lg:flex-row">
@@ -107,7 +107,11 @@ function ProfileComponent() {
         </div>
       </div>
       <div className="flex w-full flex-row gap-4 bg-white px-20 pb-8 text-slate-900 shadow-md">
-        <button className="btn btn-primary">Follow</button>
+        {
+          false 
+          ? <button className="btn btn-primary">Follow</button>
+          : <button className="btn btn-primary">Edit Profile</button>
+        }
         <button className="btn">
           Watchlists
           <div className="badge">3</div>

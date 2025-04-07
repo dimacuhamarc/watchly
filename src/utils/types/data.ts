@@ -39,4 +39,9 @@ interface CookieUserData {
   username: string;
 }
 
-export type { SanitizedUserData, CookieUserData };
+interface UserFollowData {
+  followers: number;
+  following: number;
+}
+
+export type { SanitizedUserData, CookieUserData, UserFollowData };
