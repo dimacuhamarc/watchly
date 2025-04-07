@@ -11,6 +11,7 @@ import { FaEllipsisH, FaShareAlt } from "react-icons/fa";
 import ActivityList from "~/components/resource/profile/Activity";
 import UserAbout from "~/components/resource/profile/About";
 import UserMilestones from "~/components/resource/profile/Milestones";
+import Link from "next/link";
 
 function ProfileComponent() {
   const { userData: userDataFromCookie, userFollowData } = useAuthenticated();
@@ -65,14 +66,17 @@ function ProfileComponent() {
 
   return (
     <>
-      <div className="flex w-full flex-row items-center gap-4 rounded-t-md bg-white pb-6 px-20 pt-12 text-slate-900 shadow-md lg:pt-16">
+      <Link href="/" className="mb-4 text-sm text-gray-500 hover:text-gray-200">
+        Back to Home
+      </Link>
+      <div className="flex w-full flex-row items-center gap-4 rounded-t-md bg-white px-20 pb-6 pt-12 text-slate-900 shadow-md lg:pt-16">
         {userData?.profile_picture && (
           <div className="relative h-24 w-24 overflow-hidden rounded-full">
             <PhotoAvatar
               src={userData?.profile_picture}
               alt={userDataName}
               isAutoSized={true}
-              className="object-cover w-full h-full"
+              className="h-full w-full object-cover"
             />
           </div>
         )}
@@ -93,8 +97,12 @@ function ProfileComponent() {
             </span>
           </h2>
           <h2 className="text-md flex flex-row gap-2">
-            <span className="text-primary">{userFollowData?.followers} Followers</span>
-            <span className="text-slate-900">{userFollowData?.following} Following</span>
+            <span className="text-primary">
+              {userFollowData?.followers} Followers
+            </span>
+            <span className="text-slate-900">
+              {userFollowData?.following} Following
+            </span>
           </h2>
         </div>
         <div className="mb-auto ml-auto flex flex-col gap-2 lg:flex-row">
@@ -107,11 +115,11 @@ function ProfileComponent() {
         </div>
       </div>
       <div className="flex w-full flex-row gap-4 bg-white px-20 pb-8 text-slate-900 shadow-md">
-        {
-          false 
-          ? <button className="btn btn-primary">Follow</button>
-          : <button className="btn btn-primary">Edit Profile</button>
-        }
+        {false ? (
+          <button className="btn btn-primary">Follow</button>
+        ) : (
+          <button className="btn btn-primary">Edit Profile</button>
+        )}
         <button className="btn">
           Watchlists
           <div className="badge">3</div>
