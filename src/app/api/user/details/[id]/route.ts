@@ -23,7 +23,6 @@ export async function GET(
     }
 
     try {
-      // Use a direct query approach to avoid the map error
       const user = await db.query.users.findFirst({
         where: (users, { eq }) => eq(users.id, params.id),
       });
@@ -40,13 +39,12 @@ export async function GET(
         );
       }
 
-      // Ensure user properties are properly checked before using them
       const sanitizedUser: SanitizedUserData = {
         id: user.id,
         email: user.email,
         username: user.username ?? '',
         bio: user.bio ?? '',
-        image: user.image ?? '',
+        profile_picture: user.profile_picture ?? '',
         first_name: user.first_name ?? '',
         last_name: user.last_name ?? '',
         created_at: user.created_at,

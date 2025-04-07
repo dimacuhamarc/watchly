@@ -11,6 +11,7 @@ import { FaEllipsisH, FaShareAlt } from "react-icons/fa";
 import ActivityList from "~/components/resource/profile/Activity";
 import UserAbout from "~/components/resource/profile/About";
 import UserMilestones from "~/components/resource/profile/Milestones";
+import Image from "next/image";
 
 function ProfileComponent() {
   const { userData: userDataFromCookie } = useAuthenticated();
@@ -67,7 +68,8 @@ function ProfileComponent() {
 
   return (
     <>
-      <div className="flex w-full flex-row items-center gap-4 rounded-t-md bg-white p-6 text-slate-900 shadow-md lg:p-8">
+      { userData?.profile_picture && (<Image src={userData?.profile_picture} height={50} width={50} alt={'asd'} />)}
+      <div className="flex w-full flex-row items-center gap-4 rounded-t-md bg-white pt-12 pb-6  text-slate-900 shadow-md lg:pt-16">
         <InitialAvatar
           name={userData?.first_name + " " + userData?.last_name}
           size={2}
@@ -97,7 +99,7 @@ function ProfileComponent() {
           </button>
         </div>
       </div>
-      <div className="flex w-full flex-row gap-4 bg-white px-8 pb-8 text-slate-900 shadow-md">
+      <div className="flex w-full flex-row gap-4 bg-white px-32 pb-8 text-slate-900 shadow-md">
         <button className="btn btn-primary">Follow</button>
         <button className="btn">
           Watchlists

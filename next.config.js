@@ -13,7 +13,14 @@ const config = {
     ignoreDuringBuilds: true,
   },
   images: {
-    domains: ['image.tmdb.org']
+    domains: ['image.tmdb.org'],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: `${process.env.NEXT_PUBLIC_UPLOADTHING_PATTERN}.ufs.sh`,
+        pathname: "/f/*",
+      },
+    ]
   }
 };
 

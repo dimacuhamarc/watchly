@@ -1,5 +1,6 @@
 import { relations, sql } from "drizzle-orm";
 import {
+  boolean,
   index,
   integer,
   jsonb,
@@ -11,26 +12,24 @@ import {
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
-
 import { type WatchlistItemStatusType } from "~/utils/types/data";
 import { type MediaType } from "~/utils/types/data";
 
 export const createTable = pgTableCreator((name) => `watchly_${name}`);
 
-
 export const users = createTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
-  name: varchar("name", { length: 255 }),
-  email: varchar("email", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }).notNull().unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
-  image: varchar("image", { length: 255 }),
   password_hash: varchar("password_hash", { length: 255 }).notNull(),
-  username: varchar("username", { length: 255 }),
+  username: varchar("username", { length: 255 }).notNull().unique(),
   first_name: varchar("first_name", { length: 255 }),
   last_name: varchar("last_name", { length: 255 }),
   display_name: varchar("display_name", { length: 255 }),
   profile_picture: varchar("profile_picture", { length: 255 }),
   bio: varchar("bio", { length: 360 }),
+  public_profile: boolean("public_profile").notNull().default(true),
+  location: varchar("location", { length: 255 }),
   created_at: timestamp("created_at").defaultNow().notNull(),
   updated_at: timestamp("updated_at").$onUpdate(() => new Date()),
 });
@@ -44,8 +43,9 @@ export const watchlist = createTable("watchlist", {
   createdAt: timestamp("created_at", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
-    .$onUpdate(() => new Date()),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+    () => new Date(),
+  ),
 });
 
 export const watchlistItems = createTable("watchlist_item", {
@@ -61,16 +61,15 @@ export const watchlistItems = createTable("watchlist_item", {
   createdAt: timestamp("created_at", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
-    .$onUpdate(() => new Date()),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+    () => new Date(),
+  ),
 });
 
 export const movies = createTable("movie", {
   id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
   tmdbId: integer("tmdb_id").notNull(),
-  type: varchar("type", { length: 255 })
-    .$type<MediaType>()
-    .notNull(),
+  type: varchar("type", { length: 255 }).$type<MediaType>().notNull(),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -103,7 +102,7 @@ export const accounts = createTable(
       columns: [account.provider, account.providerAccountId],
     }),
     userIdIdx: index("account_user_id_idx").on(account.userId),
-  })
+  }),
 );
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
@@ -126,7 +125,7 @@ export const sessions = createTable(
   },
   (session) => ({
     userIdIdx: index("session_user_id_idx").on(session.userId),
-  })
+  }),
 );
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
@@ -145,5 +144,5 @@ export const verificationTokens = createTable(
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
-  })
+  }),
 );

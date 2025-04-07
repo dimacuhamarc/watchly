@@ -27,10 +27,10 @@ interface SanitizedUserData {
   email: string;
   username: string;
   bio?: string;
-  image?: string;
   first_name?: string;
   last_name?: string;
   created_at?: Date | string;
+  profile_picture?: string;
 }
 
 interface CookieUserData {

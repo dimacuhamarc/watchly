@@ -5,7 +5,7 @@ import ProfileComponent from "~/components/resource/profile";
 function ProfilePage() {
   return (
     <AuthLayoutProvider>
-      <div className="mx-auto flex min-h-screen max-w-screen-lg flex-col items-start justify-start lg:px-14 py-28 md:px-0">
+      <div className="mx-auto flex min-h-screen max-w-screen-xl flex-col items-start justify-start py-28 md:px-0">
         <ProfileComponent />
       </div>
     </AuthLayoutProvider>
