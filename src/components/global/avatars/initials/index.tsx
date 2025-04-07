@@ -2,10 +2,9 @@ import React from 'react'
 
 interface InitialAvatarProps {
   name: string;
-  size?: number;
 }
 
-function InitialAvatar({ name, size = 2 }: InitialAvatarProps) {
+function InitialAvatar({ name }: InitialAvatarProps) {
   // Split the name into words and take the first letter of each word
   const initials = name
     .split(' ')

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useEffect, useState } from "react";
-import { InitialAvatar } from "~/components/global/avatars";
+import { InitialAvatar, PhotoAvatar } from "~/components/global/avatars";
 import { useAuthenticated } from "~/hooks/useAuth";
 import { fetchUserData } from "~/utils/api/apiRequests";
 import { formatToYearMonth } from "~/utils/data-formatting/date";
@@ -11,7 +11,6 @@ import { FaEllipsisH, FaShareAlt } from "react-icons/fa";
 import ActivityList from "~/components/resource/profile/Activity";
 import UserAbout from "~/components/resource/profile/About";
 import UserMilestones from "~/components/resource/profile/Milestones";
-import Image from "next/image";
 
 function ProfileComponent() {
   const { userData: userDataFromCookie } = useAuthenticated();
@@ -53,9 +52,7 @@ function ProfileComponent() {
       <>
         <div className="mx-auto my-auto flex flex-col items-center justify-center gap-4">
           <span className="loading loading-infinity loading-lg"></span>
-          {!error && (
-            <h1>Loading Profile</h1>
-          )}
+          {!error && <h1>Loading Profile</h1>}
           {error && (
             <div className="text-error">
               <span>Error Loading Profile! {errorMessage}</span>
@@ -68,12 +65,22 @@ function ProfileComponent() {
 
   return (
     <>
-      { userData?.profile_picture && (<Image src={userData?.profile_picture} height={50} width={50} alt={'asd'} />)}
-      <div className="flex w-full flex-row items-center gap-4 rounded-t-md bg-white pt-12 pb-6  text-slate-900 shadow-md lg:pt-16">
-        <InitialAvatar
-          name={userData?.first_name + " " + userData?.last_name}
-          size={2}
-        />
+      <div className="flex w-full flex-row items-center gap-4 rounded-t-md bg-white pb-6 px-20 pt-12 text-slate-900 shadow-md lg:pt-16">
+        {userData?.profile_picture && (
+          <div className="relative h-24 w-24 overflow-hidden rounded-full">
+            <PhotoAvatar
+              src={userData?.profile_picture}
+              alt={userDataName}
+              isAutoSized={true}
+              className="object-cover w-full h-full"
+            />
+          </div>
+        )}
+        {!userData?.profile_picture && (
+          <InitialAvatar
+            name={userData?.first_name + " " + userData?.last_name}
+          />
+        )}
         <div className="flex flex-col">
           <h1 className="text-3xl font-semibold leading-none">
             {userData?.first_name + " " + userData?.last_name}
@@ -99,7 +106,7 @@ function ProfileComponent() {
           </button>
         </div>
       </div>
-      <div className="flex w-full flex-row gap-4 bg-white px-32 pb-8 text-slate-900 shadow-md">
+      <div className="flex w-full flex-row gap-4 bg-white px-20 pb-8 text-slate-900 shadow-md">
         <button className="btn btn-primary">Follow</button>
         <button className="btn">
           Watchlists

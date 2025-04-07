@@ -48,7 +48,7 @@ export async function POST(req: Request) {
       const token = await signJwtAccessToken({
         id: user.id,
         email: user.email,
-        username: user?.name ?? user?.username ?? undefined,
+        username: user?.display_name ?? user?.username ?? undefined,
       });
 
       // Set the session cookie
@@ -72,7 +72,7 @@ export async function POST(req: Request) {
         user: {
           id: user.id,
           email: user.email,
-          name: user.name ?? user.username,
+          name: user.display_name ?? user.username,
           image: user.profile_picture,
         }
       });

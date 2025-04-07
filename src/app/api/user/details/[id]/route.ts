@@ -4,38 +4,36 @@ import type { SanitizedUserData } from '~/utils/types/data';
 
 export async function GET(
   request: Request,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
-    const params = context.params;
+    // eslint-disable-next-line @typescript-eslint/await-thenable
+    const { id } = await params;
+    
+    if (!id) {
+      return NextResponse.json(
+        { error: 'User ID is required' },
+        { status: 400 }
+      );
+    }
 
     if (!db?.query?.users) {
       console.error('Database connection or user query is not defined.');
       return NextResponse.json(
         { error: 'Internal Server Error: Database not configured properly' },
-        {
-          status: 500,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
+        { status: 500 }
       );
     }
 
     try {
       const user = await db.query.users.findFirst({
-        where: (users, { eq }) => eq(users.id, params.id),
+        where: (users, { eq }) => eq(users.id, id),
       });
 
       if (!user) {
         return NextResponse.json(
           { error: 'User not found' },
-          {
-            status: 404,
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
+          { status: 404 }
         );
       }
 
@@ -50,34 +48,19 @@ export async function GET(
         created_at: user.created_at,
       };
 
-      return NextResponse.json(sanitizedUser, {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      return NextResponse.json(sanitizedUser, { status: 200 });
     } catch (dbError) {
       console.error('Database query error:', dbError);
       return NextResponse.json(
         { error: 'Database query error', details: String(dbError) },
-        {
-          status: 500,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
+        { status: 500 }
       );
     }
   } catch (error) {
     console.error('Error fetching user:', error);
     return NextResponse.json(
       { error: 'Internal Server Error', details: String(error) },
-      {
-        status: 500,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
+      { status: 500 }
     );
   }
 }
