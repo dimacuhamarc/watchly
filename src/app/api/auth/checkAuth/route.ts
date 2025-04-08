@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-import { verifyJwt } from '~/utils/jwt';
+import { verifyJwt } from '~/helpers/jwt';
 
 export async function GET() {
   const cookieStore = await cookies();

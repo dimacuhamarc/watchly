@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { InitialAvatar, PhotoAvatar } from "~/components/global/avatars";
 import { useAuthenticated } from "~/hooks/useAuth";
 import { fetchUserData } from "~/utils/api/apiRequests";
-import { formatToYearMonth } from "~/utils/data-formatting/date";
+import { formatToYearMonth } from "~/helpers/date";
 import type { SanitizedUserData } from "~/utils/types/data";
 import { FaEllipsisH, FaShareAlt } from "react-icons/fa";
 import ActivityList from "~/components/resource/profile/Activity";

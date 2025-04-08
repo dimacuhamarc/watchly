@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { FaSearch, FaArrowRight } from "react-icons/fa";
 import { searchMovie, getSearchSuggestions, searchTv } from "~/utils/api/tmdb";
 import type { searchResult, show, tvShow } from "~/utils/types/tmdb-types";
-import { getTitle } from "~/utils/data-formatting/item-data";
+import { getTitle } from "~/helpers/item-data";
 interface props {
   onSearchResults: (results: searchResult, searchQuery: string) => void;
   onClear: () => void;

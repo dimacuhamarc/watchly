@@ -11,7 +11,7 @@ import {
 import { useRouter } from "next/navigation";
 import { getKeywords, getTvDetails, getWatchProviders, getVideos, getCredits } from '~/utils/api/tmdb';
 import { TvOverview, KeywordsSection, CastSection } from "~/components/resource/items/section";
-import { findBestVideo } from '~/utils/data-formatting/item-data';
+import { findBestVideo } from '~/helpers/item-data';
 import { TrailerModal, WatchProviderModal, PosterModal } from '~/components/global/modals';
 
 interface TVPageComponentProps {

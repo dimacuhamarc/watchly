@@ -18,7 +18,7 @@ import {
 import { useRouter } from "next/navigation";
 import { MovieOverview, KeywordsSection, CastSection } from "~/components/resource/items/section";
 import { TrailerModal, WatchProviderModal, PosterModal } from "~/components/global/modals";
-import { findBestVideo } from "~/utils/data-formatting/item-data";
+import { findBestVideo } from "~/helpers/item-data";
 
 interface MoviePageComponentProps {
   id: string;

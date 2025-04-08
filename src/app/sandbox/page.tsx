@@ -1,6 +1,6 @@
 "use client";
 
-import { UploadButton } from "~/utils/uploadThing";
+import { UploadButton } from "~/helpers/uploadThing";
 
 export default function SignInPage() {
 

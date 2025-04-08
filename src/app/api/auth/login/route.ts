@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { compare } from "bcryptjs";
 import { db } from "~/server/db";
 import { cookies } from "next/headers";
-import { signJwtAccessToken } from "~/utils/jwt";
+import { signJwtAccessToken } from "~/helpers/jwt";
 
 export async function POST(req: Request) {
   try {

@@ -3,8 +3,8 @@ import Image from "next/image";
 import { FaStar, FaArrowRight } from "react-icons/fa";
 import type { show, tvShow } from "~/utils/types/tmdb-types";
 import { DecoratedTextWithIcon } from "../../decorated-text";
-import { formatDate } from "~/utils/data-formatting/date";
-import { getTitle, getReleaseDate } from "~/utils/data-formatting/item-data";
+import { formatDate } from "~/helpers/date";
+import { getTitle, getReleaseDate } from "~/helpers/item-data";
 
 interface ShowProps {
   result: show | tvShow;

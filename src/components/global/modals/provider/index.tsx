@@ -7,7 +7,7 @@ import {
   type watchProvider,
 } from "~/utils/types/tmdb-types";
 import { DecoratedTextWithPhoto } from "../../decorated-text";
-import { disableScroll, enableScroll } from "~/utils/dom/scroll-lock";
+import { disableScroll, enableScroll } from "~/helpers/scroll-lock";
 
 interface WatchProviderProps {
   isOpen: boolean;
