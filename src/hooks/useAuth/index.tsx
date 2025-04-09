@@ -81,5 +81,6 @@ export function useAuthenticated() {
     userData: user,
     userFollowData: userFollowData,
     userIdentifier: userIdentifier,
+    username: userIdentifier?.username,
   };
 }

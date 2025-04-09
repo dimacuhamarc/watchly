@@ -7,7 +7,8 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  const userId = params.id;
+  // eslint-disable-next-line @typescript-eslint/await-thenable
+  const { id: userId } = await params;
 
   if (!userId) {
     return NextResponse.json(

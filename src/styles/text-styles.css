@@ -9,3 +9,11 @@
 .text-link:hover {
   @apply text-white;
 }
+
+.link {
+  @apply no-underline underline-offset-2;
+}
+
+.link:hover {
+  @apply underline;
+}

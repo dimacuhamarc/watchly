@@ -11,8 +11,6 @@ const PROTECTED_PATHS = [
   "/settings",
   "/watch",
   "/my-list",
-  "/api",
-  "/api/:path*",
 ];
 
 const ONBOARDING_PATHS = [

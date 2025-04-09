@@ -31,6 +31,12 @@ interface SanitizedUserData {
   last_name?: string;
   created_at?: Date | string;
   profile_picture?: string;
+  public_profile?: boolean;
+}
+
+interface SanitizedProfileData extends SanitizedUserData {
+  followers?: number;
+  following?: number;
 }
 
 interface CookieUserData {
@@ -44,4 +50,4 @@ interface UserFollowData {
   following: number;
 }
 
-export type { SanitizedUserData, CookieUserData, UserFollowData };
+export type { SanitizedUserData, CookieUserData, UserFollowData, SanitizedProfileData };

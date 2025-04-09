@@ -98,10 +98,10 @@ function ProfileComponent() {
           </h2>
           <h2 className="text-md flex flex-row gap-2">
             <span className="text-primary">
-              {userFollowData?.followers} Followers
+              <span className="font-bold">{userFollowData?.followers}</span> Followers
             </span>
             <span className="text-slate-900">
-              {userFollowData?.following} Following
+              <span className="font-bold">{userFollowData?.following}</span> Following
             </span>
           </h2>
         </div>
