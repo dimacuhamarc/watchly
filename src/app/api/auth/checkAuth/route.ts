@@ -7,7 +7,7 @@ export async function GET() {
   const authCookie = cookieStore.get('next-auth.session-token') ?? cookieStore.get('__Secure-next-auth.session-token');
 
   const userData = authCookie ? await verifyJwt(authCookie.value) : null;
-
+  console.log(userData)
   return NextResponse.json({ 
     isAuthenticated: !!authCookie,
     user: userData,

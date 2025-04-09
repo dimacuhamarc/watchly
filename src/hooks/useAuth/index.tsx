@@ -13,18 +13,35 @@ interface FetchedFollowData {
   followData: UserFollowData;
 }
 
+interface UserIdentifier {
+  id: string | null;
+  username: string | null;
+}
+
 export function useAuthenticated() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [cookiesLoaded, setCookiesLoaded] = useState(false);
   const [user, setUser] = useState<CookieUserData | null>(null);
+  const [userIdentifier, setUserIdentifier] = useState<UserIdentifier | null>(null);
   const [userFollowData, setUserFollowData] = useState<UserFollowData | null>(null);
   
   const fetchAuthState = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/checkAuth');
       const data = await response.json() as AuthState;
-      setIsAuthenticated(data.isAuthenticated);
-      setUser(data.user);
+
+      const stateUpdates = {
+        isAuthenticated: data.isAuthenticated,
+        user: data.user,
+        userIdentifier: {
+          id: data.user?.id ?? null,
+          username: data.user?.username ?? null,
+        }
+      }
+
+      setIsAuthenticated(stateUpdates.isAuthenticated);
+      setUser(stateUpdates.user);
+      setUserIdentifier(stateUpdates.userIdentifier);
       return data.isAuthenticated;
     } catch (error) {
       console.error('Failed to fetch authentication state:', error);
@@ -40,7 +57,6 @@ export function useAuthenticated() {
       const response = await fetch(`/api/user/${user.id}/follow-count`);
       const data = await response.json() as FetchedFollowData;
       setUserFollowData(data.followData);
-      console.log(data)
       return data;
     } catch (error) {
       console.error('Failed to fetch follow data:', error);
@@ -63,6 +79,7 @@ export function useAuthenticated() {
     cookiesLoaded,
     fetchAuthState,
     userData: user,
-    userFollowData: userFollowData
+    userFollowData: userFollowData,
+    userIdentifier: userIdentifier,
   };
 }

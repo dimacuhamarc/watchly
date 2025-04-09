@@ -7,6 +7,7 @@ import type { JWTTokenPayload } from "./utils/types/auth";
 const PROTECTED_PATHS = [
   "/search",
   "/profile",
+  "/profile/edit",
   "/settings",
   "/watch",
   "/my-list",

@@ -6,6 +6,18 @@ import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
 const config = {
+  async rewrites() {
+    return [
+      {
+        source: '/p/:slug',
+        destination: '/profile/:slug',
+      },
+      {
+        source: '/p',
+        destination: '/profile',
+      }
+    ]
+  },
   typescript: {
     ignoreBuildErrors: true,
   },
