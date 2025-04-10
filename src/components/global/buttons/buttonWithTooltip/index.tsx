@@ -21,13 +21,14 @@ function ButtonWithTooltip({ children, onClick, tooltip, tooltipPressed }: Butto
     setIsTooltipClicked(true);
     setTimeout(() => {
       setLoading(false);
+      setIsTooltipClicked(false);
     }, 1000);
   };
 
   return (
-    <div className="tooltip" data-tip={!isTooltipClicked ? tooltip : tooltipPressed}>
+    <div className="tooltip tooltip-primary" data-tip={!isTooltipClicked ? tooltip : tooltipPressed}>
       <button
-        className="tooltip flex h-8 w-8 items-center justify-center rounded-full text-slate-900 hover:bg-slate-200"
+        className="tooltip flex h-8 w-8 items-center justify-center rounded-full text-slate-200/50 hover:bg-slate-900/50"
         onClick={handleClick}
       >
         {!loading ? (
