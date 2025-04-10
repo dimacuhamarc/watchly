@@ -7,7 +7,7 @@ function ProfilePage({params}: { params: { slug: string } }) {
   const { slug }: { slug: string } = React.use(Promise.resolve(params));
   return (
     <AuthLayoutProvider>
-      <div className="mx-auto flex min-h-screen max-w-screen-xl flex-col items-start justify-start py-28 md:px-0">
+      <div className="mx-auto my-auto flex max-w-screen-lg min-h-screen flex-col items-start justify-center md:px-0">
         <Profile params={slug} />
       </div>
     </AuthLayoutProvider>

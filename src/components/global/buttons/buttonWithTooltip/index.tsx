@@ -22,7 +22,7 @@ function ButtonWithTooltip({ children, onClick, tooltip, tooltipPressed }: Butto
     setTimeout(() => {
       setLoading(false);
       setIsTooltipClicked(false);
-    }, 1000);
+    }, 400);
   };
 
   return (

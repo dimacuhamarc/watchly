@@ -8,7 +8,7 @@ import { useProfile } from "~/hooks/useProfile";
 
 import { formatToYearMonth } from "~/helpers/date";
 import { InitialAvatar, PhotoAvatar } from "~/components/global/avatars";
-import { FaEllipsisH, FaLink, FaShareAlt } from "react-icons/fa";
+import { FaCalendar, FaEllipsisH, FaLink, FaUsers } from "react-icons/fa";
 
 import ActivityList from "./Activity";
 import UserAbout from "./About";
@@ -63,12 +63,9 @@ function Profile({ params }: ProfileProps) {
 
   return (
     <>
-      <Link href="/" className="mb-4 text-sm text-gray-500 hover:text-gray-200">
-        Back to Home
-      </Link>
-      <div className="flex w-full flex-row items-center gap-8 rounded-t-md bg-white px-20 pb-6 pt-12 text-slate-900 shadow-md lg:pt-16">
+      <div className="relative flex h-48 w-full flex-row items-center gap-8 rounded-t-md bg-gradient-to-r from-orange-400 to-orange-600 px-20 pb-6 pt-12 text-base-content/60 shadow-xl lg:pt-16">
         {profileData?.profile_picture && (
-          <div className="relative h-32 w-32 overflow-hidden rounded-full">
+          <div className="absolute -bottom-16 left-16 h-32 w-32 overflow-hidden rounded-full bg-slate-800 ring ring-slate-800 ring-offset-2 ring-offset-slate-800">
             <PhotoAvatar
               src={profileData?.profile_picture}
               alt={profileData?.username}
@@ -78,29 +75,36 @@ function Profile({ params }: ProfileProps) {
           </div>
         )}
         {!profileData?.profile_picture && (
-          <InitialAvatar
-            name={profileData?.first_name + " " + profileData?.last_name}
-          />
+          <div className="absolute -bottom-16 left-16 h-32 w-32 overflow-hidden rounded-full bg-slate-700 ring ring-slate-800 ring-offset-2 ring-offset-slate-800">
+            <InitialAvatar
+              name={profileData?.first_name + " " + profileData?.last_name}
+            />
+          </div>
         )}
+      </div>
+      <div className="flex w-full flex-row gap-4 bg-slate-800 px-16 pt-20 text-base-content/60 shadow-xl">
         <div className="flex flex-col">
-          <h1 className="text-3xl font-semibold leading-none">
+          <h1 className="text-2xl font-semibold leading-none">
             {profileData?.first_name + " " + profileData?.last_name}
           </h1>
           <h2 className="text-md">
-            <span className="text-primary">@{profileData?.username}</span>
+            <span className="link-no-underline text-slate-200/50 hover:text-primary">
+              @{profileData?.username}
+            </span>
           </h2>
-          <h2 className="text-md flex flex-row gap-2">
-            <Link href={"/"} className="link text-primary">
-              <span className="font-bold">{profileData?.followers}</span>{" "}
-              Followers
+          <h2 className="text-md flex flex-row gap-4">
+            <Link
+              href={"/"}
+              className="link flex flex-row items-center gap-2 text-primary"
+            >
+              <FaUsers />
+              <span className="font-bold">
+                {profileData?.followers == 0 ? "1.4k" : profileData?.followers}{" "}
+                Followers
+              </span>{" "}
             </Link>
-            <Link href={"/"} className="link text-slate-900">
-              <span className="font-bold">{profileData?.followers}</span>{" "}
-              Followers
-            </Link>
-          </h2>
-          <h2 className="text-md">
-            <span className="text-slate-900">
+            <span className="text-md flex flex-row items-center gap-2 text-slate-200/50">
+              <FaCalendar />
               Joined{" "}
               {formatToYearMonth(
                 profileData?.created_at?.toLocaleString() ?? "",
@@ -109,32 +113,26 @@ function Profile({ params }: ProfileProps) {
           </h2>
         </div>
         <div className="mb-auto ml-auto flex flex-col gap-2 lg:flex-row">
-          <ButtonWithTooltip onClick={() => {
-            void copyToClipboard(window.location.href);
-          }} tooltip="Share Profile" tooltipPressed="Copied profile link.">
+          {isCurrentUser ? (
+            <button className="btn btn-primary btn-sm">Edit Profile</button>
+          ) : (
+            <button className="btn btn-primary btn-sm">Follow</button>
+          )}
+          <ButtonWithTooltip
+            onClick={() => {
+              void copyToClipboard(window.location.href);
+            }}
+            tooltip="Share Profile"
+            tooltipPressed="Copied profile link."
+          >
             <FaLink />
           </ButtonWithTooltip>
-          <button className="flex h-8 w-8 items-center justify-center rounded-full text-slate-900 hover:bg-slate-200">
+          <button className="flex h-8 w-8 items-center justify-center rounded-full text-slate-200/50 hover:bg-slate-900/50">
             <FaEllipsisH />
           </button>
         </div>
       </div>
-      <div className="flex w-full flex-row gap-4 bg-white px-20 pb-8 text-slate-900 shadow-md">
-        {isCurrentUser ? (
-          <button className="btn btn-primary">Edit Profile</button>
-        ) : (
-          <button className="btn btn-primary">Follow</button>
-        )}
-        <button className="btn">
-          Watchlists
-          <div className="badge">3</div>
-        </button>
-        <button className="btn">
-          Favorites
-          <div className="badge">24</div>
-        </button>
-      </div>
-      <div className="flex w-full flex-col gap-14 rounded-b-md bg-white px-4 pb-8 text-slate-900 shadow-md md:flex-row md:px-8 lg:px-16">
+      <div className="flex w-full flex-col gap-14 rounded-b-md bg-slate-800 px-4 pb-8 text-base-content/60 shadow-xl md:flex-row md:px-8 lg:px-16">
         <div className="flex w-full flex-col gap-4">
           <UserAbout userData={profileData} />
           <ActivityList userDataName={userDataName} />

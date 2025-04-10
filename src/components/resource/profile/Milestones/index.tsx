@@ -16,10 +16,10 @@ function UserMilestones() {
   const sortedMilestones = [...mockMilestones].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );
-  
+
   if (!enableMockMilestones) {
     return (
-      <div className="flex w-full flex-col gap-4 rounded-md bg-slate-100 p-4 md:w-3/5">
+      <div className="flex w-full flex-col gap-4 rounded-md bg-slate-900/50 p-4 md:w-3/5">
         <h1 className="text-xl font-semibold leading-none">Badges</h1>
         <div className="flex max-h-[400px] flex-col gap-2 overflow-y-auto">
           <p>No milestones yet.</p>
@@ -29,21 +29,23 @@ function UserMilestones() {
   }
 
   return (
-    <div className="flex w-full flex-col gap-4 rounded-md bg-slate-100 p-4 md:w-3/5">
-      <h1 className="text-xl font-semibold leading-none">Badges</h1>
-      <div className="flex max-h-[400px] flex-col gap-2 overflow-y-auto">
-        {sortedMilestones.map((milestone, index) => (
-          <div
-            key={index}
-            className="flex w-full flex-row items-center gap-4 bg-white p-4 shadow-sm"
-          >
-            <FaTrophy className="h-8 w-8 text-xs text-primary" />
-            <div className="flex w-full flex-col items-start justify-between rounded-md">
-              <p className="text-md flex flex-row">{milestone.title}</p>
-              <p className="text-sm font-semibold">{milestone.date}</p>
+    <div className="flex flex-col w-full md:w-3/5">
+      <h1 className="text-xl font-semibold leading-none">Milestones</h1>
+      <div className="flex w-full flex-col gap-4 rounded-md py-4">
+        <div className="flex max-h-[435px] flex-col gap-2 overflow-y-auto">
+          {sortedMilestones.map((milestone, index) => (
+            <div
+              key={index}
+              className="flex w-full flex-row items-center gap-4 rounded-xl bg-slate-900/50 p-4 shadow-sm"
+            >
+              <FaTrophy className="h-8 w-8 text-xs text-primary" />
+              <div className="flex w-full flex-col items-start justify-between rounded-md">
+                <p className="text-md flex flex-row">{milestone.title}</p>
+                <p className="text-sm font-semibold">{milestone.date}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -17,7 +17,7 @@ function ActivityItem({
   name = "User",
 }: ActivityItemProps) {
   return (
-    <div className="flex items-start gap-2 py-2">
+    <div className="flex items-start gap-2 p-4 bg-slate-900/50 rounded-md shadow-sm">
       <div className="flex-shrink-0 pt-1">
         {type === "favorite" ? (
           <FaHeart className="text-error" />

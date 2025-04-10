@@ -12,8 +12,8 @@ function InitialAvatar({ name }: InitialAvatarProps) {
     .join('');
 
   return (
-    <div className="avatar placeholder">
-      <div className="bg-neutral text-neutral-content w-24 rounded-full">
+    <div style={{ position: "relative", width: "100%", height: "100%" }} className="avatar placeholder w-24 h-24">
+      <div className="text-neutral-content h-full w-full rounded-full">
         <span className="text-3xl">{initials}</span>
       </div>
     </div>
