@@ -59,7 +59,7 @@ export async function GET(
         bio: userData[0]!.bio,
         public_profile: userData[0]!.public_profile,
         created_at: userData[0]!.created_at,
-        followers: 10,
+        followers: followersCount,
         following: followingCount,
       },
     });
