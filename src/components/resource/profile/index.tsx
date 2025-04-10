@@ -14,6 +14,7 @@ import ActivityList from "./Activity";
 import UserAbout from "./About";
 import UserMilestones from "./Milestones";
 import copyToClipboard from "~/helpers/clipboard";
+import ButtonWithTooltip from "~/components/global/buttons/buttonWithTooltip";
 
 interface ProfileProps {
   params: string;
@@ -108,17 +109,11 @@ function Profile({ params }: ProfileProps) {
           </h2>
         </div>
         <div className="mb-auto ml-auto flex flex-col gap-2 lg:flex-row">
-          <button
-            className="flex h-8 w-8 items-center justify-center rounded-full text-slate-900 hover:bg-slate-200"
-            onClick={(event) => {
-              event.preventDefault();
-              void copyToClipboard(
-                `${window.location.origin}/profile/${profileData?.username}`,
-              );
-            }}
-          >
+          <ButtonWithTooltip onClick={() => {
+            void copyToClipboard(window.location.href);
+          }} tooltip="Share Profile" tooltipPressed="Copied profile link.">
             <FaLink />
-          </button>
+          </ButtonWithTooltip>
           <button className="flex h-8 w-8 items-center justify-center rounded-full text-slate-900 hover:bg-slate-200">
             <FaEllipsisH />
           </button>
