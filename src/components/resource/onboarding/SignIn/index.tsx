@@ -69,7 +69,7 @@ function SignIn({ registrationSuccess }: SignInProps) {
         setSuccessMessage("Login successful! Redirecting...");
         
         // Refresh the page to update the session
-        window.location.href = "/";
+        window.location.href = "/profile";
       }
     } catch (error) {
       console.error("Login error:", error);

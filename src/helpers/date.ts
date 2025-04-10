@@ -6,8 +6,15 @@ const formatDate = (date: string) => {
   });
 };
 
+const formatToYearMonth = (date: string) => {
+  return new Date(date).toLocaleString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+};
+
 const formatRuntime = (runtime: number) => {
   return runtime.toString() + " min";
 };
 
-export { formatDate, formatRuntime };
+export { formatDate, formatRuntime, formatToYearMonth };

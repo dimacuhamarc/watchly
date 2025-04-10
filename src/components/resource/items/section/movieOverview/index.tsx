@@ -8,7 +8,7 @@ import {
   FaPlay,
   FaHeart,
 } from "react-icons/fa";
-import { formatDate, formatRuntime } from "~/utils/data-formatting/date";
+import { formatDate, formatRuntime } from "~/helpers/date";
 import { RoundedChip } from "~/components/global/chips";
 import { DecoratedTextWithIcon } from "~/components/global/decorated-text";
 import {

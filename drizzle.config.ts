@@ -9,4 +9,5 @@ export default {
     url: env.POSTGRES_URL,
   },
   tablesFilter: ["watchly_*"],
+  strict: false
 } satisfies Config;

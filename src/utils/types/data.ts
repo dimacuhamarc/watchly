@@ -21,3 +21,33 @@ const Media = {
 type MediaType = (typeof Media)[keyof typeof Media];
 
 export { Media, type MediaType };
+
+interface SanitizedUserData {
+  id: string;
+  email: string;
+  username: string;
+  bio?: string;
+  first_name?: string;
+  last_name?: string;
+  created_at?: Date | string;
+  profile_picture?: string;
+  public_profile?: boolean;
+}
+
+interface SanitizedProfileData extends SanitizedUserData {
+  followers?: number;
+  following?: number;
+}
+
+interface CookieUserData {
+  id: string;
+  email: string;
+  username: string;
+}
+
+interface UserFollowData {
+  followers: number;
+  following: number;
+}
+
+export type { SanitizedUserData, CookieUserData, UserFollowData, SanitizedProfileData };

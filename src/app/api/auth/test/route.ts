@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { verifyJwt } from "~/utils/jwt";
+import { verifyJwt } from "~/helpers/jwt";
 
 export async function GET(req: Request) {
   // Get the cookie from the request

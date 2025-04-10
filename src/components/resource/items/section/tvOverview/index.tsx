@@ -11,7 +11,7 @@ import {
 } from "react-icons/fa";
 import { DecoratedTextWithIcon } from "~/components/global/decorated-text";
 import { FaStar } from "react-icons/fa";
-import { formatDate } from "~/utils/data-formatting/date";
+import { formatDate } from "~/helpers/date";
 import { RoundedChip } from "~/components/global/chips";
 
 interface TvOverviewProps {
