@@ -1,14 +1,14 @@
 import React from "react";
-import { FaTrophy } from "react-icons/fa";
+import { FaRocket, FaSearch, FaStar, FaTrophy } from "react-icons/fa";
 
 const mockMilestones = [
-  { title: "Joined the Revolution!", date: "April 1 2025" },
-  { title: "First 10 Favorites", date: "April 2 2025" },
-  { title: "First 20 Favorites", date: "April 2 2025" },
-  { title: "First 50 Favorites", date: "April 3 2025" },
-  { title: "First 100 Favorites", date: "April 4 2025" },
-  { title: "Genre Explorer", date: "April 3 2025" },
-  { title: "Genre Master", date: "April 5 2025" },
+  { icon: FaTrophy, title: "Joined the Revolution!", date: "April 1 2025" },
+  { icon: FaStar, title: "First 10 Favorites", date: "April 2 2025" },
+  { icon: FaStar, title: "First 20 Favorites", date: "April 2 2025" },
+  { icon: FaStar, title: "First 50 Favorites", date: "April 3 2025" },
+  { icon: FaStar, title: "First 100 Favorites", date: "April 4 2025" },
+  { icon: FaSearch, title: "Genre Explorer", date: "April 3 2025" },
+  { icon: FaRocket, title: "Genre Master", date: "April 5 2025" },
 ];
 
 function UserMilestones() {
@@ -38,7 +38,7 @@ function UserMilestones() {
               key={index}
               className="flex w-full flex-row items-center gap-4 rounded-xl bg-slate-900/50 p-4 shadow-sm"
             >
-              <FaTrophy className="h-8 w-8 text-xs text-primary" />
+              <milestone.icon className="h-8 w-8 text-xs text-primary" />
               <div className="flex w-full flex-col items-start justify-between rounded-md">
                 <p className="text-md flex flex-row">{milestone.title}</p>
                 <p className="text-sm font-semibold">{milestone.date}</p>
