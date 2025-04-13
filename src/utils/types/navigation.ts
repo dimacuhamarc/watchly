@@ -26,18 +26,18 @@ const navigationLinks: NavLink[] = [
     showWhen: 'always',
   },
   {
-    name: 'Lists',
-    href: '/lists',
-    showWhen: 'authenticated',
-  },
-  {
     name: 'Search',
     href: '/search',
     showWhen: 'always',
   },
   {
+    name: 'My Lists',
+    href: '/lists',
+    showWhen: 'authenticated',
+  },
+  {
     name: 'My Profile',
-    href: '/profile',
+    href: '/p/',
     showWhen: 'authenticated',
   }
 ];

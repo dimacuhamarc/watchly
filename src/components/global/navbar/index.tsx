@@ -17,7 +17,7 @@ type NavbarProps = {
 export default function Navbar({ options }: NavbarProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const { isAuthenticated, cookiesLoaded } = useAuthenticated();
+  const { username, isAuthenticated, cookiesLoaded } = useAuthenticated();
   const [authChecked, setAuthChecked] = useState(false);
 
   // Set authChecked to true once authentication state is determined
@@ -61,13 +61,25 @@ export default function Navbar({ options }: NavbarProps) {
         {!options?.logoOnly && (
           <>
             <div className="hidden md:flex flex-row items-center gap-4">
-              {navigationLinks.map((link) => (
-                link.showWhen !== 'authenticated' && (
-                  <Link key={link.href} className="text-md tracking-wide uppercase text-link" href={link.href}>
-                    {link.name}
-                  </Link>
-                )
-              ))}
+              {isAuthenticated ? (
+                  // Authenticated user links
+                  navigationLinks.map((link) => (
+                    link.showWhen !== 'unauthenticated' && (
+                      <Link key={link.name} className='text-link'href={link.href + (link.name === 'My Profile' ? username : '')}>
+                        {link.name}
+                      </Link>
+                    )
+                  ))
+                ) : (
+                  // Unauthenticated user links
+                  navigationLinks.map((link) => (
+                    link.showWhen !== 'authenticated' && (
+                      <Link key={link.name} className='text-link' href={link.href}>
+                        {link.name}
+                      </Link>
+                    )
+                  ))
+                )}
             </div>
             {/* Only render auth-dependent links after auth check completes */}
             {authChecked && cookiesLoaded && (

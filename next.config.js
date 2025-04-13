@@ -15,6 +15,10 @@ const config = {
       {
         source: '/p',
         destination: '/profile',
+      },
+      {
+        source: '/p/:slug/:path*',
+        destination: '/profile/:slug/:path*',
       }
     ]
   },

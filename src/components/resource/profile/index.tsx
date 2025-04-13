@@ -8,7 +8,7 @@ import { useProfile } from "~/hooks/useProfile";
 
 import { formatToYearMonth } from "~/helpers/date";
 import { InitialAvatar, PhotoAvatar } from "~/components/global/avatars";
-import { FaCalendar, FaEllipsisH, FaLink, FaUsers } from "react-icons/fa";
+import { FaCalendar, FaEllipsisH, FaLink, FaUsers, FaArrowCircleLeft } from "react-icons/fa";
 
 import ActivityList from "./Activity";
 import UserAbout from "./About";
@@ -64,6 +64,12 @@ function Profile({ params }: ProfileProps) {
   return (
     <>
       <div className="relative flex h-48 w-full flex-row items-center gap-8 rounded-t-md bg-gradient-to-r from-orange-400 to-orange-600 px-20 pb-6 pt-12 text-base-content/60 shadow-xl lg:pt-16">
+        <Link
+          href={`/`}
+          className="link flex items-center justify-center rounded-full p-1 text-slate-900 absolute top-4 left-4"
+        >
+          <FaArrowCircleLeft className="text-xl" />
+        </Link>
         {profileData?.profile_picture && (
           <div className="absolute -bottom-16 left-16 h-32 w-32 overflow-hidden rounded-full bg-slate-800 ring ring-slate-800 ring-offset-2 ring-offset-slate-800">
             <PhotoAvatar
@@ -114,7 +120,7 @@ function Profile({ params }: ProfileProps) {
         </div>
         <div className="mb-auto ml-auto flex flex-col gap-2 lg:flex-row">
           {isCurrentUser ? (
-            <button className="btn btn-primary btn-sm">Edit Profile</button>
+            <Link href={`/p/` + username + `/edit`} className="btn btn-primary btn-sm">Edit Profile</Link>
           ) : (
             <button className="btn btn-primary btn-sm">Follow</button>
           )}
