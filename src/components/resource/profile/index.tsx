@@ -15,7 +15,8 @@ import UserAbout from "./About";
 import UserMilestones from "./Milestones";
 import copyToClipboard from "~/helpers/clipboard";
 import ButtonWithTooltip from "~/components/global/buttons/buttonWithTooltip";
-
+import { useAuthStore } from "~/store/authStore";
+import type { SanitizedProfileData } from "~/utils/types/data";
 interface ProfileProps {
   params: string;
 }
@@ -23,12 +24,15 @@ interface ProfileProps {
 function Profile({ params }: ProfileProps) {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [ data, setData ] = useState<SanitizedProfileData | null>(null);
   const { username, cookiesLoaded } = useAuthenticated();
   const currentUsername = username ?? "";
   const { isCurrentUser, profileLoaded, profileData } = useProfile(
     params,
     currentUsername,
   );
+  const { ownProfileData } = useAuthStore();
+
   const userDataName = profileData ? `${profileData.first_name}` : "User";
   useEffect(() => {
     if (profileData === null) {
@@ -37,9 +41,16 @@ function Profile({ params }: ProfileProps) {
     if (!cookiesLoaded && !profileLoaded) {
       setLoading(true);
     }
-  }, [profileData, cookiesLoaded, profileLoaded]);
+    if (isCurrentUser) {
+      setData(ownProfileData);
+      setLoading(false);
+    } else {
+      setData(profileData);
+      setLoading(false);
+    }
+  }, [profileData, cookiesLoaded, profileLoaded, isCurrentUser, ownProfileData]);
 
-  if (!profileLoaded) {
+  if (!profileLoaded || loading) {
     return (
       <div className="mx-auto my-auto flex flex-col items-center justify-center gap-4">
         <span className="loading loading-infinity loading-lg"></span>
@@ -48,7 +59,7 @@ function Profile({ params }: ProfileProps) {
     );
   }
 
-  if (profileData === null) {
+  if (profileData === null && !error) {
     return (
       <div className="mx-auto my-auto flex flex-col items-center justify-center gap-4 text-error">
         <span className="font-bold">Error Loading Profile</span>
@@ -70,20 +81,20 @@ function Profile({ params }: ProfileProps) {
         >
           <FaArrowCircleLeft className="text-xl" />
         </Link>
-        {profileData?.profile_picture && (
+        {data?.profile_picture && (
           <div className="absolute -bottom-16 left-16 h-32 w-32 overflow-hidden rounded-full bg-slate-800 ring ring-slate-800 ring-offset-2 ring-offset-slate-800">
             <PhotoAvatar
-              src={profileData?.profile_picture}
-              alt={profileData?.username}
+              src={data?.profile_picture}
+              alt={data?.username}
               isAutoSized={true}
               className="h-full w-full object-cover"
             />
           </div>
         )}
-        {!profileData?.profile_picture && (
+        {!data?.profile_picture && (
           <div className="absolute -bottom-16 left-16 h-32 w-32 overflow-hidden rounded-full bg-slate-700 ring ring-slate-800 ring-offset-2 ring-offset-slate-800">
             <InitialAvatar
-              name={profileData?.first_name + " " + profileData?.last_name}
+              name={data?.first_name + " " + data?.last_name}
             />
           </div>
         )}
@@ -91,11 +102,11 @@ function Profile({ params }: ProfileProps) {
       <div className="flex w-full flex-row gap-4 bg-slate-800 px-16 pt-20 text-base-content/60 shadow-xl">
         <div className="flex flex-col">
           <h1 className="text-2xl font-semibold leading-none">
-            {profileData?.first_name + " " + profileData?.last_name}
+            {data?.first_name + " " + data?.last_name}
           </h1>
           <h2 className="text-md">
             <span className="link-no-underline text-slate-200/50 hover:text-primary">
-              @{profileData?.username}
+              @{data?.username}
             </span>
           </h2>
           <h2 className="text-md flex flex-row gap-4">
@@ -105,7 +116,7 @@ function Profile({ params }: ProfileProps) {
             >
               <FaUsers />
               <span className="font-bold">
-                {profileData?.followers == 0 ? "1.4k" : profileData?.followers}{" "}
+                {data?.followers == 0 ? "1.4k" : data?.followers}{" "}
                 Followers
               </span>{" "}
             </Link>
@@ -113,7 +124,7 @@ function Profile({ params }: ProfileProps) {
               <FaCalendar />
               Joined{" "}
               {formatToYearMonth(
-                profileData?.created_at?.toLocaleString() ?? "",
+                data?.created_at?.toLocaleString() ?? "",
               )}
             </span>
           </h2>
@@ -140,7 +151,7 @@ function Profile({ params }: ProfileProps) {
       </div>
       <div className="flex w-full flex-col gap-14 rounded-b-md bg-slate-800 px-4 pb-8 text-base-content/60 shadow-xl md:flex-row md:px-8 lg:px-16">
         <div className="flex w-full flex-col gap-4">
-          <UserAbout userData={profileData} />
+          <UserAbout userData={data} />
           <ActivityList userDataName={userDataName} />
         </div>
         <UserMilestones />
