@@ -68,7 +68,7 @@ export async function POST(req: Request) {
       // Return user info (excluding password) and include a callbackUrl for redirection
       return NextResponse.json({
         ok: true,
-        url: "/", // Provide a default callback URL for redirection
+        url: `/p/${user.username}`, // Provide a default callback URL for redirection
         user: {
           id: user.id,
           email: user.email,

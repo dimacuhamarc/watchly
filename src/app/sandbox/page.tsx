@@ -9,7 +9,7 @@ export default function SignInPage() {
   const { username } = useAuthenticated()
 
   useEffect(() => {
-    if (!localStorage.getItem("auth-storage") && localStorage.getItem("auth-storage").currentUser.username !== username) {
+    if (localStorage.getItem("auth-storage")) {
       void fetchAuthState();
       void fetchProfileData(currentUser?.username ?? "");
     }

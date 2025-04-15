@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import type { LoginResponse } from "~/utils/types/auth";
+import { useAuthStore } from "~/store/authStore";
 
 interface SignInProps {
   registrationSuccess?: boolean;
@@ -24,8 +25,8 @@ function SignIn({ registrationSuccess }: SignInProps) {
   const { register, handleSubmit, watch } = useForm<SignInFormType>();
   const router = useRouter();
   const { data: session } = useSession();
+  const { fetchAuthState, fetchProfileData, ownProfileData } = useAuthStore();
 
-  // Redirect if already logged in
   useEffect(() => {
     if (session) {
       router.replace("/");
@@ -68,8 +69,15 @@ function SignIn({ registrationSuccess }: SignInProps) {
         console.log("Sign-in successful");
         setSuccessMessage("Login successful! Redirecting...");
         
-        // Refresh the page to update the session
-        window.location.href = "/profile";
+        if (!localStorage.getItem("auth-storage")) {
+          await fetchAuthState();
+          if (result.user?.name) {
+            await fetchProfileData(result.user.name);
+            console.log(ownProfileData)
+          }
+        }
+
+        window.location.href = `/p/${result.user?.name}`;
       }
     } catch (error) {
       console.error("Login error:", error);

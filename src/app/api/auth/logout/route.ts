@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 export async function GET(request: Request) {
   // Clear the auth cookie
   const cookieStore = await cookies();
+  
   cookieStore.set({
     name: "next-auth.session-token",
     value: "",

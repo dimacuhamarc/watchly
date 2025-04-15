@@ -88,7 +88,7 @@ export default function Navbar({ options }: NavbarProps) {
                   // Authenticated user links
                   onboardingLinks.map((link) => (
                     link.showWhen !== 'unauthenticated' && (
-                      <Link key={link.type} className={`${link.withStyle ? 'btn-primary btn' : 'text-link'}`} href={link.href}>
+                      <Link key={link.type} className={`${link.withStyle ? 'btn-primary btn' : 'text-link'}`} href={link.href} onClick={() => {localStorage.removeItem("auth-storage");}}>
                         {link.name}
                       </Link>
                     )
