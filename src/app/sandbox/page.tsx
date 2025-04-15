@@ -5,27 +5,10 @@ import { useAuthenticated } from "~/hooks/useAuth";
 import { useAuthStore } from "~/store/authStore";
 
 export default function SignInPage() {
-  const { currentUser, fetchAuthState, fetchProfileData, ownProfileData } = useAuthStore();
-  const { username } = useAuthenticated()
 
-  useEffect(() => {
-    if (localStorage.getItem("auth-storage")) {
-      void fetchAuthState();
-      void fetchProfileData(currentUser?.username ?? "");
-    }
-  }, [fetchAuthState, fetchProfileData, currentUser?.username]);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      {
-        ownProfileData && (
-          <div>
-            <h1>{ownProfileData.username}</h1>
-            <p>{ownProfileData.bio}</p>
-            <p>{ownProfileData.first_name} {ownProfileData.last_name}</p>
-          </div>
-        )
-      }
       <UploadButton
         endpoint="imageUploader"
         appearance={{
