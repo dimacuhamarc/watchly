@@ -18,6 +18,7 @@ import ButtonWithTooltip from "~/components/global/buttons/buttonWithTooltip";
 import { useAuthStore } from "~/store/authStore";
 import type { SanitizedProfileData } from "~/utils/types/data";
 import { LoadingScreen, UnauthorizedAccess } from "~/components/utility/screens";
+import { LuLock } from "react-icons/lu";
 interface ProfileProps {
   params: string;
 }
@@ -117,11 +118,12 @@ function Profile({ params }: ProfileProps) {
       </div>
       <div className="flex w-full flex-row gap-4 bg-slate-800 px-16 pt-20 text-base-content/60 shadow-xl">
         <div className="flex flex-col">
-          <h1 className="text-2xl font-semibold leading-none">
+          <h1 className="flex flex-row items-center  gap-4 text-2xl font-semibold leading-none">
             {(!data?.first_name || !data?.last_name) 
               ? "No Name Provided"
-              : data?.first_name + " " + data?.last_name}
+              : data?.first_name + " " + data?.last_name} {!profileData?.public_profile && <LuLock className="text-slate-200/50 text-lg" />}
           </h1>
+          
           <h2 className="text-md">
             <span className="link-no-underline text-slate-200/50 hover:text-primary">
               @{data?.username ?? ""}

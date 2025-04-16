@@ -12,7 +12,7 @@ const mockActivities = [
 
 
 function ActivityList({ userDataName }: { userDataName?: string }) {
-  const enableMockActivities = true;
+  const enableMockActivities = false;
 
   if (!enableMockActivities) {
     return (
