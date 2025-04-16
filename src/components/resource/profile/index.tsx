@@ -17,6 +17,7 @@ import copyToClipboard from "~/helpers/clipboard";
 import ButtonWithTooltip from "~/components/global/buttons/buttonWithTooltip";
 import { useAuthStore } from "~/store/authStore";
 import type { SanitizedProfileData } from "~/utils/types/data";
+import { LoadingScreen, UnauthorizedAccess } from "~/components/utility/screens";
 interface ProfileProps {
   params: string;
 }
@@ -31,7 +32,14 @@ function Profile({ params }: ProfileProps) {
     params,
     currentUsername,
   );
-  const { ownProfileData } = useAuthStore();
+  const { ownProfileData, fetchProfileData } = useAuthStore();
+
+  useEffect(() => {
+    if (cookiesLoaded) {
+      void fetchProfileData(currentUsername);
+    }
+  }
+  , [cookiesLoaded, fetchProfileData, currentUsername]);
 
   const userDataName = profileData ? `${profileData.first_name}` : "User";
   useEffect(() => {
@@ -45,31 +53,39 @@ function Profile({ params }: ProfileProps) {
       setData(ownProfileData);
       setLoading(false);
     } else {
+      setError(false);
       setData(profileData);
       setLoading(false);
     }
+    
   }, [profileData, cookiesLoaded, profileLoaded, isCurrentUser, ownProfileData]);
 
   if (!profileLoaded || loading) {
-    return (
-      <div className="mx-auto my-auto flex flex-col items-center justify-center gap-4">
-        <span className="loading loading-infinity loading-lg"></span>
-        <h1>Loading Profile</h1>
-      </div>
-    );
+    return LoadingScreen({
+      loadingMessage: "Loading Profile",
+    })
+  }
+
+  if (profileData?.public_profile === false && !isCurrentUser) {
+    return UnauthorizedAccess({
+      errorMessage: "Unauthorized Access",
+      errorDetails: "This profile is private.",
+      redirectLink: {
+        href: `/`,
+        label: "Go to home",
+      },
+    })
   }
 
   if (profileData === null && !error) {
-    return (
-      <div className="mx-auto my-auto flex flex-col items-center justify-center gap-4 text-error">
-        <span className="font-bold">Error Loading Profile</span>
-        <p>The requested profile could not be found.</p>
-        <p>Please check the URL or try again later.</p>
-        <Link href="/" className="btn btn-outline btn-error">
-          Go to Home
-        </Link>
-      </div>
-    );
+    return UnauthorizedAccess({
+      errorMessage: "Profile Not Found",
+      errorDetails: "The requested profile could not be found.",
+      redirectLink: {
+        href: `/p/${currentUsername}`,
+        label: "Go to your profile",
+      },
+    })
   }
 
   return (
@@ -102,11 +118,13 @@ function Profile({ params }: ProfileProps) {
       <div className="flex w-full flex-row gap-4 bg-slate-800 px-16 pt-20 text-base-content/60 shadow-xl">
         <div className="flex flex-col">
           <h1 className="text-2xl font-semibold leading-none">
-            {data?.first_name + " " + data?.last_name}
+            {(!data?.first_name || !data?.last_name) 
+              ? "No Name Provided"
+              : data?.first_name + " " + data?.last_name}
           </h1>
           <h2 className="text-md">
             <span className="link-no-underline text-slate-200/50 hover:text-primary">
-              @{data?.username}
+              @{data?.username ?? ""}
             </span>
           </h2>
           <h2 className="text-md flex flex-row gap-4">

@@ -61,6 +61,7 @@ export async function GET(
         created_at: userData[0]!.created_at,
         followers: followersCount,
         following: followingCount,
+        location: userData[0]!.location,
       },
     });
   } catch (error) {

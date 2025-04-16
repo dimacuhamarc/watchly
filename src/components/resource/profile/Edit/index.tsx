@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
 interface EditProfileProps {
   params: string;
@@ -8,12 +8,20 @@ interface EditProfileProps {
 import { useAuthenticated } from "~/hooks/useAuth";
 import { useProfile } from "~/hooks/useProfile";
 
-import { InitialAvatar, PhotoAvatar } from "~/components/global/avatars";
 import Link from "next/link";
 import { FaArrowCircleLeft } from "react-icons/fa";
-import { UploadButton, UploadDropzone } from "~/helpers/uploadThing";
+import {
+  LoadingScreen,
+  UnauthorizedAccess,
+} from "~/components/utility/screens";
+import EditProfilePicture from "./EditProfilePicture";
+import EditProfileDetails from "./EditProfileDetails";
+import EditProfileBio from "./EditProfileBio";
 
 function EditProfile({ params }: EditProfileProps) {
+  const [newProfilePicture, setNewProfilePicture] = useState<string | null>(
+    null,
+  );
   const { username, cookiesLoaded } = useAuthenticated();
   const currentUsername = username ?? "";
   const { isCurrentUser, profileLoaded, profileData } = useProfile(
@@ -21,26 +29,25 @@ function EditProfile({ params }: EditProfileProps) {
     currentUsername,
   );
 
-  if (!profileLoaded || !cookiesLoaded) {
-    return (
-      <div className="mx-auto my-auto flex flex-col items-center justify-center gap-4">
-        <span className="loading loading-infinity loading-lg"></span>
-        <h1>Loading Profile</h1>
-      </div>
-    );
+  if (!profileLoaded || !profileData) {
+    return LoadingScreen({
+      loadingMessage: "",
+    });
   }
 
-  if (!isCurrentUser) {
-    return (
-      <div className="mx-auto my-auto flex flex-col items-center justify-center gap-4 text-error">
-        <span className="font-bold">Error Loading Page</span>
-        <p>Unauthorized Access.</p>
-        <Link href="/" className="btn btn-outline btn-error">
-          Go to Home
-        </Link>
-      </div>
-    );
+  if (!isCurrentUser && profileLoaded && cookiesLoaded) {
+    return UnauthorizedAccess({
+      errorMessage: "Unauthorized Access",
+      errorDetails: "You are not authorized to edit this profile.",
+      redirectLink: {
+        href: `/p/${currentUsername}`,
+        label: "Go to your profile",
+      },
+    });
   }
+
+  const sectionClassName =
+    "flex w-full flex-col md:flex-row items-center justify-between gap-8 bg-slate-800 md:px-20 md:pb-12 md:pt-12 text-base-content/60 shadow-xl lg:pt-16 px-8 pb-4 pt-4";
 
   return (
     <>
@@ -60,45 +67,19 @@ function EditProfile({ params }: EditProfileProps) {
           </span>
         </h1>
       </div>
-      <div className="flex h-48 w-full flex-row items-center gap-8 bg-slate-800 px-20 pb-12 pt-12 text-base-content/60 shadow-xl lg:pt-16">
-        {profileData?.profile_picture && (
-          <div className="h-32 w-32 overflow-hidden rounded-full bg-slate-800 ring ring-slate-800 ring-offset-2 ring-offset-slate-800">
-            <PhotoAvatar
-              src={profileData?.profile_picture}
-              alt={profileData?.username}
-              isAutoSized={true}
-              className="h-full w-full object-cover"
-            />
-          </div>
-        )}
-        {!profileData?.profile_picture && (
-          <div className="h-32 w-32 overflow-hidden rounded-full bg-slate-700 ring ring-slate-800 ring-offset-2 ring-offset-slate-800">
-            <InitialAvatar
-              name={profileData?.first_name + " " + profileData?.last_name}
-            />
-          </div>
-        )}
-        <UploadButton
-          appearance={{
-            button:
-              "ut-ready:bg-primary ut-uploading:cursor-not-allowed rounded bg-red-500 bg-none",
-            container: "w-max flex-row rounded-md border-cyan-300 bg-slate-800",
-            allowedContent:
-              "flex h-8 flex-col items-center justify-center px-2 text-white",
-          }}
-          endpoint="imageUploader"
-          onClientUploadComplete={(res) => {
-            console.log("Files: ", res);
-            alert("Upload Completed");
-          }}
-          onUploadError={(error: Error) => {
-            alert(`ERROR! ${error.message}`);
-          }}
-          className="*:text-slate-200 bg-slate-800"
+      <div className={sectionClassName}>
+        <EditProfilePicture
+          params={params}
+          profileData={profileData}
+          setNewProfilePicture={setNewProfilePicture}
+          newProfilePicture={newProfilePicture}
         />
       </div>
-      <div className="flex h-48 w-full flex-row items-center gap-8 bg-slate-800 px-20 pb-12 pt-12 text-base-content/60 shadow-xl lg:pt-16">
-
+      <div className={sectionClassName}>
+        <EditProfileDetails params={params} profileData={profileData} />
+      </div>
+      <div className={sectionClassName + " rounded-b-md"}>
+        <EditProfileBio params={params} profileData={profileData} />
       </div>
     </>
   );

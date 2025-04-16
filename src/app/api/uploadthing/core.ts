@@ -1,17 +1,30 @@
 /* eslint-disable @typescript-eslint/only-throw-error */
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
+import { cookies } from "next/headers";
 import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
+import { verifyJwt } from "~/helpers/jwt";
 
 const f = createUploadthing();
 
-const auth = (req: Request) => {
-  const sessionUser = { id: "14642adc-601e-4535-9ffd-0452d9e9c073" }; // Replace with actual user extraction logic
-  return sessionUser;
-};
+const auth = async (req: Request) => {
+  const cookieStore = await cookies();
+  const authCookie = cookieStore.get('next-auth.session-token') ?? cookieStore.get('__Secure-next-auth.session-token');
 
+  if (!authCookie) {
+    throw new UploadThingError("No authentication cookie found");
+  }
+
+  const userData = await verifyJwt(authCookie.value);
+
+  if (!userData) {
+    throw new UploadThingError("Invalid authentication token");
+  }
+
+  return { id: userData.id };
+};
 
 export const uploadFileRouter = {
   imageUploader: f({
@@ -21,20 +34,15 @@ export const uploadFileRouter = {
     },
   })
     .middleware(async ({ req }) => {
-      const user = auth(req);
-
-      if (!user) throw new UploadThingError("Unauthorized");
-
+      const user = await auth(req);
+      
       return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      // console.log("Upload complete for userId:", metadata.userId);
       await db.update(users).set({
         profile_picture: file.ufsUrl,
       }).where(eq(users.id, metadata.userId));
-
-      // console.log("file url", file.ufsUrl);
-
+      
       return { uploadedBy: metadata.userId };
     }),
 } satisfies FileRouter;
