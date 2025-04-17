@@ -12,7 +12,7 @@ const mockMilestones = [
 ];
 
 function UserMilestones() {
-  const enableMockMilestones = false;
+  const enableMockMilestones = true;
   const sortedMilestones = [...mockMilestones].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );
@@ -21,7 +21,7 @@ function UserMilestones() {
     return (
       <div className="flex w-full flex-col gap-4 rounded-md bg-slate-900/50 p-4 md:w-3/5">
         <h1 className="text-xl font-semibold leading-none">Badges</h1>
-        <div className="flex max-h-[400px] flex-col gap-2 overflow-y-auto">
+        <div className="flex md:max-h-[400px] flex-col gap-2 overflow-y-auto">
           <p>No milestones yet.</p>
         </div>
       </div>
@@ -32,7 +32,7 @@ function UserMilestones() {
     <div className="flex flex-col w-full md:w-3/5">
       <h1 className="text-xl font-semibold leading-none">Milestones</h1>
       <div className="flex w-full flex-col gap-4 rounded-md py-4">
-        <div className="flex max-h-[435px] flex-col gap-2 overflow-y-auto">
+        <div className="flex max-h-[315px] flex-col gap-2 overflow-y-auto">
           {sortedMilestones.map((milestone, index) => (
             <div
               key={index}

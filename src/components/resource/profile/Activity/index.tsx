@@ -10,9 +10,8 @@ const mockActivities = [
   { type: 'add' as const, movieTitle: 'Everything Everywhere All At Once', listName: 'Sci-Fi Watchlist', timeAgo: '2 days ago' }
 ];
 
-
 function ActivityList({ userDataName }: { userDataName?: string }) {
-  const enableMockActivities = false;
+  const enableMockActivities = true;
 
   if (!enableMockActivities) {
     return (
@@ -27,9 +26,8 @@ function ActivityList({ userDataName }: { userDataName?: string }) {
 
   return (
     <div className="flex flex-col gap-2 py-4">
-      <h1 className="text-2xl font-semibold leading-none">Activity</h1>
-      <div className="flex flex-col gap-2 max-h-[250px] overflow-y-auto">
-        {mockActivities.map((activity, index) => (
+      <div className="flex flex-col gap-2 max-h-[225px] overflow-y-auto">
+        {mockActivities.slice(0,3).map((activity, index) => (
           <ActivityItem
             key={index}
             type={activity.type}

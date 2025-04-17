@@ -47,6 +47,21 @@ export const follow = createTable("follow", {
     .notNull(),
 });
 
+export const favorites = createTable("favorite", {
+  id: varchar("id", { length: 255 }).primaryKey().unique().notNull(),
+  userId: varchar("user_id", { length: 255 })
+    .notNull()
+    .references(() => users.id)
+    .unique(),
+  movieIds: jsonb("movie_ids").array(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+    () => new Date(),
+  ),
+});
+
 export const watchlist = createTable("watchlist", {
   id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
   userId: varchar("user_id", { length: 255 })
@@ -85,8 +100,12 @@ export const movies = createTable("movie", {
   type: varchar("type", { length: 255 }).$type<MediaType>().notNull(),
 });
 
-export const usersRelations = relations(users, ({ many }) => ({
+export const usersRelations = relations(users, ({ many, one }) => ({
   accounts: many(accounts),
+  favorites: one(favorites, {
+    fields: [users.id],
+    references: [favorites.userId],
+  }),
 }));
 
 export const accounts = createTable(
@@ -159,3 +178,7 @@ export const verificationTokens = createTable(
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   }),
 );
+
+export const favoritesRelations = relations(favorites, ({ one }) => ({
+  user: one(users, { fields: [favorites.userId], references: [users.id] }),
+}));

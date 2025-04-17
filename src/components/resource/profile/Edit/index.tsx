@@ -59,11 +59,8 @@ function EditProfile({ params }: EditProfileProps) {
           >
             <FaArrowCircleLeft className="text-xl" />
           </Link>
-          <span className="text-2xl font-bold text-slate-900">
-            Edit Profile
-          </span>
           <span className="text-lg font-semibold text-primary">
-            p/@{params}
+            p/{params}
           </span>
         </h1>
       </div>
