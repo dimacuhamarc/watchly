@@ -1,10 +1,6 @@
 import React from "react";
 
-export interface FavoritesContentProps {
-  favorites: string[];
-}
-
-function FavoritesContent({ favorites }: FavoritesContentProps) {
+function FavoritesContent() {
   return (
     <>
       <p className="text-md">{"No favorites available"}</p>

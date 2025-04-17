@@ -7,7 +7,6 @@ import { searchMovie, getSearchSuggestions, searchTv } from "~/utils/api/tmdb";
 import type { searchResult, show, tvShow } from "~/utils/types/tmdb-types";
 import { getTitle } from "~/helpers/item-data";
 
-// Add this near the top of your file
 function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
   
@@ -36,7 +35,6 @@ export default function SearchComponent({ onSearchResults, onClear, onSetSearchT
   const [searchType, setSearchType] = useState<"movie" | "tv">("movie");
   const debouncedSearch = useDebounce(search, 300); // 300ms delay
   
-  // Update this to use the debounced value
   useEffect(() => {
     if (debouncedSearch.length > 2) {
       void handleSuggestions();
@@ -56,7 +54,8 @@ export default function SearchComponent({ onSearchResults, onClear, onSetSearchT
     else {
       setSuggestions([]);
     }
-  }, [debouncedSearch, searchType,]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearch, searchType]);
 
   const handleSearch = async () => {
     if (searchType === "movie") {

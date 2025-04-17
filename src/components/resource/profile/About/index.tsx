@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import AboutContent from "./AboutContent";
 import FavoritesContent from "./FavoritesContent";
 import ActivitiesContent from "./ActivitiesContent";
@@ -14,7 +14,6 @@ interface UserAboutProps {
 
 function UserAbout({ userData }: UserAboutProps) {
   const [activeTab, setActiveTab] = useState("about");
-  const [loading, setLoading] = useState(true);
 
   const enableBio = true;
 
@@ -66,7 +65,7 @@ function UserAbout({ userData }: UserAboutProps) {
       {activeTab === "about" && AboutContent({ bio: userData?.bio })}
       {activeTab === "watchlists" && WatchlistsContent()}
       {activeTab === "favorites" && (
-        <FavoritesContent favorites={["test", "test2"]} />
+        <FavoritesContent />
       )}
       {activeTab === "activities" && ActivitiesContent()}
     </div>

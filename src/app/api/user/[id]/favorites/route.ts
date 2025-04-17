@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
-import { users, favorites } from "~/server/db/schema";
-import { eq } from "drizzle-orm";
+import { favorites } from "~/server/db/schema";
 import { v4 as uuidv4 } from "uuid";
 
 export async function GET(

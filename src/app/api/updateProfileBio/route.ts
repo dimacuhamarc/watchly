@@ -3,17 +3,14 @@ import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
-import { decode } from "next-auth/jwt";
 import { verifyJwt } from "~/helpers/jwt";
 
-// Define the expected request body type
 interface UpdateProfileRequest {
   bio?: string;
 }
 
 export async function PATCH(req: Request) {
   try {
-    // Get the session token from cookies
     const cookieStore = await cookies();
     const authCookie = cookieStore.get('next-auth.session-token') ?? cookieStore.get('__Secure-next-auth.session-token');
     
@@ -23,8 +20,6 @@ export async function PATCH(req: Request) {
         { status: 401 }
       );
     }
-    
-    // Decode the session token to get the user ID
     const userData = authCookie ? await verifyJwt(authCookie.value) : null
     
     if (!userData) {
@@ -34,15 +29,12 @@ export async function PATCH(req: Request) {
       );
     }
     
-    // Get data from request body
     const { bio } = await req.json() as UpdateProfileRequest;
     
-    // Update fields only if they are provided
     const updateData: Record<string, unknown> = {};
     
     if (bio !== undefined) updateData.bio = bio;
     
-    // Check if we have any fields to update
     if (Object.keys(updateData).length === 0) {
       return NextResponse.json(
         { message: "No fields to update" },
@@ -50,13 +42,11 @@ export async function PATCH(req: Request) {
       );
     }
     
-    // Update the user in the database
     await db
       .update(users)
       .set(updateData)
       .where(eq(users.id, userData.id));
     
-    // Return success response with updated data
     return NextResponse.json(
       { 
         message: "Profile updated successfully",

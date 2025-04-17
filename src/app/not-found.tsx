@@ -1,7 +1,6 @@
 import MainLayoutProvider from "~/components/layout/mainLayoutProvider";
-import Link from "next/link";
-import { IoArrowBack } from "react-icons/io5";
 import { UnauthorizedAccess } from "~/components/utility/screens";
+
 export default function NotFound() {
   const content = UnauthorizedAccess({
     errorMessage: "404 | Page Not Found",

@@ -1,8 +1,6 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { UploadButton } from "~/helpers/uploadThing";
-import { useAuthenticated } from "~/hooks/useAuth";
-import { useAuthStore } from "~/store/authStore";
 
 export default function SignInPage() {
 
@@ -19,12 +17,10 @@ export default function SignInPage() {
             "flex h-8 flex-col items-center justify-center px-2 text-white",
         }}
         onClientUploadComplete={(res) => {
-          // Do something with the response
           console.log("Files: ", res);
           alert("Upload Completed");
         }}
         onUploadError={(error: Error) => {
-          // Do something with the error.
           alert(`ERROR! ${error.message}`);
         }}
       />

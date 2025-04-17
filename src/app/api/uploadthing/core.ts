@@ -10,6 +10,9 @@ import { verifyJwt } from "~/helpers/jwt";
 const f = createUploadthing();
 
 const auth = async (req: Request) => {
+  if (!req) {
+    throw new UploadThingError("Request object is missing");
+  }
   const cookieStore = await cookies();
   const authCookie = cookieStore.get('next-auth.session-token') ?? cookieStore.get('__Secure-next-auth.session-token');
 
