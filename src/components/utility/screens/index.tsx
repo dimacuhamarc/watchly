@@ -15,7 +15,7 @@ interface CommonScreenProps {
 
 const LoadingScreen = ({ loadingMessage }: CommonScreenProps) => {
   return (
-    <div className="mx-auto my-auto flex flex-col items-center justify-center gap-4 h-screen w-screen">
+    <div className="mx-auto my-auto flex flex-col items-center justify-center gap-4 md:h-full md:w-full h-screen w-screen">
       <span className="loading loading-infinity loading-lg"></span>
       <h1>{loadingMessage}</h1>
     </div>
@@ -24,7 +24,7 @@ const LoadingScreen = ({ loadingMessage }: CommonScreenProps) => {
 
 const UnauthorizedAccess = ({ errorMessage, errorDetails, redirectLink }: CommonScreenProps) => {
   return (
-    <div className="mx-auto my-auto flex flex-col items-center justify-center gap-4 text-error h-screen w-scree">
+    <div className="mx-auto my-auto flex flex-col items-center justify-center gap-4 text-error md:h-full md:w-full h-screen w-screen">
       <LuTriangleAlert className="text-6xl" />
       <span className="font-bold">{errorMessage}</span>
       <p>{errorDetails}</p>

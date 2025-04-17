@@ -16,7 +16,6 @@ import {
   FaArrowCircleLeft,
 } from "react-icons/fa";
 
-import ActivityList from "./Activity";
 import UserAbout from "./About";
 import UserMilestones from "./Milestones";
 import copyToClipboard from "~/helpers/clipboard";
@@ -49,8 +48,6 @@ function Profile({ params }: ProfileProps) {
       void fetchProfileData(currentUsername);
     }
   }, [cookiesLoaded, fetchProfileData, currentUsername]);
-
-  const userDataName = profileData ? `${profileData.first_name}` : "User";
 
   useEffect(() => {
     if (profileData === null) {
@@ -165,7 +162,7 @@ function Profile({ params }: ProfileProps) {
             </span>
           </h2>
         </div>
-        <div className="mb-auto ml-auto flex items-end gap-2 flex-col md:items-start lg:flex-row">
+        <div className="mb-auto ml-auto flex flex-col items-end gap-2 md:items-start lg:flex-row">
           {isCurrentUser ? (
             <Link
               href={`/p/` + username + `/edit`}
@@ -194,7 +191,7 @@ function Profile({ params }: ProfileProps) {
           </div>
         </div>
       </div>
-      <div className="flex w-full flex-col gap-4 md:gap-14 rounded-b-md bg-slate-800 px-6 pb-8 text-base-content/60 shadow-xl min-h-[calc(100vh-23.5rem)] md:max-h-96 md:min-h-96 md:flex-row md:px-8 lg:px-16">
+      <div className="flex min-h-[calc(100vh-23.5rem)] w-full flex-col gap-4 rounded-b-md bg-slate-800 px-6 pb-8 text-base-content/60 shadow-xl md:max-h-96 md:min-h-96 md:flex-row md:gap-14 md:px-8 lg:px-16">
         <div className="flex w-full flex-col">
           <UserAbout userData={data} />
         </div>
