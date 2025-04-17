@@ -30,6 +30,12 @@ type JWTTokenPayload = {
 interface LoginResponse {
   error?: string;
   success?: boolean;
+  user?: {
+    email: string;
+    name: string;
+    id: string;
+    image: string;
+  }
 }
 
 interface AuthProvider {

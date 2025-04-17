@@ -1,0 +1,15 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.horizontal-center {
+  @apply absolute md:-bottom-16 md:left-16 -bottom-16;
+}
+
+@media (max-width: 768px) {
+  .horizontal-center {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

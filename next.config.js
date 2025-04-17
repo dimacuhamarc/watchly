@@ -6,6 +6,22 @@ import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
 const config = {
+  async rewrites() {
+    return [
+      {
+        source: '/p/:slug',
+        destination: '/profile/:slug',
+      },
+      {
+        source: '/p',
+        destination: '/profile',
+      },
+      {
+        source: '/p/:slug/:path*',
+        destination: '/profile/:slug/:path*',
+      }
+    ]
+  },
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -13,7 +29,14 @@ const config = {
     ignoreDuringBuilds: true,
   },
   images: {
-    domains: ['image.tmdb.org']
+    domains: ['image.tmdb.org'],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: `${process.env.NEXT_PUBLIC_UPLOADTHING_PATTERN}.ufs.sh`,
+        pathname: "/f/*",
+      },
+    ]
   }
 };
 

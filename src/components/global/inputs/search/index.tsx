@@ -1,11 +1,28 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaSearch, FaArrowRight } from "react-icons/fa";
 import { searchMovie, getSearchSuggestions, searchTv } from "~/utils/api/tmdb";
 import type { searchResult, show, tvShow } from "~/utils/types/tmdb-types";
-import { getTitle } from "~/utils/data-formatting/item-data";
+import { getTitle } from "~/helpers/item-data";
+
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+  
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+    
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+  
+  return debouncedValue;
+}
+
 interface props {
   onSearchResults: (results: searchResult, searchQuery: string) => void;
   onClear: () => void;
@@ -16,6 +33,29 @@ export default function SearchComponent({ onSearchResults, onClear, onSetSearchT
   const [search, setSearch] = useState("");
   const [suggestions, setSuggestions] = useState<(show | tvShow)[]>([]);
   const [searchType, setSearchType] = useState<"movie" | "tv">("movie");
+  const debouncedSearch = useDebounce(search, 300); // 300ms delay
+  
+  useEffect(() => {
+    if (debouncedSearch.length > 2) {
+      void handleSuggestions();
+      void handleSearch();
+    } else if (debouncedSearch.length === 0) {
+      setSuggestions([]);
+      onSearchResults(
+        {
+          page: 1,
+          results: [],
+          total_pages: 1,
+          total_results: 0,
+        },
+        "",
+      );
+    }
+    else {
+      setSuggestions([]);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearch, searchType]);
 
   const handleSearch = async () => {
     if (searchType === "movie") {
@@ -46,7 +86,7 @@ export default function SearchComponent({ onSearchResults, onClear, onSetSearchT
   };
 
   const handleSuggestions = async () => {
-    const data = await getSearchSuggestions(search, searchType);
+    const data = await getSearchSuggestions(debouncedSearch, searchType);
     const uniqueTitles = Array.from(
       new Set(data.map((item) => {
         if ('title' in item) {
@@ -123,7 +163,6 @@ export default function SearchComponent({ onSearchResults, onClear, onSetSearchT
               setSuggestions([]);
             }
           }}
-          onKeyUp={handleSuggestions}
         />
 
         {search.length > 0 && (

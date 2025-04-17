@@ -6,7 +6,7 @@ interface NavLink {
 
 interface OnboardingLink extends NavLink {
   withStyle?: boolean;
-  type: 'signup' | 'signin';
+  type: 'signup' | 'signin' | 'signout';
 }
 
 const navigationLinks: NavLink[] = [
@@ -26,18 +26,18 @@ const navigationLinks: NavLink[] = [
     showWhen: 'always',
   },
   {
-    name: 'Lists',
-    href: '/lists',
-    showWhen: 'authenticated',
-  },
-  {
     name: 'Search',
     href: '/search',
     showWhen: 'always',
   },
   {
+    name: 'My Lists',
+    href: '/lists',
+    showWhen: 'authenticated',
+  },
+  {
     name: 'My Profile',
-    href: '/profile',
+    href: '/p/',
     showWhen: 'authenticated',
   }
 ];
@@ -78,6 +78,13 @@ const onboardingLinks: OnboardingLink[] = [
     href: '/onboarding',
     type: 'signin',
     showWhen: 'unauthenticated',
+    withStyle: true
+  },
+  {
+    name: 'Sign Out',
+    href: '/api/auth/logout',
+    type: 'signout',
+    showWhen: 'authenticated',
     withStyle: true
   }
 ];

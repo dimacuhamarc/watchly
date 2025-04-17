@@ -7,10 +7,11 @@ import TransitionProvider from "~/components/layout/transitionProvider";
 import { useTextRotation } from "~/hooks/useTextRotation";
 import { IoRocket } from "react-icons/io5";
 
+
 export default function Hero() {
   const rotatingWords = ["Faster", "Accurately", "With Watchly"];
   const { currentWord, isVisible } = useTextRotation({ words: rotatingWords });
-
+  
   return (
     <TransitionProvider className="mx-auto flex min-h-screen max-w-screen-lg flex-col items-start justify-center gap-6 px-10 py-44">
       <h1 className="text-7xl font-bold">
@@ -32,7 +33,7 @@ export default function Hero() {
       </p>
 
       <div className="flex flex-row items-center gap-4">
-        <Link className="btn btn-primary" href="/signup">
+        <Link className="btn btn-primary" href="/onboarding?type=signup">
           <IoRocket className="h-4 w-4" /> Get Started
         </Link>
         <Link

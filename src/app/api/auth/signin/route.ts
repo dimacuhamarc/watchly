@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       id: user.id,
       email: user.email,
-      name: user.name ?? user.username
+      username: user.username
     });
   } catch (error) {
     console.error("Sign-in error:", error);

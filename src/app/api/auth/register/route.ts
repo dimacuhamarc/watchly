@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { hash } from "bcryptjs";
 import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
+import { users, favorites } from "~/server/db/schema";
 import { v4 as uuidv4 } from 'uuid';
 
 import type { SignUpRequest } from "~/utils/types/auth";
@@ -38,6 +38,14 @@ export async function POST(req: Request) {
       email,
       password_hash: hashedPassword,
       emailVerified: null,
+    });
+
+    await db.insert(favorites).values({
+      id: uuidv4(),
+      userId: userId,
+      movieIds: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
 
     return NextResponse.json(

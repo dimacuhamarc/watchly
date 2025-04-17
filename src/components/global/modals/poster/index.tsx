@@ -1,6 +1,6 @@
 import { FaTimes } from "react-icons/fa";
 import { useEffect } from "react";
-import { disableScroll, enableScroll } from "~/utils/dom/scroll-lock";
+import { disableScroll, enableScroll } from "~/helpers/scroll-lock";
 import Image from "next/image";
 import { useFadeIn } from "~/hooks/useFadeIn/useFadeIn";
 interface PosterProps {

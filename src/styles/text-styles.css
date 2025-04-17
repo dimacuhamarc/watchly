@@ -9,3 +9,15 @@
 .text-link:hover {
   @apply text-white;
 }
+
+.link {
+  @apply no-underline underline-offset-2 transition-all duration-300 ease-in-out;
+}
+
+.link-no-underline {
+  @apply no-underline transition-all duration-300 ease-in-out;
+}
+
+.link:hover {
+  @apply underline;
+}
