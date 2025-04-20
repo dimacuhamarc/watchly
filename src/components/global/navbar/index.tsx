@@ -122,6 +122,7 @@ export default function Navbar({ options }: NavbarProps) {
                     key="signout"
                     className={`text-link btn-primary`}
                     href="/api/auth/logout"
+                    prefetch={false}
                   >
                     Sign Out
                   </Link>
