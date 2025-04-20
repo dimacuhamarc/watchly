@@ -67,7 +67,10 @@ export const watchlist = createTable("watchlist", {
   userId: varchar("user_id", { length: 255 })
     .notNull()
     .references(() => users.id),
-  movieIds: jsonb("movie_ids").array(),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description"),
+  public_watchlist: boolean("public_watchlist").notNull().default(false),
+  cover_image: varchar("cover_image", { length: 255 }),
   createdAt: timestamp("created_at", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
@@ -77,11 +80,14 @@ export const watchlist = createTable("watchlist", {
 });
 
 export const watchlistItems = createTable("watchlist_item", {
-  id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+  id: integer("id").primaryKey().generatedByDefaultAsIdentity(),  
   watchlistId: integer("watchlist_id")
     .notNull()
     .references(() => watchlist.id),
-  movieId: integer("movie_id").notNull(),
+  itemId: integer("item_id").notNull(),
+  mediaType: varchar("media_type", { length: 255 })
+    .$type<MediaType>()
+    .notNull(),
   status: varchar("status", { length: 255 })
     .$type<WatchlistItemStatusType>()
     .notNull(),
