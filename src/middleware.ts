@@ -5,7 +5,7 @@ import type { JWTTokenPayload } from "./utils/types/auth";
 
 // List of paths that REQUIRE authentication
 const PROTECTED_PATHS = [
-  "/search",
+  // "/search",
   "/profile",
   "/profile/edit",
   "/settings",
