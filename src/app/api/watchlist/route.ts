@@ -1,20 +1,15 @@
 import { NextResponse } from "next/server";
 import { db } from "~/server/db";
-import { watchlist } from "~/server/db/schema";
-import { v4 as uuidv4 } from "uuid";
-import { Watchlist } from "~/utils/types/watchlist";
 
-export async function GET(
-  request: Request,
-) {
+export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
     const userId = url.searchParams.get("userId");
 
     if (!userId) {
       return NextResponse.json(
-        { error: 'User ID is required' },
-        { status: 400 }
+        { error: "User ID is required" },
+        { status: 400 },
       );
     }
 
@@ -24,20 +19,19 @@ export async function GET(
 
     const count = userWatchlists.length;
 
-
     return NextResponse.json(
       {
         message: "Watchlists fetched successfully",
         watchlists: userWatchlists,
         count: count,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error fetching user watchlists:", error);
     return NextResponse.json(
       { error: "Failed to fetch user watchlists" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
