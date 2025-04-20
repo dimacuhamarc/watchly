@@ -69,9 +69,9 @@ const features = [
     },
   },
   {
-    title: "User Ratings & Reviews",
+    title: "More Than Just Movies",
     description:
-      "Read and contribute reviews, see aggregated ratings, and make informed decisions on what to watch next",
+      "Watchly isn't just for movies. Discover and track your favorite TV shows, documentaries, and more.",
     icon: IoStatsChart,
     colorClasses: {
       bg: "bg-indigo-500/10 hover:bg-indigo-500/50",

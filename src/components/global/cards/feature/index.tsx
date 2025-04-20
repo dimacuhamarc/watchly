@@ -25,7 +25,7 @@ function Feature({
         className={`group-hover:animate-wiggle transform text-3xl transition-all duration-300 group-hover:scale-125 ${colorClasses?.icon}`}
       />
       <h2 className="text-2xl font-bold text-white">{title}</h2>
-      <p className="line-clamp-2 text-lg text-slate-200">{description}</p>
+      <p className="line-clamp-2 text-lg text-slate-200 text-wrap h-full">{description}</p>
     </div>
   );
 }

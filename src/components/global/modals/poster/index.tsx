@@ -47,13 +47,13 @@ function Poster({ posterPath, isOpen, onClose }: PosterProps) {
   }
 
   return (
-    <div ref={ref} className="fixed inset-0 z-50 flex items-center justify-center opacity-0 transition-opacity duration-700r">
+    <div ref={ref} className="fixed inset-0 z-50 flex items-center justify-center opacity-0 transition-opacity duration-700">
       <div
         className="fixed inset-0 bg-black/25 backdrop-blur-sm"
         onClick={handleClose}
       ></div>
       <div className="relative z-50 w-auto">
-        <div className="relative mx-auto h-[800px] w-[533px]">
+        <div className="relative mx-auto h-[800px] w-[533px] md:scale-100 scale-75">
           <button
             className="absolute z-50 top-4 right-4 text-white hover:text-gray-300"
             onClick={handleClose}

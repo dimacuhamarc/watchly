@@ -124,11 +124,11 @@ export default function SearchComponent({ onSearchResults, onClear, onSetSearchT
   return (
     <div className="dropdown w-full">
       <label className="input input-md input-bordered flex w-full items-center gap-2 rounded-full transition-all duration-300 md:input-lg">
-        <ul className="menu menu-horizontal mr-0 gap-2 rounded-box pr-2">
+        <ul className="menu menu-horizontal md:menu-sm menu-xs mr-0 gap-2 rounded-box md:pr-2">
           {searchType === "movie" && (
             <li>
               <button
-                className={`btn btn-sm ${searchType === "movie" ? "btn-primary" : ""}`}
+                className={`btn btn-xs md:btn-sm ${searchType === "movie" ? "btn-primary" : ""}`}
                 onClick={(e) => {
                   onSearchTypeChange(e, "movie");
                 }}
@@ -140,7 +140,7 @@ export default function SearchComponent({ onSearchResults, onClear, onSetSearchT
           {searchType === "tv" && (
             <li>
               <button
-                className={`btn btn-sm ${searchType === "tv" ? "btn-primary" : ""}`}
+                className={`btn btn-xs md:btn-sm ${searchType === "tv" ? "btn-primary" : ""}`}
                 onClick={(e) => {
                   onSearchTypeChange(e, "tv");
                 }}
@@ -166,14 +166,14 @@ export default function SearchComponent({ onSearchResults, onClear, onSetSearchT
         />
 
         {search.length > 0 && (
-          <>
+          <div className="flex flex-row items-center gap-2">
             <button className="btn btn-circle btn-sm" onClick={handleSearch}>
               <FaArrowRight />
             </button>
-            <button className="btn btn-sm" onClick={handleClear}>
+            <button className="btn btn-sm max-md:absolute max-md:right-[13%] max-md:translate-x-[50%] max-md:mt-24" onClick={handleClear}>
               Clear
             </button>
-          </>
+          </div>
         )}
       </label>
 

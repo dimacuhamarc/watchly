@@ -52,8 +52,8 @@ function Trailer({ videoKey, isOpen, onClose }: TrailerProps) {
         className="fixed inset-0 bg-black/25 backdrop-blur-sm"
         onClick={handleClose}
       ></div>
-      <div className="relative z-50 w-full max-w-6xl">
-        <div className="aspect-video w-full">
+      <div className="relative z-50 w-full max-w-6xl scale-75 lg:scale-100">
+        <div className="aspect-video w-full max-w-screen">
           <iframe
             className="h-full w-full rounded-xl"
             src={`https://www.youtube.com/embed/${videoKey}?autoplay=1`}
@@ -63,7 +63,7 @@ function Trailer({ videoKey, isOpen, onClose }: TrailerProps) {
           ></iframe>
         </div>
         <button
-          className="absolute -top-10 right-0 text-white hover:text-gray-300"
+          className="absolute -top-0.5 -right-10 lg:-top-10 lg:right-0 text-white hover:text-gray-300"
           onClick={handleClose}
         >
           <div className="btn btn-circle btn-sm" onClick={handleClose}>
