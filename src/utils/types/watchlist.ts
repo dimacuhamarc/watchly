@@ -1,4 +1,4 @@
-import { MediaType, WatchlistItemStatusType } from "./data";
+import type { MediaType, WatchlistItemStatusType } from "./data";
 
 type Watchlist = {
   id: string;
