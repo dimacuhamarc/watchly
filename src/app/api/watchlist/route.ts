@@ -1,0 +1,44 @@
+import { NextResponse } from "next/server";
+import { db } from "~/server/db";
+import { watchlist } from "~/server/db/schema";
+import { v4 as uuidv4 } from "uuid";
+import { Watchlist } from "~/utils/types/watchlist";
+
+export async function GET(
+  request: Request,
+) {
+  try {
+    // eslint-disable-next-line @typescript-eslint/await-thenable
+    const url = new URL(request.url);
+    const userId = url.searchParams.get("userId");
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'User ID is required' },
+        { status: 400 }
+      );
+    }
+
+    const userWatchlists = await db.query.watchlist.findMany({
+      where: (watchlist, { eq }) => eq(watchlist.userId, userId),
+    });
+
+    const count = userWatchlists.length;
+
+
+    return NextResponse.json(
+      {
+        message: "Watchlists fetched successfully",
+        watchlists: userWatchlists,
+        count: count,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error fetching user watchlists:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch user watchlists" },
+      { status: 500 }
+    );
+  }
+}
