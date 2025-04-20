@@ -14,7 +14,7 @@ export default function Hero() {
   
   return (
     <TransitionProvider className="mx-auto flex min-h-screen max-w-screen-lg flex-col items-start justify-center gap-6 px-10 py-44">
-      <h1 className="text-7xl font-bold">
+      <h1 className="text-3xl md:text-7xl font-bold">
         Find Your Next Watch,{" "}
         <span
           className={`text-blue-500/80 transition-all duration-300 hover:text-blue-500 ease-in-out${

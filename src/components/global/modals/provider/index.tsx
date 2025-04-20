@@ -61,7 +61,7 @@ function WatchProvider({
         onClick={handleClose}
       ></div>
       <div className="relative z-50 w-full max-w-2xl">
-        <div className="rounded-lg bg-white px-12 py-8 text-slate-900 backdrop-blur-sm">
+        <div className="rounded-lg max-h-screen bg-white px-12 py-8 text-slate-900 backdrop-blur-sm">
           <button
             className="group absolute right-1 top-1 rounded-full p-2 text-white transition-all duration-300 hover:bg-gray-100 hover:text-gray-300 md:right-10 md:top-10"
             onClick={handleClose}
@@ -91,7 +91,7 @@ function WatchProvider({
                   </p>
                 )}
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 overflow-y-scroll max-h-[60vh]">
                 {watchProvider?.flatrate &&
                   watchProvider?.flatrate?.length > 0 && (
                     <>
