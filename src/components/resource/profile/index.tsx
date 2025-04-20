@@ -25,6 +25,7 @@ import type { SanitizedProfileData } from "~/utils/types/data";
 import {
   LoadingScreen,
   UnauthorizedAccess,
+  InformationScreen,
 } from "~/components/utility/screens";
 import { LuLock } from "react-icons/lu";
 interface ProfileProps {
@@ -86,6 +87,7 @@ function Profile({ params }: ProfileProps) {
         href: `/`,
         label: "Go to home",
       },
+      leftIcon: true,
     });
   }
 
@@ -97,6 +99,31 @@ function Profile({ params }: ProfileProps) {
         href: `/p/${currentUsername}`,
         label: "Go to your profile",
       },
+      leftIcon: true,
+    });
+  }
+
+  if ((profileData?.first_name === null || profileData?.last_name === null) && isCurrentUser) {
+    return InformationScreen({
+      message: "Setup Your Profile",
+      details: "You need to set up your basic details to access your profile.",
+      redirectLink: {
+        href: `/p/${currentUsername}/edit`,
+        label: "Proceed to setup",
+      },
+      rightIcon: true,
+    });
+  }
+
+  if ((profileData?.first_name === null || profileData?.last_name === null) && !isCurrentUser) {
+    return UnauthorizedAccess({
+      errorMessage: "Profile Not Found",
+      errorDetails: "This user has not set up their profile yet.",
+      redirectLink: {
+        href: `/p/${currentUsername}`,
+        label: "Go to your profile",
+      },
+      leftIcon: true,
     });
   }
 
