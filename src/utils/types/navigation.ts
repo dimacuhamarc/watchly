@@ -79,15 +79,14 @@ const onboardingLinks: OnboardingLink[] = [
     type: 'signin',
     showWhen: 'unauthenticated',
     withStyle: true
+  },
+  {
+    name: 'Sign Out',
+    href: '/api/auth/logout',
+    type: 'signout',
+    showWhen: 'authenticated',
+    withStyle: true
   }
-  // ,
-  // {
-  //   name: 'Sign Out',
-  //   href: '/api/auth/logout',
-  //   type: 'signout',
-  //   showWhen: 'authenticated',
-  //   withStyle: true
-  // }
 ];
 
 export { navigationLinks, onboardingLinks, footerLinks };

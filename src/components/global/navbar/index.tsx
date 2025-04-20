@@ -11,8 +11,8 @@ type NavbarProps = {
     logoOnly?: boolean;
     mainLinks?: boolean;
     onboardingLinks?: boolean;
-  }
-}
+  };
+};
 
 export default function Navbar({ options }: NavbarProps) {
   const [isVisible, setIsVisible] = useState(true);
@@ -41,68 +41,104 @@ export default function Navbar({ options }: NavbarProps) {
       setLastScrollY(currentScrollY);
     };
 
-    window.addEventListener('scroll', controlNavbar);
+    window.addEventListener("scroll", controlNavbar);
 
     return () => {
-      window.removeEventListener('scroll', controlNavbar);
+      window.removeEventListener("scroll", controlNavbar);
     };
   }, [lastScrollY]);
 
   // For the main container, make it initially hidden via CSS
   // This prevents content flash before JS loads
   return (
-    <div className={`w-full backdrop-blur-sm transition-transform duration-300 ${
-      isVisible ? 'translate-y-0' : '-translate-y-full'
-    }`}>
-      <div className={`w-2/3 mx-auto flex flex-row ${options?.logoOnly ? 'justify-center' : 'justify-center md:justify-between'} items-center px-10 py-8`}>
+    <div
+      className={`w-full backdrop-blur-sm transition-transform duration-300 ${
+        isVisible ? "translate-y-0" : "-translate-y-full"
+      }`}
+    >
+      <div
+        className={`mx-auto flex w-2/3 flex-row ${options?.logoOnly ? "justify-center" : "justify-center md:justify-between"} items-center px-10 py-8`}
+      >
         <Link className="text-3xl font-bold" href="/">
-          <Image src={"/assets/brand-light.svg"} alt="Brand" width={144} height={37} priority />
+          <Image
+            src={"/assets/brand-light.svg"}
+            alt="Brand"
+            width={144}
+            height={37}
+            priority
+          />
         </Link>
         {!options?.logoOnly && (
           <>
-            <div className="hidden md:flex flex-row items-center gap-4">
-              {isAuthenticated ? (
-                  // Authenticated user links
-                  navigationLinks.map((link) => (
-                    link.showWhen !== 'unauthenticated' && (
-                      <Link key={link.name} className='text-link'href={link.href + (link.name === 'My Profile' ? username : '')}>
-                        {link.name}
-                      </Link>
-                    )
-                  ))
-                ) : (
-                  // Unauthenticated user links
-                  navigationLinks.map((link) => (
-                    link.showWhen !== 'authenticated' && (
-                      <Link key={link.name} className='text-link' href={link.href}>
-                        {link.name}
-                      </Link>
-                    )
-                  ))
-                )}
+            <div className="hidden flex-row items-center gap-4 md:flex">
+              {isAuthenticated
+                ? // Authenticated user links
+                  navigationLinks.map(
+                    (link) =>
+                      link.showWhen !== "unauthenticated" && (
+                        <Link
+                          key={link.name}
+                          className="text-link"
+                          href={
+                            link.href +
+                            (link.name === "My Profile" ? username : "")
+                          }
+                        >
+                          {link.name}
+                        </Link>
+                      ),
+                  )
+                : // Unauthenticated user links
+                  navigationLinks.map(
+                    (link) =>
+                      link.showWhen !== "authenticated" && (
+                        <Link
+                          key={link.name}
+                          className="text-link"
+                          href={link.href}
+                        >
+                          {link.name}
+                        </Link>
+                      ),
+                  )}
             </div>
             {/* Only render auth-dependent links after auth check completes */}
             {authChecked && cookiesLoaded && (
-              <div className="hidden md:flex flex-row items-center gap-4">
-                {isAuthenticated ? (
-                  // Authenticated user links
-                  onboardingLinks.map((link) => (
-                    link.showWhen !== 'unauthenticated' && (
-                      <Link key={link.type} className={`${link.withStyle ? 'btn-primary btn' : 'text-link'}`} href={link.href} onClick={() => {localStorage.removeItem("auth-storage");}}>
-                        {link.name}
-                      </Link>
+              <div className="hidden flex-row items-center gap-4 md:flex">
+                {isAuthenticated
+                  ? // Authenticated user links
+                    onboardingLinks.map(
+                      (link) =>
+                        link.showWhen !== "unauthenticated" && (
+                          <Link
+                            key={link.type}
+                            className={`${link.withStyle ? "btn btn-primary" : "text-link"}`}
+                            href={link.href}
+                            onClick={
+                              link.type === "signout"
+                                ? () => {
+                                    localStorage.removeItem("auth-storage");
+                                  }
+                                : undefined
+                            }
+                          >
+                            {link.name}
+                          </Link>
+                        ),
                     )
-                  ))
-                ) : (
-                  // Unauthenticated user links
-                  onboardingLinks.map((link) => (
-                    link.showWhen !== 'authenticated' && (
-                      <Link key={link.type} className={`${link.withStyle ? 'btn-primary btn' : 'text-link'}`} href={link.href + '?type=' + link.type}>
-                        {link.name}
-                      </Link>
-                    )
-                  ))
-                )}
+                  : // Unauthenticated user links
+                    onboardingLinks.map(
+                      (link) =>
+                        link.showWhen !== "authenticated" && (
+                          <Link
+                            key={link.type}
+                            className={`${link.withStyle ? "btn btn-primary" : "text-link"}`}
+                            href={link.href + "?type=" + link.type}
+                          >
+                            {link.name}
+                          </Link>
+                        ),
+                    )}
               </div>
             )}
           </>
