@@ -105,40 +105,27 @@ export default function Navbar({ options }: NavbarProps) {
             {/* Only render auth-dependent links after auth check completes */}
             {authChecked && cookiesLoaded && (
               <div className="hidden flex-row items-center gap-4 md:flex">
-                {isAuthenticated
-                  ? // Authenticated user links
-                    onboardingLinks.map(
-                      (link) =>
-                        link.showWhen !== "unauthenticated" && (
-                          <Link
-                            key={link.type}
-                            className={`${link.withStyle ? "btn btn-primary" : "text-link"}`}
-                            href={link.href}
-                            onClick={
-                              link.type === "signout"
-                                ? () => {
-                                    localStorage.removeItem("auth-storage");
-                                  }
-                                : undefined
-                            }
-                          >
-                            {link.name}
-                          </Link>
-                        ),
-                    )
-                  : // Unauthenticated user links
-                    onboardingLinks.map(
-                      (link) =>
-                        link.showWhen !== "authenticated" && (
-                          <Link
-                            key={link.type}
-                            className={`${link.withStyle ? "btn btn-primary" : "text-link"}`}
-                            href={link.href + "?type=" + link.type}
-                          >
-                            {link.name}
-                          </Link>
-                        ),
-                    )}
+                {!isAuthenticated && onboardingLinks.map(
+                  (link) =>
+                    link.showWhen === "unauthenticated" && (
+                      <Link
+                        key={link.name}
+                        className={`${link.withStyle ? "btn btn-primary" : "text-link"}`}
+                        href={link.href + "?type=" + link.type}
+                      >
+                        {link.name}
+                      </Link>
+                    ),
+                )}
+                {isAuthenticated && (
+                  <Link
+                    key="signout"
+                    className={`text-link btn-primary`}
+                    href="/api/auth/logout"
+                  >
+                    Sign Out
+                  </Link>
+                )}
               </div>
             )}
           </>
