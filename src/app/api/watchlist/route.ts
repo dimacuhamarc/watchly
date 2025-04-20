@@ -8,7 +8,6 @@ export async function GET(
   request: Request,
 ) {
   try {
-    // eslint-disable-next-line @typescript-eslint/await-thenable
     const url = new URL(request.url);
     const userId = url.searchParams.get("userId");
 
