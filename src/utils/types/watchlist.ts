@@ -22,4 +22,10 @@ type WatchlistItem = {
   updatedAt: Date | string;
 }
 
-export type { Watchlist, WatchlistItem };
+type WatchlistRequest = {
+  title: string;
+  description?: string;
+  public_watchlist: boolean;
+}
+
+export type { Watchlist, WatchlistItem, WatchlistRequest };
