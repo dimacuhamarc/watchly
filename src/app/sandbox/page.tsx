@@ -1,19 +1,47 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import type { WatchlistRequest } from "~/utils/types/watchlist";
 
-export default function SignInPage() {
-  const { register, handleSubmit, watch } = useForm<WatchlistRequest>();
-  const [isSubmitEnabled, setIsSubmitEnabled] = useState(true);
+export default function CreateWatchlistPage() {
+  const { register, handleSubmit, reset, watch } =
+    useForm<WatchlistRequest>({
+      defaultValues: {
+        public_watchlist: false, // Set default value for required field
+      },
+    });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [submitEnabled, setSubmitEnabled] = useState(false);
+
+  useEffect(() => {
+    const subscription = watch((value) => {
+      const title = value.title;
+
+      if (!title) {
+        setSubmitEnabled(false);
+        return;
+      }
+
+      if (title.length < 3) {
+        setSubmitEnabled(false);
+        return;
+      }
+
+      if (title.length > 3) {
+        setError(null);
+        setSubmitEnabled(true);
+        return;
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   const onSubmit = async (data: WatchlistRequest) => {
     setLoading(true);
     setError(null);
-    console.log(data);
-   
+
     try {
       const response = await fetch("/api/watchlist", {
         method: "POST",
@@ -23,80 +51,127 @@ export default function SignInPage() {
         body: JSON.stringify(data),
       });
 
+      const responseData = (await response.json()) as {
+        message: string;
+        error?: string;
+        watchlist?: {
+          id: string;
+          title: string;
+          description?: string;
+          public_watchlist: boolean;
+          createdAt: Date | string;
+          updatedAt: Date | string;
+        };
+      };
+
       if (!response.ok) {
-        const errorData = await response.json() as { message: string };
-        setError(errorData.message);
+        setError(
+          (responseData?.error?.toString() ??
+            responseData?.message?.toString()) ||
+            "Failed to create watchlist",
+        );
       } else {
-        // Handle success (e.g., redirect or show a success message)
-        console.log("Watchlist created successfully");
+        const modal = document.getElementById(
+          "my_modal_1",
+        ) as HTMLDialogElement;
+        modal?.close();
+        reset();
       }
     } catch (error) {
       setError("An error occurred while creating the watchlist.");
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-4">Create a Watchlist</h1>
-        <div className="flex flex-col gap-4">
-          <label className="text-sm font-medium text-gray-500">
-            Enter your watchlist name
-          </label>
-          <label className="input input-bordered flex items-center gap-2 bg-slate-800">
-            <input
-              type="text"
-              className="grow"
-              placeholder="watchlist name"
-              {...register("title")}
-            />
-          </label>
+      <button
+        className="btn"
+        onClick={() => {
+          const modal = document.getElementById(
+            "my_modal_1",
+          ) as HTMLDialogElement;
+          modal?.showModal();
+        }}
+      >
+        Create
+      </button>
+      <dialog id="my_modal_1" className="modal">
+        <div className="modal-box">
+          <h1 className="text-2xl font-bold">Create a Watchlist</h1>
+          <p className="mb-4">
+            Create a watchlist to keep track of your favorite movies and shows.
+          </p>
 
-          <label className="text-sm font-medium text-gray-500">
-            Description
-          </label>
-          <label className="input input-bordered flex items-center gap-2 bg-slate-800">
-            <input
-              type="text"
-              className="grow"
-              placeholder="Description"
-              {...register("description")}
-            />
-          </label>
-          <label className="text-sm font-medium text-gray-500">
-            Cover Image
-          </label>
-          <label className="text-sm font-medium text-gray-500">
-            Public Watchlist
-          </label>
-          <label className="input input-bordered flex items-center gap-2 bg-slate-800">
-            <input
-              type="checkbox"
-              className="grow"
-              {...register("public_watchlist")}
-            />
-            <span className="ml-2">Make this watchlist public</span>
-          </label>
           {error && (
-            <div className="text-red-500 text-sm mt-2">{error}</div>
+            <div className="alert alert-error mb-4">
+              <span>{error}</span>
+            </div>
           )}
+          
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
+          >
+            <label className="text-sm font-medium text-gray-500">
+              Watchlist Details
+            </label>
+            <label className="input input-bordered flex items-center gap-2 bg-slate-800">
+              <input
+                type="text"
+                className="grow"
+                placeholder="Enter your watchlist name"
+                required
+                {...register("title", { required: true })}
+              />
+            </label>
 
-          {loading && (
-            <div className="text-blue-500 text-sm mt-2">Loading...</div>
-          )}
+            <label className="input input-bordered flex items-center gap-2 bg-slate-800">
+              <input
+                type="text"
+                className="grow"
+                placeholder="Enter a description"
+                {...register("description")}
+              />
+            </label>
+
+            <label className="text-sm font-medium text-gray-500">
+              Watchlist Privacy
+            </label>
+            <label className="input input-bordered flex items-center gap-2 bg-slate-800">
+              <input
+                type="checkbox"
+                className="toggle toggle-primary"
+                {...register("public_watchlist")}
+              />
+              <span className="grow">Make this watchlist public</span>
+            </label>
+
+            <div className="modal-action mt-4">
+              <button
+                type="button"
+                className="btn"
+                onClick={() => {
+                  const modal = document.getElementById(
+                    "my_modal_1",
+                  ) as HTMLDialogElement;
+                  modal?.close();
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={loading || !submitEnabled}
+              >
+                {loading ? "Creating..." : "Create Watchlist"}
+              </button>
+            </div>
+          </form>
         </div>
-        <button
-          type="submit"
-          className={`mt-4 rounded bg-blue-500 p-2 text-white ${
-            isSubmitEnabled ? "" : "cursor-not-allowed opacity-50"
-          }`}
-          // disabled={!isSubmitEnabled}
-        >
-          Create Watchlist
-        </button>
-      </form>
+      </dialog>
     </main>
   );
 }

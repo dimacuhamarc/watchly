@@ -56,6 +56,7 @@ function EditProfile({ params }: EditProfileProps) {
           <Link
             href={`/p/${params}`}
             className="link flex items-center justify-center rounded-full p-1 text-slate-900"
+            prefetch
           >
             <FaArrowCircleLeft className="text-xl" />
           </Link>

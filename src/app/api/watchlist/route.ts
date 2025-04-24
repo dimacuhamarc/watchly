@@ -82,16 +82,12 @@ export async function POST(request: Request) {
         where: (watchlist, { eq }) => eq(watchlist.userId, userId),
       });
       const count = userWatchlists.length;
-      if (count >= 10) {
+      if (count > 10) {
         return NextResponse.json(
           { error: "User has reached the maximum number of watchlists" },
           { status: 400 },
         );
       }
-      return NextResponse.json(
-        { error: "User has reached the maximum number of watchlists" },
-        { status: 400 },
-      );
     }
 
     const { title, description, public_watchlist, cover_image } = body;
