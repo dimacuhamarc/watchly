@@ -6,15 +6,18 @@ import FavoritesContent from "./FavoritesContent";
 import ActivitiesContent from "./ActivitiesContent";
 import WatchlistsContent from "./WatchlistsContent";
 
+import type { Watchlist } from "~/utils/types/watchlist";
+
 interface UserAboutProps {
   userData: {
+    id: string;
     bio?: string;
   } | null;
+  watchlistData: Watchlist[];
 }
 
-function UserAbout({ userData }: UserAboutProps) {
-  const [activeTab, setActiveTab] = useState("about");
-
+function UserAbout({ userData, watchlistData }: UserAboutProps) {
+  const [activeTab, setActiveTab] = useState("watchlists");
   const enableBio = true;
 
   if (!enableBio) {
@@ -63,7 +66,7 @@ function UserAbout({ userData }: UserAboutProps) {
         </a>
       </div>
       {activeTab === "about" && AboutContent({ bio: userData?.bio })}
-      {activeTab === "watchlists" && WatchlistsContent()}
+      {activeTab === "watchlists" && userData?.id && <WatchlistsContent watchlists={watchlistData} />}
       {activeTab === "favorites" && (
         <FavoritesContent />
       )}

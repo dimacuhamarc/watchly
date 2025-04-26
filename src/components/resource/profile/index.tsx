@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import React from "react";
 import { useAuthenticated } from "~/hooks/useAuth";
 import { useProfile } from "~/hooks/useProfile";
+import { useWatchlist } from "~/hooks/useWatchlist";
 
 import { formatToYearMonth } from "~/helpers/date";
 import { InitialAvatar, PhotoAvatar } from "~/components/global/avatars";
@@ -43,18 +44,22 @@ function Profile({ params }: ProfileProps) {
     currentUsername,
   );
   const { ownProfileData, fetchProfileData } = useAuthStore();
-
+  const { watchlists, watchlistLoaded, fetchWatchlistData } = useWatchlist(
+    profileData?.id ?? "",
+  );
+  
   useEffect(() => {
     if (cookiesLoaded) {
       void fetchProfileData(currentUsername);
+      void fetchWatchlistData(profileData?.id ?? "");
     }
-  }, [cookiesLoaded, fetchProfileData, currentUsername]);
+  }, [cookiesLoaded, fetchProfileData, currentUsername, fetchWatchlistData, profileData?.id]);
 
   useEffect(() => {
     if (profileData === null) {
       setError(true);
     }
-    if (!cookiesLoaded && !profileLoaded) {
+    if (!cookiesLoaded && !profileLoaded && !watchlistLoaded) {
       setLoading(true);
     }
     if (isCurrentUser) {
@@ -71,6 +76,8 @@ function Profile({ params }: ProfileProps) {
     profileLoaded,
     isCurrentUser,
     ownProfileData,
+    watchlists,
+    watchlistLoaded,
   ]);
 
   if (!profileLoaded || loading) {
@@ -220,7 +227,7 @@ function Profile({ params }: ProfileProps) {
       </div>
       <div className="flex min-h-[calc(100vh-23.5rem)] w-full flex-col gap-4 rounded-b-md bg-slate-800 px-6 pb-8 text-base-content/60 shadow-xl md:max-h-96 md:min-h-96 md:flex-row md:gap-14 md:px-8 lg:px-16">
         <div className="flex w-full flex-col">
-          <UserAbout userData={data} />
+          <UserAbout userData={data} watchlistData={watchlists} />
         </div>
         <UserMilestones />
       </div>
