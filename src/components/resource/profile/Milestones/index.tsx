@@ -29,14 +29,14 @@ function UserMilestones() {
   }
 
   return (
-    <div className="flex flex-col w-full md:w-3/5">
+    <div className="flex flex-col w-full">
       <h1 className="text-xl font-semibold leading-none">Milestones</h1>
       <div className="flex w-full flex-col gap-4 rounded-md py-4">
-        <div className="flex max-h-[315px] flex-col gap-2 overflow-y-auto">
+        <div className="flex flex-col gap-2 overflow-y-auto">
           {sortedMilestones.map((milestone, index) => (
             <div
               key={index}
-              className="flex w-full flex-row items-center gap-4 rounded-xl bg-slate-900/50 p-4 shadow-sm"
+              className="flex w-full flex-row items-center gap-4 rounded-xl bg-slate-900/50 p-4 shadow-sm border border-slate-700/50 transition-opacity duration-200 ease-in-out hover:opacity-80"
             >
               <milestone.icon className="h-8 w-8 text-xs text-primary" />
               <div className="flex w-full flex-col items-start justify-between rounded-md">

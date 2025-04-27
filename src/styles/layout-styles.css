@@ -4,7 +4,7 @@
 @tailwind utilities;
 
 .horizontal-center {
-  @apply absolute md:-bottom-16 md:left-16 -bottom-16;
+  @apply absolute md:-bottom-16 md:left-28 -bottom-16;
 }
 
 @media (max-width: 768px) {

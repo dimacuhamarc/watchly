@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import React from "react";
 import { useAuthenticated } from "~/hooks/useAuth";
 import { useProfile } from "~/hooks/useProfile";
@@ -10,11 +10,7 @@ import { useWatchlist } from "~/hooks/useWatchlist";
 import { formatToYearMonth } from "~/helpers/date";
 import { InitialAvatar, PhotoAvatar } from "~/components/global/avatars";
 import {
-  FaCalendar,
-  FaEllipsisH,
   FaLink,
-  FaUsers,
-  FaArrowCircleLeft,
 } from "react-icons/fa";
 
 import UserAbout from "./About";
@@ -28,32 +24,50 @@ import {
   UnauthorizedAccess,
   InformationScreen,
 } from "~/components/utility/screens";
-import { LuLock } from "react-icons/lu";
+import {
+  LuArrowLeft,
+  LuCalendar,
+  LuLock,
+  LuUsers,
+} from "react-icons/lu";
 interface ProfileProps {
   params: string;
 }
 
-function Profile({ params }: ProfileProps) {
+const Profile = React.memo(function Profile({ params }: ProfileProps) {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<SanitizedProfileData | null>(null);
   const { username, cookiesLoaded } = useAuthenticated();
   const currentUsername = username ?? "";
+
   const { isCurrentUser, profileLoaded, profileData } = useProfile(
     params,
     currentUsername,
   );
+
   const { ownProfileData, fetchProfileData } = useAuthStore();
-  const { watchlists, watchlistLoaded, fetchWatchlistData } = useWatchlist(
-    profileData?.id ?? "",
-  );
-  
-  useEffect(() => {
+
+  const userId = useMemo(() => profileData?.id ?? "", [profileData?.id]);
+  const { watchlists, watchlistLoaded, fetchWatchlistData } =
+    useWatchlist(userId);
+
+  const fetchData = useCallback(() => {
     if (cookiesLoaded) {
       void fetchProfileData(currentUsername);
-      void fetchWatchlistData(profileData?.id ?? "");
+      void fetchWatchlistData(userId);
     }
-  }, [cookiesLoaded, fetchProfileData, currentUsername, fetchWatchlistData, profileData?.id]);
+  }, [
+    cookiesLoaded,
+    fetchProfileData,
+    currentUsername,
+    fetchWatchlistData,
+    userId,
+  ]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   useEffect(() => {
     if (profileData === null) {
@@ -110,7 +124,10 @@ function Profile({ params }: ProfileProps) {
     });
   }
 
-  if ((profileData?.first_name === null || profileData?.last_name === null) && isCurrentUser) {
+  if (
+    (profileData?.first_name === null || profileData?.last_name === null) &&
+    isCurrentUser
+  ) {
     return InformationScreen({
       message: "Setup Your Profile",
       details: "You need to set up your basic details to access your profile.",
@@ -122,7 +139,10 @@ function Profile({ params }: ProfileProps) {
     });
   }
 
-  if ((profileData?.first_name === null || profileData?.last_name === null) && !isCurrentUser) {
+  if (
+    (profileData?.first_name === null || profileData?.last_name === null) &&
+    !isCurrentUser
+  ) {
     return UnauthorizedAccess({
       errorMessage: "Profile Not Found",
       errorDetails: "This user has not set up their profile yet.",
@@ -135,80 +155,76 @@ function Profile({ params }: ProfileProps) {
   }
 
   return (
-    <>
-      <div className="relative flex h-48 w-full flex-row items-center gap-8 rounded-t-md bg-gradient-to-r from-orange-400 to-orange-600 px-20 pb-6 pt-12 text-base-content/60 shadow-xl lg:pt-16">
+    <div className="flex min-h-screen flex-col items-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
+      <div className="relative h-64 w-full overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-600 via-amber-500 to-orange-400"></div>
+        <div className="absolute inset-0 bg-[url('/placeholder.svg?height=400&width=1200')] opacity-20 mix-blend-overlay"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 opacity-60"></div>
+
         <Link
           href={`/`}
-          className="link absolute left-4 top-4 flex items-center justify-center rounded-full p-1 text-slate-900"
+          className="absolute left-6 top-6 z-10 h-10 w-10 rounded-full border border-white/10 bg-black/20 p-2 backdrop-blur-md transition-all hover:bg-black/30"
         >
-          <FaArrowCircleLeft className="text-xl" />
+          <LuArrowLeft className="text-xl" />
         </Link>
-
-        {data?.profile_picture && (
-          <div className="horizontal-center h-32 w-32 overflow-hidden rounded-full bg-slate-800 ring ring-slate-800 ring-offset-2 ring-offset-slate-800">
-            <PhotoAvatar
-              src={data?.profile_picture}
-              alt={data?.username}
-              isAutoSized={true}
-              className="h-full w-full object-cover"
-            />
-          </div>
-        )}
-        {!data?.profile_picture && (
-          <div className="horizontal-center h-32 w-32 overflow-hidden rounded-full bg-slate-700 ring ring-slate-800 ring-offset-2 ring-offset-slate-800">
-            <InitialAvatar name={data?.first_name + " " + data?.last_name} />
-          </div>
-        )}
       </div>
 
-      <div className="flex w-full flex-row gap-4 bg-slate-800 px-8 pt-20 text-base-content/60 shadow-xl md:px-16 md:pt-20">
-        <div className="flex flex-col">
-          <h1 className="flex items-center gap-4 text-2xl font-semibold leading-none md:flex-row">
-            {!data?.first_name || !data?.last_name
-              ? "No Name Provided"
-              : data?.first_name + " " + data?.last_name}{" "}
-            {!profileData?.public_profile && (
-              <LuLock className="text-lg text-slate-200/50" />
+      {/* Profile section - Full width with contained content */}
+      <div className="relative w-full px-6 md:px-12 lg:px-24">
+        <div className="-mt-24 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+          <div className="z-10 flex flex-col items-start gap-6 md:flex-row md:items-end">
+            {data?.profile_picture && (
+              <div className="h-36 w-36 rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-slate-700 to-slate-800 shadow-xl">
+                <PhotoAvatar
+                  src={data?.profile_picture}
+                  alt={data?.username}
+                  isAutoSized={true}
+                  className="h-full w-full rounded-xl object-cover"
+                />
+              </div>
             )}
-          </h1>
+            {!data?.profile_picture && (
+              <div className="h-36 w-36 rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-slate-700 to-slate-800 shadow-xl">
+                <InitialAvatar
+                  name={data?.first_name + " " + data?.last_name}
+                />
+              </div>
+            )}
 
-          <h2 className="text-md">
-            <span className="link-no-underline text-slate-200/50 hover:text-primary">
-              @{data?.username ?? ""}
-            </span>
-          </h2>
+            <div className="mb-2">
+              <h1 className="flex flex-row items-center gap-4 text-3xl font-bold tracking-tight">
+                {!data?.first_name || !data?.last_name
+                  ? "No Name Provided"
+                  : data?.first_name + " " + data?.last_name}{" "}
+                {!profileData?.public_profile && (
+                  <LuLock className="text-lg text-slate-200/50" />
+                )}
+              </h1>
+              <p className="-mt-2 font-medium text-slate-400">
+                @{data?.username ?? ""}
+              </p>
 
-          <h2 className="text-md flex flex-col md:flex-row md:gap-4">
-            <Link
-              href={"/"}
-              className="link flex flex-row items-center gap-2 text-primary"
-            >
-              <FaUsers />
-              <span className="font-bold">
-                {data?.followers == 0 ? "1.4k" : data?.followers} Followers
-              </span>{" "}
-            </Link>
+              <div className="mt-4 flex flex-wrap items-center gap-4">
+                <div className="flex items-center gap-2 rounded-full border border-slate-700/50 bg-slate-800/50 px-3 py-1.5 backdrop-blur-sm">
+                  <LuUsers className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-medium">
+                    {data?.followers == 0 ? "1.4m" : data?.followers} Followers
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 rounded-full border border-slate-700/50 bg-slate-800/50 px-3 py-1.5 backdrop-blur-sm">
+                  <LuCalendar className="h-4 w-4 text-slate-400" />
+                  <span className="text-sm font-medium">
+                    Joined{" "}
+                    {formatToYearMonth(
+                      data?.created_at?.toLocaleString() ?? "",
+                    )}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-            <span className="text-md flex flex-row items-center gap-2 text-slate-200/50">
-              <FaCalendar />
-              Joined{" "}
-              {formatToYearMonth(data?.created_at?.toLocaleString() ?? "")}
-            </span>
-          </h2>
-        </div>
-        <div className="mb-auto ml-auto flex flex-col items-end gap-2 md:items-start lg:flex-row">
-          {isCurrentUser ? (
-            <Link
-              href={`/p/` + username + `/edit`}
-              className="btn btn-primary btn-sm"
-            >
-              Edit Profile
-            </Link>
-          ) : (
-            <button className="btn btn-primary btn-sm">Follow</button>
-          )}
-
-          <div className="flex flex-row gap-2">
+          <div className="z-10 mt-4 flex gap-2 md:mt-0">
             <ButtonWithTooltip
               onClick={() => {
                 void copyToClipboard(window.location.href);
@@ -218,21 +234,33 @@ function Profile({ params }: ProfileProps) {
             >
               <FaLink />
             </ButtonWithTooltip>
-
-            <button className="flex h-8 w-8 items-center justify-center rounded-full text-slate-200/50 hover:bg-slate-900/50">
-              <FaEllipsisH />
-            </button>
+            {isCurrentUser ? (
+              <Link
+                href={`/p/` + username + `/edit`}
+                className="btn btn-primary btn-sm rounded-full"
+              >
+                Edit Profile
+              </Link>
+            ) : (
+              <button className="btn btn-primary btn-sm rounded-full">
+                Follow
+              </button>
+            )}
           </div>
         </div>
       </div>
-      <div className="flex min-h-[calc(100vh-23.5rem)] w-full flex-col gap-4 rounded-b-md bg-slate-800 px-6 pb-8 text-base-content/60 shadow-xl md:max-h-96 md:min-h-96 md:flex-row md:gap-14 md:px-8 lg:px-16">
-        <div className="flex w-full flex-col">
+
+      {/* Profile details section */}
+      <div className="w-full px-6 md:px-12 lg:px-24 mt-6 grid grid-cols-1 lg:grid-cols-3 gap-16">
+        <div className="lg:col-span-2">
           <UserAbout userData={data} watchlistData={watchlists} />
         </div>
-        <UserMilestones />
+        <div className="space-y-6">
+          <UserMilestones />
+        </div>
       </div>
-    </>
+    </div>
   );
-}
+});
 
 export default Profile;
