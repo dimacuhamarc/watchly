@@ -30,7 +30,9 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <SessionProvider session={session}>
-        <body>{children}</body>
+        <body>
+          {children}
+        </body>
       </SessionProvider>
     </html>
   );

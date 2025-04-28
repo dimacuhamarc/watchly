@@ -13,13 +13,11 @@ interface UserAboutProps {
     id: string;
     bio?: string;
   } | null;
-  watchlistData: Watchlist[];
   isCurrentUser?: boolean;
 }
 
-const UserAbout = React.memo(function UserAbout({
+const UserAbout = function UserAbout({
   userData,
-  watchlistData,
   isCurrentUser,
 }: UserAboutProps) {
   const [activeTab, setActiveTab] = useState("about");
@@ -80,14 +78,14 @@ const UserAbout = React.memo(function UserAbout({
       return (
         <WatchlistsContent
           isCurrentUser={isCurrentUser ?? false}
-          watchlists={watchlistData}
+          userId={userData.id}
         />
       );
     if (activeTab === "favorites") return <FavoritesContent />;
     if (activeTab === "activities") return ActivitiesContent();
     if (activeTab === "following") return <div>Following</div>;
     return null;
-  }, [activeTab, userData?.bio, userData?.id, watchlistData, isCurrentUser]);
+  }, [activeTab, userData?.bio, userData?.id, isCurrentUser]);
 
   return (
     <div className="flex flex-col gap-2">
@@ -95,6 +93,6 @@ const UserAbout = React.memo(function UserAbout({
       {currentTabContent}
     </div>
   );
-});
+};
 
 export default UserAbout;

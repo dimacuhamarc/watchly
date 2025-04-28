@@ -34,7 +34,7 @@ interface ProfileProps {
   params: string;
 }
 
-const Profile = React.memo(function Profile({ params }: ProfileProps) {
+const Profile = function Profile({ params }: ProfileProps) {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<SanitizedProfileData | null>(null);
@@ -49,20 +49,17 @@ const Profile = React.memo(function Profile({ params }: ProfileProps) {
   const { ownProfileData, fetchProfileData } = useAuthStore();
 
   const userId = useMemo(() => profileData?.id ?? "", [profileData?.id]);
-  const { watchlists, watchlistLoaded, fetchWatchlistData } =
-    useWatchlist(userId);
+  // const { watchlists, watchlistLoaded, fetchWatchlistData } =
+  //   useWatchlist(userId);
 
   const fetchData = useCallback(() => {
     if (cookiesLoaded) {
       void fetchProfileData(currentUsername);
-      void fetchWatchlistData(userId);
     }
   }, [
     cookiesLoaded,
-    fetchProfileData,
     currentUsername,
-    fetchWatchlistData,
-    userId,
+    fetchProfileData,
   ]);
 
   useEffect(() => {
@@ -73,7 +70,7 @@ const Profile = React.memo(function Profile({ params }: ProfileProps) {
     if (profileData === null) {
       setError(true);
     }
-    if (!cookiesLoaded && !profileLoaded && !watchlistLoaded) {
+    if (!cookiesLoaded && !profileLoaded) {
       setLoading(true);
     }
     if (isCurrentUser) {
@@ -90,8 +87,6 @@ const Profile = React.memo(function Profile({ params }: ProfileProps) {
     profileLoaded,
     isCurrentUser,
     ownProfileData,
-    watchlists,
-    watchlistLoaded,
   ]);
 
   if (!profileLoaded || loading) {
@@ -251,9 +246,9 @@ const Profile = React.memo(function Profile({ params }: ProfileProps) {
       </div>
 
       {/* Profile details section */}
-      <div className="w-full px-6 md:px-12 lg:px-24 mt-6 grid grid-cols-1 lg:grid-cols-3 gap-16">
+      <div className="w-full max-h-[600px] px-6 md:px-12 lg:px-24 mt-6 grid grid-cols-1 lg:grid-cols-3 gap-16">
         <div className="lg:col-span-2">
-          <UserAbout isCurrentUser={isCurrentUser} userData={data} watchlistData={watchlists} />
+          <UserAbout isCurrentUser={isCurrentUser} userData={data} />
         </div>
         <div className="space-y-6">
           <UserMilestones />
@@ -261,6 +256,6 @@ const Profile = React.memo(function Profile({ params }: ProfileProps) {
       </div>
     </div>
   );
-});
+};
 
 export default Profile;

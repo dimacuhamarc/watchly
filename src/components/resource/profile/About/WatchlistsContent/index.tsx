@@ -3,11 +3,32 @@ import React, { useCallback } from "react";
 import { LuPlus } from "react-icons/lu";
 import type { Watchlist } from "~/utils/types/watchlist";
 import { WatchlistCard } from "~/components/global/cards/index";
+import WatchlistModal from "~/components/resource/watchlist/modal";
+import { useWatchlist } from "~/hooks/useWatchlist";
 
-const WatchlistsContent = React.memo(function WatchlistsContent({ watchlists, isCurrentUser }: { watchlists: Watchlist[], isCurrentUser: boolean }) {
+const WatchlistsContent = function WatchlistsContent({ isCurrentUser, userId }: { isCurrentUser: boolean, userId: string }) {
+  const [watchlistAdded, setWatchlistAdded] = React.useState(false);
+
+  const { watchlistLoaded, fetchWatchlistData, watchlists: hookWatchlists } = useWatchlist(userId);
+  
   const handleCreateClick = useCallback(() => {
     console.log("Create a watchlist");
+    const modal = document.getElementById(
+      "my_modal_1",
+    ) as HTMLDialogElement;
+    modal?.showModal();
   }, []);
+
+  const handleAddWatchlist = useCallback(() => {
+    setWatchlistAdded(true);
+    void fetchWatchlistData(userId);
+  }, [fetchWatchlistData, userId]);
+
+  const SortedWatchlists = hookWatchlists.length === 0 ? [] : hookWatchlists.sort((a, b) => {
+    const aDate = new Date(a.createdAt).getTime();
+    const bDate = new Date(b.createdAt).getTime();
+    return bDate - aDate;
+  })
   
   return (
     <>
@@ -20,14 +41,17 @@ const WatchlistsContent = React.memo(function WatchlistsContent({ watchlists, is
         <h2 className="text-lg font-semibold">Create a Watchlist</h2>
       </button>}
       <div className="flex flex-col gap-2 overflow-y-auto max-h-[320px]">
-        {watchlists?.length > 0 && (
-          watchlists.map((watchlist) => (
-            <WatchlistCard key={watchlist.id} watchlist={watchlist} />
+        {SortedWatchlists?.length > 0 && watchlistLoaded && (
+          SortedWatchlists.map((watchlist) => (
+            !watchlist.public_watchlist && !isCurrentUser 
+              ? null
+              : <WatchlistCard key={watchlist.id} watchlist={watchlist} />
           ))
         )}
       </div>
+      <WatchlistModal onAddWatchlist={handleAddWatchlist} />
     </>
   );
-});
+};
 
 export default WatchlistsContent;
