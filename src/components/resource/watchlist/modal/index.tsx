@@ -10,7 +10,7 @@ interface WatchlistModalProps {
 function WatchlistModal({ onAddWatchlist }: WatchlistModalProps) {
   const { register, handleSubmit, reset, watch } = useForm<WatchlistRequest>({
     defaultValues: {
-      public_watchlist: false, // Set default value for required field
+      public_watchlist: false,
     },
   });
   const [error, setError] = useState<string | null>(null);
@@ -82,7 +82,8 @@ function WatchlistModal({ onAddWatchlist }: WatchlistModalProps) {
         reset();
       }
     } catch (error) {
-      setError("An error occurred while creating the watchlist.");
+      console.error("Error creating watchlist:", error);
+      setError(`An error occurred while creating the watchlist.`);
     } finally {
       setLoading(false);
     }

@@ -6,8 +6,6 @@ import FavoritesContent from "./FavoritesContent";
 import ActivitiesContent from "./ActivitiesContent";
 import WatchlistsContent from "./WatchlistsContent";
 
-import type { Watchlist } from "~/utils/types/watchlist";
-
 interface UserAboutProps {
   userData: {
     id: string;

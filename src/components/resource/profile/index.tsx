@@ -5,7 +5,6 @@ import { useEffect, useState, useMemo, useCallback } from "react";
 import React from "react";
 import { useAuthenticated } from "~/hooks/useAuth";
 import { useProfile } from "~/hooks/useProfile";
-import { useWatchlist } from "~/hooks/useWatchlist";
 
 import { formatToYearMonth } from "~/helpers/date";
 import { InitialAvatar, PhotoAvatar } from "~/components/global/avatars";
