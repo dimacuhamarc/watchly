@@ -253,7 +253,7 @@ const Profile = React.memo(function Profile({ params }: ProfileProps) {
       {/* Profile details section */}
       <div className="w-full px-6 md:px-12 lg:px-24 mt-6 grid grid-cols-1 lg:grid-cols-3 gap-16">
         <div className="lg:col-span-2">
-          <UserAbout userData={data} watchlistData={watchlists} />
+          <UserAbout isCurrentUser={isCurrentUser} userData={data} watchlistData={watchlists} />
         </div>
         <div className="space-y-6">
           <UserMilestones />

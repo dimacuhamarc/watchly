@@ -32,7 +32,7 @@ function UserMilestones() {
     <div className="flex flex-col w-full">
       <h1 className="text-xl font-semibold leading-none">Milestones</h1>
       <div className="flex w-full flex-col gap-4 rounded-md py-4">
-        <div className="flex flex-col gap-2 overflow-y-auto">
+        <div className="flex flex-col gap-2 overflow-y-auto max-h-[396px]">
           {sortedMilestones.map((milestone, index) => (
             <div
               key={index}
