@@ -149,7 +149,7 @@ const Profile = function Profile({ params }: ProfileProps) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
+    <div className="flex min-h-screen w-full flex-col items-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
       <div className="relative h-64 w-full overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-orange-600 via-amber-500 to-orange-400"></div>
         <div className="absolute inset-0 bg-[url('/placeholder.svg?height=400&width=1200')] opacity-20 mix-blend-overlay"></div>
@@ -164,7 +164,7 @@ const Profile = function Profile({ params }: ProfileProps) {
       </div>
 
       {/* Profile section - Full width with contained content */}
-      <div className="relative w-full px-6 md:px-12 lg:px-24">
+      <div className="relative w-full max-w-full px-6 md:px-12 lg:px-24">
         <div className="-mt-24 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div className="z-10 flex flex-col items-start gap-6 md:flex-row md:items-end">
             {data?.profile_picture && (
@@ -245,7 +245,7 @@ const Profile = function Profile({ params }: ProfileProps) {
       </div>
 
       {/* Profile details section */}
-      <div className="w-full max-h-[600px] px-6 md:px-12 lg:px-24 mt-6 grid grid-cols-1 lg:grid-cols-3 gap-16">
+      <div className="w-full max-w-full px-6 md:px-12 lg:px-24 mt-6 grid grid-cols-1 lg:grid-cols-3 gap-16">
         <div className="lg:col-span-2">
           <UserAbout isCurrentUser={isCurrentUser} userData={data} />
         </div>
