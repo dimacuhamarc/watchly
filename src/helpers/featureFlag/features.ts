@@ -5,6 +5,7 @@ type FeatureFlags = {
 const FEATURE_KEYS = {
   FEATURE_FLAG_SEARCH: "FEATURE_FLAG_SEARCH",
   FEATURE_FLAG_PROFILE_V1: "FEATURE_FLAG_PROFILE_V1",
+  FEATURE_FLAG_LIMITED_WATCHLIST: "FEATURE_FLAG_LIMITED_WATCHLIST",
   // Add more feature flags here as needed
   // FEATURE_FLAG_NEW_UI: "FEATURE_FLAG_NEW_UI",
 } as const;
@@ -12,6 +13,7 @@ const FEATURE_KEYS = {
 const FEATURE_FLAGS: FeatureFlags = {
   FEATURE_FLAG_SEARCH: false,
   FEATURE_FLAG_PROFILE_V1: false,
+  FEATURE_FLAG_LIMITED_WATCHLIST: true,
   // Add more feature flags here as needed
   // FEATURE_FLAG_NEW_UI: true,
 };

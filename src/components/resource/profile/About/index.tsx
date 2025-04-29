@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import AboutContent from "./AboutContent";
 import FavoritesContent from "./FavoritesContent";
 import ActivitiesContent from "./ActivitiesContent";
@@ -8,31 +8,28 @@ import WatchlistsContent from "./WatchlistsContent";
 
 interface UserAboutProps {
   userData: {
+    id: string;
     bio?: string;
   } | null;
+  isCurrentUser?: boolean;
 }
 
-function UserAbout({ userData }: UserAboutProps) {
+const UserAbout = function UserAbout({
+  userData,
+  isCurrentUser,
+}: UserAboutProps) {
   const [activeTab, setActiveTab] = useState("about");
 
-  const enableBio = true;
-
-  if (!enableBio) {
-    return (
-      <div className="flex flex-col gap-2 py-4">
-        <h1 className="text-2xl font-semibold leading-none">About</h1>
-        <div className="flex flex-col">No bio yet.</div>
-      </div>
-    );
-  }
-
-  const onClickTab = (tab: string) => {
+  const onClickTab = useCallback((tab: string) => {
     setActiveTab(tab);
-  };
+  }, []);
 
-  return (
-    <div className="flex flex-col gap-2 py-4">
-      <div role="tablist" className="tabs-boxed tabs mb-2 bg-slate-900/50 md:overflow-auto overflow-x-scroll">
+  const tabButtons = useMemo(
+    () => (
+      <div
+        role="tablist"
+        className="tabs-boxed tabs mb-2 overflow-x-scroll border border-slate-700/50 bg-slate-800/50 md:overflow-auto"
+      >
         <a
           onClick={() => onClickTab("about")}
           role="tab"
@@ -41,11 +38,11 @@ function UserAbout({ userData }: UserAboutProps) {
           About
         </a>
         <a
-          onClick={() => onClickTab("watchlists")}
+          onClick={() => onClickTab("following")}
           role="tab"
-          className={`tab font-semibold ${activeTab === "watchlists" ? "tab-active" : ""}`}
+          className={`tab font-semibold ${activeTab === "following" ? "tab-active" : ""}`}
         >
-          Watchlists
+          Following
         </a>
         <a
           onClick={() => onClickTab("favorites")}
@@ -55,6 +52,13 @@ function UserAbout({ userData }: UserAboutProps) {
           Favorites
         </a>
         <a
+          onClick={() => onClickTab("watchlists")}
+          role="tab"
+          className={`tab font-semibold ${activeTab === "watchlists" ? "tab-active" : ""}`}
+        >
+          Watchlists
+        </a>
+        <a
           onClick={() => onClickTab("activities")}
           role="tab"
           className={`tab font-semibold ${activeTab === "activities" ? "tab-active" : ""}`}
@@ -62,14 +66,31 @@ function UserAbout({ userData }: UserAboutProps) {
           Activities
         </a>
       </div>
-      {activeTab === "about" && AboutContent({ bio: userData?.bio })}
-      {activeTab === "watchlists" && WatchlistsContent()}
-      {activeTab === "favorites" && (
-        <FavoritesContent />
-      )}
-      {activeTab === "activities" && ActivitiesContent()}
+    ),
+    [activeTab, onClickTab],
+  );
+
+  const currentTabContent = useMemo(() => {
+    if (activeTab === "about") return AboutContent({ bio: userData?.bio });
+    if (activeTab === "watchlists" && userData?.id)
+      return (
+        <WatchlistsContent
+          isCurrentUser={isCurrentUser ?? false}
+          userId={userData.id}
+        />
+      );
+    if (activeTab === "favorites") return <FavoritesContent />;
+    if (activeTab === "activities") return ActivitiesContent();
+    if (activeTab === "following") return <div>Following</div>;
+    return null;
+  }, [activeTab, userData?.bio, userData?.id, isCurrentUser]);
+
+  return (
+    <div className="flex flex-col gap-2">
+      {tabButtons}
+      {currentTabContent}
     </div>
   );
-}
+};
 
 export default UserAbout;

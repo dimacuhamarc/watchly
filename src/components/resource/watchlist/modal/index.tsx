@@ -1,15 +1,18 @@
-"use client";
 import React, { useState, useEffect } from "react";
+
 import { useForm } from "react-hook-form";
 import type { WatchlistRequest } from "~/utils/types/watchlist";
 
-export default function CreateWatchlistPage() {
-  const { register, handleSubmit, reset, watch } =
-    useForm<WatchlistRequest>({
-      defaultValues: {
-        public_watchlist: false, // Set default value for required field
-      },
-    });
+interface WatchlistModalProps {
+  onAddWatchlist: () => void;
+}
+
+function WatchlistModal({ onAddWatchlist }: WatchlistModalProps) {
+  const { register, handleSubmit, reset, watch } = useForm<WatchlistRequest>({
+    defaultValues: {
+      public_watchlist: false,
+    },
+  });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [submitEnabled, setSubmitEnabled] = useState(false);
@@ -71,6 +74,7 @@ export default function CreateWatchlistPage() {
             "Failed to create watchlist",
         );
       } else {
+        onAddWatchlist();
         const modal = document.getElementById(
           "my_modal_1",
         ) as HTMLDialogElement;
@@ -78,25 +82,15 @@ export default function CreateWatchlistPage() {
         reset();
       }
     } catch (error) {
-      setError("An error occurred while creating the watchlist.");
+      console.error("Error creating watchlist:", error);
+      setError(`An error occurred while creating the watchlist.`);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <button
-        className="btn"
-        onClick={() => {
-          const modal = document.getElementById(
-            "my_modal_1",
-          ) as HTMLDialogElement;
-          modal?.showModal();
-        }}
-      >
-        Create
-      </button>
+    <main className="flex flex-col items-center justify-between p-24">
       <dialog id="my_modal_1" className="modal">
         <div className="modal-box">
           <h1 className="text-2xl font-bold">Create a Watchlist</h1>
@@ -109,7 +103,7 @@ export default function CreateWatchlistPage() {
               <span>{error}</span>
             </div>
           )}
-          
+
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-4"
@@ -175,3 +169,5 @@ export default function CreateWatchlistPage() {
     </main>
   );
 }
+
+export default WatchlistModal;

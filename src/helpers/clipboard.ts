@@ -1,3 +1,10 @@
+/**
+ * copyToClipboard.ts
+ * This function copies a given text to the clipboard.
+ * @param text - The text to copy to the clipboard.
+ * @example - If the text is "Hello World", it will copy "Hello World" to the clipboard.
+ */
+
 const copyToClipboard = (text: string) => {
   if (navigator.clipboard && window.isSecureContext) {
     return navigator.clipboard.writeText(text);

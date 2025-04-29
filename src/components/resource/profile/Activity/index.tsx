@@ -26,8 +26,8 @@ function ActivityList({ userDataName }: { userDataName?: string }) {
 
   return (
     <div className="flex flex-col gap-2 py-4">
-      <div className="flex flex-col gap-2 max-h-[225px] overflow-y-auto">
-        {mockActivities.slice(0,3).map((activity, index) => (
+      <div className="flex flex-col gap-2 max-h-[360px] overflow-y-auto">
+        {mockActivities.map((activity, index) => (
           <ActivityItem
             key={index}
             type={activity.type}
