@@ -1,34 +1,37 @@
-import { FaTimes } from "react-icons/fa";
-import { useEffect } from "react";
-import { disableScroll, enableScroll } from "~/helpers/scroll-lock";
-import { useFadeIn } from "~/hooks/useFadeIn/useFadeIn";
+import { FaTimes } from 'react-icons/fa'
+import { useEffect } from 'react'
+import { disableScroll, enableScroll } from '~/helpers/scroll-lock'
+import { useFadeIn } from '~/hooks/useFadeIn/useFadeIn'
 
 interface TrailerProps {
-  videoKey: string;
-  isOpen: boolean;
-  onClose: () => void;
+  videoKey: string
+  isOpen: boolean
+  onClose: () => void
 }
 
 function Trailer({ videoKey, isOpen, onClose }: TrailerProps) {
-  const ref = useFadeIn<HTMLDivElement>();
+  const ref = useFadeIn<HTMLDivElement>()
   useEffect(() => {
     if (isOpen) {
-      disableScroll();
+      disableScroll()
     } else {
-      enableScroll();
+      enableScroll()
     }
-  }, [isOpen]);
+  }, [isOpen])
 
   const handleClose = () => {
-    onClose();
-    enableScroll();
-  };
+    onClose()
+    enableScroll()
+  }
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   if (!videoKey) {
     return (
-      <div ref={ref} className="fixed inset-0 z-50 flex items-center justify-center opacity-0 transition-opacity duration-700">
+      <div
+        ref={ref}
+        className="fixed inset-0 z-50 flex items-center justify-center opacity-0 transition-opacity duration-700"
+      >
         <div
           className="fixed inset-0 bg-black/25 backdrop-blur-sm"
           onClick={handleClose}
@@ -43,17 +46,20 @@ function Trailer({ videoKey, isOpen, onClose }: TrailerProps) {
           </button>
         </div>
       </div>
-    );
+    )
   }
 
   return (
-    <div ref={ref} className="fixed inset-0 z-50 flex items-center justify-center opacity-0 transition-opacity duration-700">
+    <div
+      ref={ref}
+      className="fixed inset-0 z-50 flex items-center justify-center opacity-0 transition-opacity duration-700"
+    >
       <div
         className="fixed inset-0 bg-black/25 backdrop-blur-sm"
         onClick={handleClose}
       ></div>
       <div className="relative z-50 w-full max-w-6xl scale-75 lg:scale-100">
-        <div className="aspect-video w-full max-w-screen">
+        <div className="max-w-screen aspect-video w-full">
           <iframe
             className="h-full w-full rounded-xl"
             src={`https://www.youtube.com/embed/${videoKey}?autoplay=1`}
@@ -63,7 +69,7 @@ function Trailer({ videoKey, isOpen, onClose }: TrailerProps) {
           ></iframe>
         </div>
         <button
-          className="absolute -top-0.5 -right-10 lg:-top-10 lg:right-0 text-white hover:text-gray-300"
+          className="absolute -right-10 -top-0.5 text-white hover:text-gray-300 lg:-top-10 lg:right-0"
           onClick={handleClose}
         >
           <div className="btn btn-circle btn-sm" onClick={handleClose}>
@@ -72,7 +78,7 @@ function Trailer({ videoKey, isOpen, onClose }: TrailerProps) {
         </button>
       </div>
     </div>
-  );
+  )
 }
 
-export default Trailer;
+export default Trailer

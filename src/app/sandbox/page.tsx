@@ -1,88 +1,85 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import type { WatchlistRequest } from "~/utils/types/watchlist";
+'use client'
+import React, { useState, useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import type { WatchlistRequest } from '~/utils/types/watchlist'
 
 export default function CreateWatchlistPage() {
-  const { register, handleSubmit, reset, watch } =
-    useForm<WatchlistRequest>({
-      defaultValues: {
-        public_watchlist: false, // Set default value for required field
-      },
-    });
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [submitEnabled, setSubmitEnabled] = useState(false);
+  const { register, handleSubmit, reset, watch } = useForm<WatchlistRequest>({
+    defaultValues: {
+      public_watchlist: false, // Set default value for required field
+    },
+  })
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [submitEnabled, setSubmitEnabled] = useState(false)
 
   useEffect(() => {
     const subscription = watch((value) => {
-      const title = value.title;
+      const title = value.title
 
       if (!title) {
-        setSubmitEnabled(false);
-        return;
+        setSubmitEnabled(false)
+        return
       }
 
       if (title.length < 3) {
-        setSubmitEnabled(false);
-        return;
+        setSubmitEnabled(false)
+        return
       }
 
       if (title.length > 3) {
-        setError(null);
-        setSubmitEnabled(true);
-        return;
+        setError(null)
+        setSubmitEnabled(true)
+        return
       }
-    });
+    })
 
-    return () => subscription.unsubscribe();
-  }, [watch]);
+    return () => subscription.unsubscribe()
+  }, [watch])
 
   const onSubmit = async (data: WatchlistRequest) => {
-    setLoading(true);
-    setError(null);
+    setLoading(true)
+    setError(null)
 
     try {
-      const response = await fetch("/api/watchlist", {
-        method: "POST",
+      const response = await fetch('/api/watchlist', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
-      });
+      })
 
       const responseData = (await response.json()) as {
-        message: string;
-        error?: string;
+        message: string
+        error?: string
         watchlist?: {
-          id: string;
-          title: string;
-          description?: string;
-          public_watchlist: boolean;
-          createdAt: Date | string;
-          updatedAt: Date | string;
-        };
-      };
+          id: string
+          title: string
+          description?: string
+          public_watchlist: boolean
+          createdAt: Date | string
+          updatedAt: Date | string
+        }
+      }
 
       if (!response.ok) {
         setError(
           (responseData?.error?.toString() ??
             responseData?.message?.toString()) ||
-            "Failed to create watchlist",
-        );
+            'Failed to create watchlist',
+        )
       } else {
-        const modal = document.getElementById(
-          "my_modal_1",
-        ) as HTMLDialogElement;
-        modal?.close();
-        reset();
+        const modal = document.getElementById('my_modal_1') as HTMLDialogElement
+        modal?.close()
+        reset()
       }
     } catch (error) {
-      setError("An error occurred while creating the watchlist.");
+      setError('An error occurred while creating the watchlist.')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -90,9 +87,9 @@ export default function CreateWatchlistPage() {
         className="btn"
         onClick={() => {
           const modal = document.getElementById(
-            "my_modal_1",
-          ) as HTMLDialogElement;
-          modal?.showModal();
+            'my_modal_1',
+          ) as HTMLDialogElement
+          modal?.showModal()
         }}
       >
         Create
@@ -109,7 +106,7 @@ export default function CreateWatchlistPage() {
               <span>{error}</span>
             </div>
           )}
-          
+
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-4"
@@ -123,7 +120,7 @@ export default function CreateWatchlistPage() {
                 className="grow"
                 placeholder="Enter your watchlist name"
                 required
-                {...register("title", { required: true })}
+                {...register('title', { required: true })}
               />
             </label>
 
@@ -132,7 +129,7 @@ export default function CreateWatchlistPage() {
                 type="text"
                 className="grow"
                 placeholder="Enter a description"
-                {...register("description")}
+                {...register('description')}
               />
             </label>
 
@@ -143,7 +140,7 @@ export default function CreateWatchlistPage() {
               <input
                 type="checkbox"
                 className="toggle toggle-primary"
-                {...register("public_watchlist")}
+                {...register('public_watchlist')}
               />
               <span className="grow">Make this watchlist public</span>
             </label>
@@ -154,9 +151,9 @@ export default function CreateWatchlistPage() {
                 className="btn"
                 onClick={() => {
                   const modal = document.getElementById(
-                    "my_modal_1",
-                  ) as HTMLDialogElement;
-                  modal?.close();
+                    'my_modal_1',
+                  ) as HTMLDialogElement
+                  modal?.close()
                 }}
               >
                 Cancel
@@ -166,12 +163,12 @@ export default function CreateWatchlistPage() {
                 className="btn btn-primary"
                 disabled={loading || !submitEnabled}
               >
-                {loading ? "Creating..." : "Create Watchlist"}
+                {loading ? 'Creating...' : 'Create Watchlist'}
               </button>
             </div>
           </form>
         </div>
       </dialog>
     </main>
-  );
+  )
 }

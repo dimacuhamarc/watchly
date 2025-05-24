@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 
 interface RegionData {
-  countryCode: string | null;
-  countryName: string | null;
-  loading: boolean;
-  error: string | null;
+  countryCode: string | null
+  countryName: string | null
+  loading: boolean
+  error: string | null
 }
 
 interface IpapiResponse {
-  country_code: string;
-  country_name: string;
+  country_code: string
+  country_name: string
 }
 
 export function useRegion() {
@@ -17,33 +17,34 @@ export function useRegion() {
     countryCode: null,
     countryName: null,
     loading: true,
-    error: null
-  });
+    error: null,
+  })
 
   useEffect(() => {
     const fetchRegion = async () => {
       try {
-        const response = await fetch('https://ipapi.co/json/');
-        if (!response.ok) throw new Error('Failed to fetch region data');
-        
-        const data = await response.json() as IpapiResponse;
+        const response = await fetch('https://ipapi.co/json/')
+        if (!response.ok) throw new Error('Failed to fetch region data')
+
+        const data = (await response.json()) as IpapiResponse
         setRegionData({
           countryCode: data.country_code,
           countryName: data.country_name,
           loading: false,
-          error: null
-        });
+          error: null,
+        })
       } catch (error) {
-        setRegionData(prev => ({
+        setRegionData((prev) => ({
           ...prev,
           loading: false,
-          error: error instanceof Error ? error.message : 'Failed to fetch region'
-        }));
+          error:
+            error instanceof Error ? error.message : 'Failed to fetch region',
+        }))
       }
-    };
+    }
 
-    void fetchRegion();
-  }, []);
+    void fetchRegion()
+  }, [])
 
-  return regionData;
+  return regionData
 }

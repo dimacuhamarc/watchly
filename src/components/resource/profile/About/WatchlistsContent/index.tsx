@@ -1,13 +1,13 @@
-import React, { useCallback } from "react";
+import React, { useCallback } from 'react'
 
-import { LuPlus } from "react-icons/lu";
-import { WatchlistCard } from "~/components/global/cards/index";
-import WatchlistModal from "~/components/resource/watchlist/modal";
-import { useWatchlist } from "~/hooks/useWatchlist";
+import { LuPlus } from 'react-icons/lu'
+import { WatchlistCard } from '~/components/global/cards/index'
+import WatchlistModal from '~/components/resource/watchlist/modal'
+import { useWatchlist } from '~/hooks/useWatchlist'
 
 interface WatchlistsContentProps {
-  isCurrentUser: boolean;
-  userId: string;
+  isCurrentUser: boolean
+  userId: string
 }
 
 const WatchlistsContent = function WatchlistsContent({
@@ -18,26 +18,26 @@ const WatchlistsContent = function WatchlistsContent({
     watchlistLoaded,
     fetchWatchlistData,
     watchlists: hookWatchlists,
-  } = useWatchlist(userId);
+  } = useWatchlist(userId)
 
   const handleCreateClick = useCallback(() => {
-    console.log("Create a watchlist");
-    const modal = document.getElementById("my_modal_1") as HTMLDialogElement;
-    modal?.showModal();
-  }, []);
+    console.log('Create a watchlist')
+    const modal = document.getElementById('my_modal_1') as HTMLDialogElement
+    modal?.showModal()
+  }, [])
 
   const handleAddWatchlist = useCallback(() => {
-    void fetchWatchlistData(userId);
-  }, [fetchWatchlistData, userId]);
+    void fetchWatchlistData(userId)
+  }, [fetchWatchlistData, userId])
 
   const SortedWatchlists =
     hookWatchlists.length === 0
       ? []
       : hookWatchlists.sort((a, b) => {
-          const aDate = new Date(a.createdAt).getTime();
-          const bDate = new Date(b.createdAt).getTime();
-          return bDate - aDate;
-        });
+          const aDate = new Date(a.createdAt).getTime()
+          const bDate = new Date(b.createdAt).getTime()
+          return bDate - aDate
+        })
 
   return (
     <>
@@ -62,7 +62,7 @@ const WatchlistsContent = function WatchlistsContent({
       </div>
       <WatchlistModal onAddWatchlist={handleAddWatchlist} />
     </>
-  );
-};
+  )
+}
 
-export default WatchlistsContent;
+export default WatchlistsContent

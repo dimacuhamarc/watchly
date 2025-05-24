@@ -1,3 +1,3 @@
-import { default as SearchBar } from "./search";
+import { default as SearchBar } from './search'
 
-export { SearchBar };
+export { SearchBar }

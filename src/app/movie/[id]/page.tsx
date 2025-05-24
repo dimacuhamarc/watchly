@@ -1,23 +1,23 @@
-import React from "react";
-import MainLayoutProvider from "~/components/layout/mainLayoutProvider";
-import { MovieItemComponent } from "~/components/resource/items";
-import { getMovieDetails } from "~/utils/api/tmdb";
+import React from 'react'
+import MainLayoutProvider from '~/components/layout/mainLayoutProvider'
+import { MovieItemComponent } from '~/components/resource/items'
+import { getMovieDetails } from '~/utils/api/tmdb'
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
-  const { id } = params;
-  const movie = await getMovieDetails(id);
+  const { id } = params
+  const movie = await getMovieDetails(id)
   return {
-    title: `${movie?.title ?? "Not Found"} | Watchly`,
-    description: movie?.overview ?? "Not Found",
-  };
+    title: `${movie?.title ?? 'Not Found'} | Watchly`,
+    description: movie?.overview ?? 'Not Found',
+  }
 }
 
 interface MovieItemPageProps {
-  params: { id: string };
+  params: { id: string }
 }
 
 function MovieItemPage({ params }: MovieItemPageProps) {
-  const { id }: { id: string } = React.use(Promise.resolve(params));
+  const { id }: { id: string } = React.use(Promise.resolve(params))
 
   return (
     <MainLayoutProvider>
@@ -25,7 +25,7 @@ function MovieItemPage({ params }: MovieItemPageProps) {
         <MovieItemComponent id={id} />
       </div>
     </MainLayoutProvider>
-  );
+  )
 }
 
-export default MovieItemPage;
+export default MovieItemPage

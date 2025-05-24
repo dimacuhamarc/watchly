@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react'
 
 interface TextWithIconProps {
-  text: string;
-  icon: React.ReactNode;
+  text: string
+  icon: React.ReactNode
 }
 
 function TextWithIcon({ text, icon }: TextWithIconProps) {
@@ -11,7 +11,7 @@ function TextWithIcon({ text, icon }: TextWithIconProps) {
       <span className="mb-0.5">{icon}</span>
       <span>{text}</span>
     </p>
-  );
+  )
 }
 
-export default TextWithIcon;
+export default TextWithIcon

@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react'
 import {
   LuLock,
   LuLockOpen,
@@ -8,95 +8,95 @@ import {
   LuEyeOff,
   LuUser,
   LuMail,
-} from "react-icons/lu";
-import { useForm } from "react-hook-form";
-import type { SignUpFormType } from "~/utils/types/types";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+} from 'react-icons/lu'
+import { useForm } from 'react-hook-form'
+import type { SignUpFormType } from '~/utils/types/types'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 function SignUp() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const { register, handleSubmit, watch } = useForm<SignUpFormType>();
-  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const { register, handleSubmit, watch } = useForm<SignUpFormType>()
+  const router = useRouter()
 
   useEffect(() => {
     const subscription = watch((value) => {
-      const username = value.username;
-      const email = value.email;
-      const password = value.password;
-      const confirmPassword = value.confirmPassword;
-      
+      const username = value.username
+      const email = value.email
+      const password = value.password
+      const confirmPassword = value.confirmPassword
+
       if (!username || !email || !password || !confirmPassword) {
-        setIsSubmitDisabled(true);
-        return;
+        setIsSubmitDisabled(true)
+        return
       }
-      
+
       if (password !== confirmPassword) {
-        setError("Passwords do not match");
-        setIsSubmitDisabled(true);
-        return;
+        setError('Passwords do not match')
+        setIsSubmitDisabled(true)
+        return
       }
-      
-      setError(null);
-      setIsSubmitDisabled(false);
-    });
-    
-    return () => subscription.unsubscribe();
-  }, [watch]);
+
+      setError(null)
+      setIsSubmitDisabled(false)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [watch])
 
   const handleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
+    setShowPassword(!showPassword)
+  }
 
   const handleShowConfirmPassword = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
+    setShowConfirmPassword(!showConfirmPassword)
+  }
 
   const onSubmit = async (data: SignUpFormType) => {
     if (data.password !== data.confirmPassword) {
-      setError("Passwords do not match");
-      return;
+      setError('Passwords do not match')
+      return
     }
-    
-    setIsLoading(true);
-    setError(null);
-    
+
+    setIsLoading(true)
+    setError(null)
+
     try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           username: data.username,
           email: data.email,
           password: data.password,
         }),
-      });
-      
-      const result = await response.json() as { message: string };
-      
+      })
+
+      const result = (await response.json()) as { message: string }
+
       if (!response.ok) {
-        throw new Error(result.message || "Failed to register");
+        throw new Error(result.message || 'Failed to register')
       }
-      
+
       // Registration successful - redirect to sign in
-      router.push("/onboarding?type=signin&registered=true");
+      router.push('/onboarding?type=signin&registered=true')
     } catch (error) {
-      console.error("Registration error:", error);
+      console.error('Registration error:', error)
       setError(
-        error instanceof Error 
-          ? error.message 
-          : "An unexpected error occurred. Please try again."
-      );
+        error instanceof Error
+          ? error.message
+          : 'An unexpected error occurred. Please try again.',
+      )
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <div className="flex flex-col justify-center gap-4 rounded-lg bg-white px-10 py-8">
@@ -107,9 +107,7 @@ function SignUp() {
         <p className="text-center text-gray-500">
           Create an account to continue
         </p>
-        {error && (
-          <p className="text-center text-sm text-red-500">{error}</p>
-        )}
+        {error && <p className="text-center text-sm text-red-500">{error}</p>}
       </div>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
         <div>
@@ -121,7 +119,7 @@ function SignUp() {
               className="grow"
               placeholder="i.e. rhoadey"
               autoFocus
-              {...register("username")}
+              {...register('username')}
             />
           </label>
         </div>
@@ -133,7 +131,7 @@ function SignUp() {
               type="email"
               className="grow"
               placeholder="i.e. rhoadey@gmail.com"
-              {...register("email")}
+              {...register('email')}
             />
           </label>
         </div>
@@ -151,10 +149,10 @@ function SignUp() {
               <LuLockOpen className="swap-on h-4 w-4 opacity-70" />
             </label>
             <input
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               placeholder="i.e. warmachineRox"
               className="grow"
-              {...register("password")}
+              {...register('password')}
             />
             <label className="swap swap-rotate">
               <input
@@ -183,10 +181,10 @@ function SignUp() {
               <LuLockOpen className="swap-on h-4 w-4 opacity-70" />
             </label>
             <input
-              type={showConfirmPassword ? "text" : "password"}
+              type={showConfirmPassword ? 'text' : 'password'}
               placeholder="i.e. warmachineRox"
               className="grow"
-              {...register("confirmPassword")}
+              {...register('confirmPassword')}
             />
             <label className="swap swap-rotate">
               <input
@@ -204,14 +202,14 @@ function SignUp() {
           className="btn btn-primary disabled:cursor-not-allowed disabled:text-gray-400"
           disabled={isSubmitDisabled || isLoading}
         >
-          {isLoading ? "Creating account..." : "Continue"}
+          {isLoading ? 'Creating account...' : 'Continue'}
         </button>
         <p className="text-sm font-medium text-gray-500">
-          By proceeding, you agree to our{" "}
+          By proceeding, you agree to our{' '}
           <Link href="/terms" className="link-hover link text-primary">
             Terms of Service
-          </Link>{" "}
-          and{" "}
+          </Link>{' '}
+          and{' '}
           <Link href="/privacy" className="link-hover link text-primary">
             Privacy Policy
           </Link>
@@ -226,7 +224,7 @@ function SignUp() {
         </div>
       </form>
     </div>
-  );
+  )
 }
 
-export default SignUp;
+export default SignUp

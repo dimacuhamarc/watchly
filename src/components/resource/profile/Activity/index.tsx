@@ -1,32 +1,54 @@
-import React from "react";
-import ActivityItem from "./ActivityItem";
+import React from 'react'
+import ActivityItem from './ActivityItem'
 
 const mockActivities = [
   { type: 'favorite' as const, movieTitle: 'Iron Man', timeAgo: '4 hours ago' },
-  { type: 'favorite' as const, movieTitle: 'Iron Man 2', timeAgo: '2 days ago' },
-  { type: 'add' as const, movieTitle: 'Interstellar', listName: 'Sci-fi Flicks', timeAgo: '2 days ago' },
-  { type: 'add' as const, movieTitle: 'The Dark Knight', listName: 'Best Movies', timeAgo: '2 days ago' },
-  { type: 'add' as const, movieTitle: 'The Dark Knight Rises', listName: 'Best Movies', timeAgo: '2 days ago' },
-  { type: 'add' as const, movieTitle: 'Everything Everywhere All At Once', listName: 'Sci-Fi Watchlist', timeAgo: '2 days ago' }
-];
+  {
+    type: 'favorite' as const,
+    movieTitle: 'Iron Man 2',
+    timeAgo: '2 days ago',
+  },
+  {
+    type: 'add' as const,
+    movieTitle: 'Interstellar',
+    listName: 'Sci-fi Flicks',
+    timeAgo: '2 days ago',
+  },
+  {
+    type: 'add' as const,
+    movieTitle: 'The Dark Knight',
+    listName: 'Best Movies',
+    timeAgo: '2 days ago',
+  },
+  {
+    type: 'add' as const,
+    movieTitle: 'The Dark Knight Rises',
+    listName: 'Best Movies',
+    timeAgo: '2 days ago',
+  },
+  {
+    type: 'add' as const,
+    movieTitle: 'Everything Everywhere All At Once',
+    listName: 'Sci-Fi Watchlist',
+    timeAgo: '2 days ago',
+  },
+]
 
 function ActivityList({ userDataName }: { userDataName?: string }) {
-  const enableMockActivities = true;
+  const enableMockActivities = true
 
   if (!enableMockActivities) {
     return (
       <div className="flex flex-col gap-2 py-4">
         <h1 className="text-2xl font-semibold leading-none">Activity</h1>
-        <div className="flex flex-col">
-          No activities yet.
-        </div>
+        <div className="flex flex-col">No activities yet.</div>
       </div>
-    );
+    )
   }
 
   return (
     <div className="flex flex-col gap-2 py-4">
-      <div className="flex flex-col gap-2 max-h-[360px] overflow-y-auto">
+      <div className="flex max-h-[360px] flex-col gap-2 overflow-y-auto">
         {mockActivities.map((activity, index) => (
           <ActivityItem
             key={index}
@@ -39,7 +61,7 @@ function ActivityList({ userDataName }: { userDataName?: string }) {
         ))}
       </div>
     </div>
-  );
+  )
 }
 
-export default ActivityList;
+export default ActivityList

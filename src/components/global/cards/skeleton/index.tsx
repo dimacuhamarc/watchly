@@ -1,20 +1,20 @@
-import React from "react";
+import React from 'react'
 
 interface SkeletonProps {
-  type?: "show" | "movie" | null;
+  type?: 'show' | 'movie' | null
 }
 
 function Skeleton({ type }: SkeletonProps) {
-  if (type === "show") {
-    return <ShowSkeleton />;
-  } else if (type === "movie") {
-    return <MovieSkeleton />;
+  if (type === 'show') {
+    return <ShowSkeleton />
+  } else if (type === 'movie') {
+    return <MovieSkeleton />
   } else {
-    return <MovieSkeleton />;
+    return <MovieSkeleton />
   }
 }
 
-export default Skeleton;
+export default Skeleton
 
 const MovieSkeleton = () => {
   return (
@@ -32,9 +32,9 @@ const MovieSkeleton = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 const ShowSkeleton = () => {
-  return <div>ShowSkeleton</div>;
-};
+  return <div>ShowSkeleton</div>
+}

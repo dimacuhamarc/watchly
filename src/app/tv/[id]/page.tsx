@@ -1,23 +1,23 @@
-import React from "react";
-import MainLayoutProvider from "~/components/layout/mainLayoutProvider";
-import { TVItemComponent } from "~/components/resource/items";
-import { getTvDetails } from "~/utils/api/tmdb";
+import React from 'react'
+import MainLayoutProvider from '~/components/layout/mainLayoutProvider'
+import { TVItemComponent } from '~/components/resource/items'
+import { getTvDetails } from '~/utils/api/tmdb'
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
-  const { id } = params;
-  const tv = await getTvDetails(id);
+  const { id } = params
+  const tv = await getTvDetails(id)
   return {
-    title: `${tv?.name ?? "Not Found"} | Watchly`,
-    description: tv?.overview ?? "Not Found",
-  };
+    title: `${tv?.name ?? 'Not Found'} | Watchly`,
+    description: tv?.overview ?? 'Not Found',
+  }
 }
 
 interface TVItemPageProps {
-  params: { id: string };
+  params: { id: string }
 }
 
 function TVItemPage({ params }: TVItemPageProps) {
-  const { id }: { id: string } = React.use(Promise.resolve(params));
+  const { id }: { id: string } = React.use(Promise.resolve(params))
 
   return (
     <MainLayoutProvider>
@@ -25,7 +25,7 @@ function TVItemPage({ params }: TVItemPageProps) {
         <TVItemComponent id={id} />
       </div>
     </MainLayoutProvider>
-  );
+  )
 }
 
-export default TVItemPage;
+export default TVItemPage

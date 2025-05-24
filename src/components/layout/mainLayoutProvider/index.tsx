@@ -5,7 +5,7 @@ import Navbar from '~/components/global/navbar'
 function MainLayoutProvider({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <div className="fixed top-0 left-0 w-full z-50">
+      <div className="fixed left-0 top-0 z-50 w-full">
         <Navbar />
       </div>
       <div className="bg-gradient-to-br from-slate-700 to-slate-950 text-white">

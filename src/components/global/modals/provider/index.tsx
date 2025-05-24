@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { FaTimes } from "react-icons/fa";
-import { useFadeIn } from "~/hooks/useFadeIn/useFadeIn";
-import { useRegion } from "~/hooks/useRegion/useRegion";
+import React, { useState, useEffect } from 'react'
+import { FaTimes } from 'react-icons/fa'
+import { useFadeIn } from '~/hooks/useFadeIn/useFadeIn'
+import { useRegion } from '~/hooks/useRegion/useRegion'
 import {
   type watchProviders,
   type watchProvider,
-} from "~/utils/types/tmdb-types";
-import { DecoratedTextWithPhoto } from "../../decorated-text";
-import { disableScroll, enableScroll } from "~/helpers/scroll-lock";
+} from '~/utils/types/tmdb-types'
+import { DecoratedTextWithPhoto } from '../../decorated-text'
+import { disableScroll, enableScroll } from '~/helpers/scroll-lock'
 
 interface WatchProviderProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  watchProviders: watchProviders | null;
+  isOpen: boolean
+  onClose: () => void
+  title: string
+  watchProviders: watchProviders | null
 }
 
 function WatchProvider({
@@ -22,9 +22,9 @@ function WatchProvider({
   title,
   watchProviders,
 }: WatchProviderProps) {
-  const [watchProvider, setWatchProvider] = useState<watchProvider | null>(null);
-  const ref = useFadeIn<HTMLDivElement>();
-  const { countryName, countryCode, loading } = useRegion();
+  const [watchProvider, setWatchProvider] = useState<watchProvider | null>(null)
+  const ref = useFadeIn<HTMLDivElement>()
+  const { countryName, countryCode, loading } = useRegion()
 
   useEffect(() => {
     if (watchProviders && countryCode) {
@@ -32,24 +32,24 @@ function WatchProvider({
         watchProviders.results[countryCode] ??
           watchProviders.results.US ??
           null,
-      );
+      )
     }
-  }, [watchProviders, countryCode]);
+  }, [watchProviders, countryCode])
 
   useEffect(() => {
     if (isOpen) {
-      disableScroll();
+      disableScroll()
     } else {
-      enableScroll();
+      enableScroll()
     }
-  }, [isOpen]);
+  }, [isOpen])
 
   const handleClose = () => {
-    onClose();
-    enableScroll();
-  };
+    onClose()
+    enableScroll()
+  }
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <div
@@ -61,7 +61,7 @@ function WatchProvider({
         onClick={handleClose}
       ></div>
       <div className="relative z-50 w-full max-w-2xl">
-        <div className="rounded-lg max-h-screen bg-white px-12 py-8 text-slate-900 backdrop-blur-sm">
+        <div className="max-h-screen rounded-lg bg-white px-12 py-8 text-slate-900 backdrop-blur-sm">
           <button
             className="group absolute right-1 top-1 rounded-full p-2 text-white transition-all duration-300 hover:bg-gray-100 hover:text-gray-300 md:right-10 md:top-10"
             onClick={handleClose}
@@ -80,18 +80,19 @@ function WatchProvider({
           ) : (
             <div className="flex flex-col gap-4">
               <div>
-                <h1 className="font-bold mb-2">
-                  Where to watch <br/><span className="text-2xl text-primary">{title}</span>
+                <h1 className="mb-2 font-bold">
+                  Where to watch <br />
+                  <span className="text-2xl text-primary">{title}</span>
                 </h1>
                 {countryName && countryCode && (
                   <p className="">
-                    Your current region is{" "}
+                    Your current region is{' '}
                     <span className="font-bold">{countryName}</span> (
                     {countryCode})
                   </p>
                 )}
               </div>
-              <div className="flex flex-col gap-2 overflow-y-scroll max-h-[60vh]">
+              <div className="flex max-h-[60vh] flex-col gap-2 overflow-y-scroll">
                 {watchProvider?.flatrate &&
                   watchProvider?.flatrate?.length > 0 && (
                     <>
@@ -138,7 +139,7 @@ function WatchProvider({
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default WatchProvider;
+export default WatchProvider
