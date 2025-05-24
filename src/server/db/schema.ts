@@ -63,7 +63,7 @@ export const favorites = createTable("favorite", {
 });
 
 export const watchlist = createTable("watchlist", {
-  id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+  id: varchar("id", { length: 255 }).primaryKey().unique().notNull(),
   userId: varchar("user_id", { length: 255 })
     .notNull()
     .references(() => users.id),
@@ -80,8 +80,8 @@ export const watchlist = createTable("watchlist", {
 });
 
 export const watchlistItems = createTable("watchlist_item", {
-  id: integer("id").primaryKey().generatedByDefaultAsIdentity(),  
-  watchlistId: integer("watchlist_id")
+  id: varchar("id", { length: 255 }).primaryKey().unique().notNull(),  
+  watchlistId: varchar("watchlist_id", { length: 255 })
     .notNull()
     .references(() => watchlist.id),
   itemId: integer("item_id").notNull(),

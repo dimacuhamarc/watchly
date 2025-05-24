@@ -45,7 +45,10 @@ export function useProfile(username: string, currentUsername: string) {
 
   const isPublicProfile = profileData?.public_profile === true;
 
+  const currentUserId = profileData?.id;
+
   return {
+    currentUserId,
     isPublicProfile,
     isCurrentUser,
     profileLoaded,

@@ -5,7 +5,6 @@ interface InitialAvatarProps {
 }
 
 function InitialAvatar({ name }: InitialAvatarProps) {
-  // Split the name into words and take the first letter of each word
   const initials = name
     .split(' ')
     .map(word => word.charAt(0).toUpperCase())
@@ -13,7 +12,7 @@ function InitialAvatar({ name }: InitialAvatarProps) {
 
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }} className="avatar placeholder w-24 h-24">
-      <div className="text-neutral-content h-full w-full rounded-full">
+      <div className="text-neutral-content h-full w-full rounded-lg">
         <span className="text-3xl">{initials}</span>
       </div>
     </div>
