@@ -1,95 +1,97 @@
-"use client";
+'use client'
 
-import React, { useEffect, useState } from "react";
-import { LuLock, LuLockOpen, LuEye, LuEyeOff, LuMail } from "react-icons/lu";
-import { useForm } from "react-hook-form";
-import type { SignInFormType } from "~/utils/types/types";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-import type { LoginResponse } from "~/utils/types/auth";
-import { useAuthStore } from "~/store/authStore";
+import React, { useEffect, useState } from 'react'
+import { LuLock, LuLockOpen, LuEye, LuEyeOff, LuMail } from 'react-icons/lu'
+import { useForm } from 'react-hook-form'
+import type { SignInFormType } from '~/utils/types/types'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+import type { LoginResponse } from '~/utils/types/auth'
+import { useAuthStore } from '~/store/authStore'
 
 interface SignInProps {
-  registrationSuccess?: boolean;
+  registrationSuccess?: boolean
 }
 
 function SignIn({ registrationSuccess }: SignInProps) {
-  const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false)
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(
-    registrationSuccess ? "Account created successfully! Please sign in." : null
-  );
-  const { register, handleSubmit, watch } = useForm<SignInFormType>();
-  const router = useRouter();
-  const { data: session } = useSession();
-  const { fetchAuthState, fetchProfileData, ownProfileData } = useAuthStore();
+    registrationSuccess
+      ? 'Account created successfully! Please sign in.'
+      : null,
+  )
+  const { register, handleSubmit, watch } = useForm<SignInFormType>()
+  const router = useRouter()
+  const { data: session } = useSession()
+  const { fetchAuthState, fetchProfileData, ownProfileData } = useAuthStore()
 
   useEffect(() => {
     if (session) {
-      router.replace("/");
+      router.replace('/')
     }
-  }, [session, router]);
+  }, [session, router])
 
   useEffect(() => {
     const subscription = watch((value) => {
-      const email = value.email;
-      const password = value.password;
-      setIsSubmitDisabled(!email || !password);
-    });
-    return () => subscription.unsubscribe();
-  }, [watch]);
+      const email = value.email
+      const password = value.password
+      setIsSubmitDisabled(!email || !password)
+    })
+    return () => subscription.unsubscribe()
+  }, [watch])
 
   const onSubmit = async (data: SignInFormType) => {
-    setIsLoading(true);
-    setError("");
-    setSuccessMessage("");
-    
+    setIsLoading(true)
+    setError('')
+    setSuccessMessage('')
+
     try {
       // Direct API call instead of going through NextAuth signIn
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json"
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           email: data.email,
-          password: data.password
-        })
-      });
+          password: data.password,
+        }),
+      })
 
-      const result = await res.json() as LoginResponse;
-      
+      const result = (await res.json()) as LoginResponse
+
       if (!res.ok) {
-        setError(result.error ?? "Authentication failed");
-        console.error("Sign-in error:", result.error);
+        setError(result.error ?? 'Authentication failed')
+        console.error('Sign-in error:', result.error)
       } else {
-        console.log("Sign-in successful");
-        setSuccessMessage("Login successful! Redirecting...");
-        
-        if (!localStorage.getItem("auth-storage")) {
-          await fetchAuthState();
+        console.log('Sign-in successful')
+        setSuccessMessage('Login successful! Redirecting...')
+
+        if (!localStorage.getItem('auth-storage')) {
+          await fetchAuthState()
           if (result.user?.name) {
-            await fetchProfileData(result.user.name);
+            await fetchProfileData(result.user.name)
             console.log(ownProfileData)
           }
         }
 
-        window.location.href = `/p/${result.user?.name}`;
+        window.location.href = `/p/${result.user?.name}`
       }
     } catch (error) {
-      console.error("Login error:", error);
-      setError("Authentication failed. Please try again.");
+      console.error('Login error:', error)
+      setError('Authentication failed. Please try again.')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
+    setShowPassword(!showPassword)
+  }
 
   return (
     <div className="flex flex-col justify-center gap-4 rounded-lg bg-white px-10 py-8">
@@ -100,9 +102,7 @@ function SignIn({ registrationSuccess }: SignInProps) {
         <p className="text-center text-gray-500">
           Sign in to your account to continue
         </p>
-        {error && (
-          <p className="text-center text-sm text-red-500">{error}</p>
-        )}
+        {error && <p className="text-center text-sm text-red-500">{error}</p>}
         {successMessage && (
           <p className="text-center text-sm text-green-500">{successMessage}</p>
         )}
@@ -117,7 +117,7 @@ function SignIn({ registrationSuccess }: SignInProps) {
               className="grow"
               placeholder="your.email@example.com"
               autoFocus
-              {...register("email")}
+              {...register('email')}
             />
           </label>
         </div>
@@ -135,11 +135,11 @@ function SignIn({ registrationSuccess }: SignInProps) {
               <LuLockOpen className="swap-on h-4 w-4 opacity-70" />
             </label>
             <input
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               placeholder="i.e. warmachineRox"
               className="grow"
               autoComplete="off"
-              {...register("password")}
+              {...register('password')}
             />
             <label className="swap swap-rotate">
               <input
@@ -157,7 +157,7 @@ function SignIn({ registrationSuccess }: SignInProps) {
           className="btn btn-primary disabled:cursor-not-allowed disabled:text-gray-400"
           disabled={isSubmitDisabled || isLoading}
         >
-          {isLoading ? "Signing in..." : "Continue"}
+          {isLoading ? 'Signing in...' : 'Continue'}
         </button>
         <div className="flex flex-row justify-between">
           <Link
@@ -175,7 +175,7 @@ function SignIn({ registrationSuccess }: SignInProps) {
         </div>
       </form>
     </div>
-  );
+  )
 }
 
-export default SignIn;
+export default SignIn

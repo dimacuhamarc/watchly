@@ -2,10 +2,9 @@ import React from 'react'
 import ActivityList from '../../Activity'
 
 function ActivitiesContent() {
-  
   return (
     <>
-      <ActivityList userDataName='Marc' />
+      <ActivityList userDataName="Marc" />
     </>
   )
 }

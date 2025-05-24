@@ -1,26 +1,26 @@
-import React from "react";
-import type { credits, tvDetails, videos } from "~/utils/types/tmdb-types";
-import Image from "next/image";
-import { DisplayAvatar } from "~/components/global/avatars";
+import React from 'react'
+import type { credits, tvDetails, videos } from '~/utils/types/tmdb-types'
+import Image from 'next/image'
+import { DisplayAvatar } from '~/components/global/avatars'
 import {
   FaCalendar,
   FaExternalLinkAlt,
   FaHeart,
   FaPlay,
   FaTv,
-} from "react-icons/fa";
-import { DecoratedTextWithIcon } from "~/components/global/decorated-text";
-import { FaStar } from "react-icons/fa";
-import { formatDate } from "~/helpers/date";
-import { RoundedChip } from "~/components/global/chips";
+} from 'react-icons/fa'
+import { DecoratedTextWithIcon } from '~/components/global/decorated-text'
+import { FaStar } from 'react-icons/fa'
+import { formatDate } from '~/helpers/date'
+import { RoundedChip } from '~/components/global/chips'
 
 interface TvOverviewProps {
-  tv: tvDetails;
-  credits: credits;
-  videos: videos;
-  setShowTrailerModal: (show: boolean) => void;
-  setShowWatchProviderModal: (show: boolean) => void;
-  setShowExpandPosterModal: (show: boolean) => void;
+  tv: tvDetails
+  credits: credits
+  videos: videos
+  setShowTrailerModal: (show: boolean) => void
+  setShowWatchProviderModal: (show: boolean) => void
+  setShowExpandPosterModal: (show: boolean) => void
 }
 
 function TvOverview({
@@ -32,26 +32,26 @@ function TvOverview({
   setShowExpandPosterModal,
 }: TvOverviewProps) {
   const onTrailerClick = () => {
-    setShowTrailerModal(true);
-  };
+    setShowTrailerModal(true)
+  }
 
   const onWatchlistClick = () => {
     // console.log("Watchlist clicked");
-  };
+  }
 
   const onWhereToWatchClick = () => {
-    setShowWatchProviderModal(true);
-  };
+    setShowWatchProviderModal(true)
+  }
 
-  const getCrewMembers = (crew: credits["crew"], jobs: string[]) => {
+  const getCrewMembers = (crew: credits['crew'], jobs: string[]) => {
     return crew
       .filter((member) => jobs.includes(member.job))
-      .sort((a, b) => b.popularity - a.popularity);
-  };
+      .sort((a, b) => b.popularity - a.popularity)
+  }
 
   const onExpandPosterClick = () => {
-    setShowExpandPosterModal(true);
-  };
+    setShowExpandPosterModal(true)
+  }
 
   return (
     <div className="flex flex-col justify-center gap-8 md:flex-row md:gap-4">
@@ -59,7 +59,7 @@ function TvOverview({
         <Image
           src={`https://image.tmdb.org/t/p/w500/${tv?.poster_path}`}
           priority={true}
-          alt={tv?.name || ""}
+          alt={tv?.name || ''}
           fill
           className="rounded-2xl object-cover transition-all duration-300"
           onClick={onExpandPosterClick}
@@ -74,26 +74,26 @@ function TvOverview({
           <DecoratedTextWithIcon
             text={
               tv?.vote_average === 0
-                ? "No Rating"
-                : tv?.vote_average.toString() + "/10" || "No Rating"
+                ? 'No Rating'
+                : tv?.vote_average.toString() + '/10' || 'No Rating'
             }
             icon={<FaStar className="text-yellow-500" />}
           />
           <DecoratedTextWithIcon
             text={
-              tv?.first_air_date === ""
-                ? "No Release Date"
-                : formatDate(tv?.first_air_date || "No Available Date")
+              tv?.first_air_date === ''
+                ? 'No Release Date'
+                : formatDate(tv?.first_air_date || 'No Available Date')
             }
             icon={<FaCalendar className="text-yellow-500" />}
           />
           <DecoratedTextWithIcon
             text={
               tv?.number_of_seasons === 0
-                ? "No Seasons"
+                ? 'No Seasons'
                 : tv?.number_of_seasons.toString() +
-                    (tv?.number_of_seasons === 1 ? " Season" : " Seasons") ||
-                  "No Seasons"
+                    (tv?.number_of_seasons === 1 ? ' Season' : ' Seasons') ||
+                  'No Seasons'
             }
             icon={<FaTv className="text-yellow-500" />}
           />
@@ -125,42 +125,42 @@ function TvOverview({
         <p className="text-balance text-base">{tv?.overview}</p>
 
         <div className="flex flex-col gap-2 md:flex-row md:justify-between">
-          {getCrewMembers(credits?.crew ?? [], ["Executive Producer"]).length >
+          {getCrewMembers(credits?.crew ?? [], ['Executive Producer']).length >
             0 && (
             <div>
               <h1 className="mb-2 text-base">Executive Producers</h1>
               <div className="flex flex-col gap-4">
-                {getCrewMembers(credits?.crew ?? [], ["Executive Producer"])
+                {getCrewMembers(credits?.crew ?? [], ['Executive Producer'])
                   .slice(0, 3)
                   .map((producer) => (
                     <DisplayAvatar
                       key={producer.id}
                       name={producer.name}
-                      image={producer.profile_path ?? ""}
+                      image={producer.profile_path ?? ''}
                     />
                   ))}
               </div>
             </div>
           )}
           {getCrewMembers(credits?.crew ?? [], [
-            "Producer",
-            "Co-Producer",
-            "Writer",
+            'Producer',
+            'Co-Producer',
+            'Writer',
           ]).length > 0 && (
             <div>
               <h1 className="mb-2 text-base">Producers</h1>
               <div className="flex flex-col gap-4">
                 {getCrewMembers(credits?.crew ?? [], [
-                  "Producer",
-                  "Co-Producer",
-                  "Writer",
+                  'Producer',
+                  'Co-Producer',
+                  'Writer',
                 ])
                   .slice(0, 3)
                   .map((producer) => (
                     <DisplayAvatar
                       key={producer.id}
                       name={producer.name}
-                      image={producer.profile_path ?? ""}
+                      image={producer.profile_path ?? ''}
                     />
                   ))}
               </div>
@@ -169,7 +169,7 @@ function TvOverview({
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default TvOverview;
+export default TvOverview

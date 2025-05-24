@@ -1,19 +1,16 @@
-import { NextResponse } from "next/server";
-import { db } from "~/server/db";
-import { users, follow } from "~/server/db/schema";
-import { eq, count } from "drizzle-orm";
+import { NextResponse } from 'next/server'
+import { db } from '~/server/db'
+import { users, follow } from '~/server/db/schema'
+import { eq, count } from 'drizzle-orm'
 
 export async function GET(
   request: Request,
-  { params }: { params: { username: string } }
+  { params }: { params: { username: string } },
 ) {
-  const { username } = params;
+  const { username } = params
 
   if (!username) {
-    return NextResponse.json(
-      { error: "Username is required" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: 'Username is required' }, { status: 400 })
   }
 
   try {
@@ -24,31 +21,28 @@ export async function GET(
       .execute()
 
     if (userData.length === 0) {
-      return NextResponse.json(
-        { error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
-    const userId = userData[0]!.id;
-    
+    const userId = userData[0]!.id
+
     const followersCount = await db
       .select({ count: count() })
       .from(follow)
       .where(eq(follow.followedUserId, userId))
       .execute()
-      .then((result) => Number(result[0]?.count));
+      .then((result) => Number(result[0]?.count))
 
     const followingCount = await db
       .select({ count: count() })
       .from(follow)
       .where(eq(follow.userId, userId))
       .execute()
-      .then((result) => Number(result[0]?.count));
+      .then((result) => Number(result[0]?.count))
 
     return NextResponse.json({
-      status: "success",
-      message: "User profile data fetched successfully",
+      status: 'success',
+      message: 'User profile data fetched successfully',
       profileData: {
         id: userData[0]!.id,
         username: userData[0]!.username,
@@ -63,12 +57,12 @@ export async function GET(
         following: followingCount,
         location: userData[0]!.location,
       },
-    });
+    })
   } catch (error) {
-    console.error("Error fetching user data:", error);
+    console.error('Error fetching user data:', error)
     return NextResponse.json(
-      { error: "Failed to fetch user data" },
-      { status: 500 }
-    );
+      { error: 'Failed to fetch user data' },
+      { status: 500 },
+    )
   }
 }

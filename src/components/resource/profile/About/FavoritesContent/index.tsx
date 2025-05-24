@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react'
 
 function FavoritesContent() {
   return (
     <>
-      <p className="text-md">{"No favorites available"}</p>
+      <p className="text-md">{'No favorites available'}</p>
     </>
-  );
+  )
 }
 
-export default FavoritesContent;
+export default FavoritesContent

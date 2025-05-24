@@ -1,13 +1,13 @@
-import MainLayoutProvider from "~/components/layout/mainLayoutProvider";
-import { UnauthorizedAccess } from "~/components/utility/screens";
+import MainLayoutProvider from '~/components/layout/mainLayoutProvider'
+import { UnauthorizedAccess } from '~/components/utility/screens'
 
 export default function NotFound() {
   const content = UnauthorizedAccess({
-    errorMessage: "404 | Page Not Found",
-    errorDetails: "The page you are looking for does not exist.",
+    errorMessage: '404 | Page Not Found',
+    errorDetails: 'The page you are looking for does not exist.',
     redirectLink: {
-      href: "/",
-      label: "Go to home page",
+      href: '/',
+      label: 'Go to home page',
     },
   })
   return (
@@ -16,5 +16,5 @@ export default function NotFound() {
         {content}
       </div>
     </MainLayoutProvider>
-  );
+  )
 }

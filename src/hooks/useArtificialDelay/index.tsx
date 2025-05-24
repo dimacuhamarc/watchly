@@ -1,17 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 
 function useArtificialDelay(delay = 1000) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, delay);
+      setIsLoading(false)
+    }, delay)
 
-    return () => clearTimeout(timer);
-  }, [delay]);
+    return () => clearTimeout(timer)
+  }, [delay])
 
-  return isLoading;
+  return isLoading
 }
 
-export default useArtificialDelay;
+export default useArtificialDelay

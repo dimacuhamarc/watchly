@@ -27,7 +27,7 @@ Watchly is designed to streamline your entertainment experience, offering a seam
 - [x] add db
 - [x] add auth ( next auth )
 - [x] add jwt, sessions, signin, signup, middlewares
-- [ ] setup user profile
+- [x] setup user profile
 - [x] add search
 - [ ] add watchlist
 - [ ] add recommendations

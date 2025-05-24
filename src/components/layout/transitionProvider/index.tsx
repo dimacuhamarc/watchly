@@ -1,12 +1,18 @@
-"use client"
+'use client'
 
 import React, { useEffect, useRef } from 'react'
 
-function TransitionProvider({ children, className }: { children: React.ReactNode, className?: string }) {
+function TransitionProvider({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const currentRef = ref.current;
+    const currentRef = ref.current
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -15,7 +21,7 @@ function TransitionProvider({ children, className }: { children: React.ReactNode
           }
         })
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     )
 
     if (currentRef) {
@@ -30,8 +36,8 @@ function TransitionProvider({ children, className }: { children: React.ReactNode
   }, [])
 
   return (
-    <div 
-      ref={ref} 
+    <div
+      ref={ref}
       className={`opacity-0 transition-opacity duration-700 ${className}`}
       style={{ willChange: 'opacity' }}
     >

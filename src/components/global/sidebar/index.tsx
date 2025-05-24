@@ -3,10 +3,8 @@ import './index.css'
 
 function Sidebar() {
   return (
-    <div className='sidebar-wrapper'>
-      <div className='sidebar'>
-        test
-      </div>
+    <div className="sidebar-wrapper">
+      <div className="sidebar">test</div>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 .sidebar-wrapper {
-  @apply fixed z-50 p-4 shadow-sm transition-opacity max-h-screen h-screen w-24;
+  @apply fixed z-50 h-screen max-h-screen w-24 p-4 shadow-sm transition-opacity;
 }
 
 .sidebar {
-  @apply bg-slate-900/50 border border-slate-700/50 h-full rounded-xl;
+  @apply h-full rounded-xl border border-slate-700/50 bg-slate-900/50;
 }

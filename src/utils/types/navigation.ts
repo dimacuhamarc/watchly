@@ -1,12 +1,12 @@
 interface NavLink {
-  name: string;
-  href: string;
-  showWhen: 'always' | 'authenticated' | 'unauthenticated';
+  name: string
+  href: string
+  showWhen: 'always' | 'authenticated' | 'unauthenticated'
 }
 
 interface OnboardingLink extends NavLink {
-  withStyle?: boolean;
-  type: 'signup' | 'signin' | 'signout';
+  withStyle?: boolean
+  type: 'signup' | 'signin' | 'signout'
 }
 
 const navigationLinks: NavLink[] = [
@@ -39,8 +39,8 @@ const navigationLinks: NavLink[] = [
     name: 'My Profile',
     href: '/p/',
     showWhen: 'authenticated',
-  }
-];
+  },
+]
 
 const footerLinks: NavLink[] = [
   {
@@ -62,8 +62,8 @@ const footerLinks: NavLink[] = [
     name: 'TMDb',
     href: 'https://www.themoviedb.org/',
     showWhen: 'always',
-  }
-];
+  },
+]
 
 const onboardingLinks: OnboardingLink[] = [
   {
@@ -71,15 +71,15 @@ const onboardingLinks: OnboardingLink[] = [
     href: '/onboarding',
     type: 'signup',
     showWhen: 'unauthenticated',
-    withStyle: false
+    withStyle: false,
   },
   {
     name: 'Login',
     href: '/onboarding',
     type: 'signin',
     showWhen: 'unauthenticated',
-    withStyle: true
-  }
-];
+    withStyle: true,
+  },
+]
 
-export { navigationLinks, onboardingLinks, footerLinks };
+export { navigationLinks, onboardingLinks, footerLinks }

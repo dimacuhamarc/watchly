@@ -2,9 +2,9 @@ import React from 'react'
 import './index.css'
 
 interface ToastProps {
-  type: 'info' | 'success' | 'error',
-  message?: string,
-  show?: boolean,
+  type: 'info' | 'success' | 'error'
+  message?: string
+  show?: boolean
 }
 function Toast({ type = 'info', message, show }: ToastProps) {
   React.useEffect(() => {

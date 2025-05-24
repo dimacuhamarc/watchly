@@ -1,19 +1,19 @@
-import React from "react";
-import { RectangleChip } from "~/components/global/chips";
-import { type keywords } from "~/utils/types/tmdb-types";
+import React from 'react'
+import { RectangleChip } from '~/components/global/chips'
+import { type keywords } from '~/utils/types/tmdb-types'
 
 type KeywordsSectionProps = {
-  keywords: keywords;
-};
+  keywords: keywords
+}
 
 function KeywordsSection({ keywords }: KeywordsSectionProps) {
   return (
-    <div className="flex flex-row flex-wrap justify-start gap-2 md:justify-center mt-4">
+    <div className="mt-4 flex flex-row flex-wrap justify-start gap-2 md:justify-center">
       {keywords.keywords.map((keyword) => (
         <RectangleChip key={keyword.id} label={keyword.name} />
       ))}
     </div>
-  );
+  )
 }
 
-export default KeywordsSection;
+export default KeywordsSection

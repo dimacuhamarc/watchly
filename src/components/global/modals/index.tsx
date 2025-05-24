@@ -1,5 +1,5 @@
-import { default as TrailerModal } from "./trailer";
-import { default as WatchProviderModal } from "./provider";
-import { default as PosterModal } from "./poster";
+import { default as TrailerModal } from './trailer'
+import { default as WatchProviderModal } from './provider'
+import { default as PosterModal } from './poster'
 
-export { TrailerModal, WatchProviderModal, PosterModal };
+export { TrailerModal, WatchProviderModal, PosterModal }

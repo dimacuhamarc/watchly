@@ -1,19 +1,23 @@
-import React from "react";
-import Image from "next/image";
-import { FaStar, FaArrowRight } from "react-icons/fa";
-import type { show, tvShow } from "~/utils/types/tmdb-types";
-import { DecoratedTextWithIcon } from "../../decorated-text";
-import { formatDate } from "~/helpers/date";
-import { getTitle, getReleaseDate } from "~/helpers/item-data";
+import React from 'react'
+import Image from 'next/image'
+import { FaStar, FaArrowRight } from 'react-icons/fa'
+import type { show, tvShow } from '~/utils/types/tmdb-types'
+import { DecoratedTextWithIcon } from '../../decorated-text'
+import { formatDate } from '~/helpers/date'
+import { getTitle, getReleaseDate } from '~/helpers/item-data'
 
 interface ShowProps {
-  result: show | tvShow;
-  onClick: () => void;
+  result: show | tvShow
+  onClick: () => void
 }
 
 function Show({ result, onClick }: ShowProps) {
   return (
-    <div className="card-wrapper h-[600px] max-w-[400px] min-md:max-w-[268px]" key={result.id} onClick={onClick}>
+    <div
+      className="card-wrapper min-md:max-w-[268px] h-[600px] max-w-[400px]"
+      key={result.id}
+      onClick={onClick}
+    >
       <div className="group card transition-all duration-300 hover:scale-95 hover:bg-gray-100/20">
         <div className="card-body flex flex-col items-center justify-center">
           <Image
@@ -25,18 +29,20 @@ function Show({ result, onClick }: ShowProps) {
           />
           <div className="card-section flex w-full flex-row items-center justify-between transition-all duration-300 group-hover:-mb-2 group-hover:mt-8">
             <div className="w-full">
-              <h2 className="w-full truncate text-md md:text-xl font-bold">
+              <h2 className="text-md w-full truncate font-bold md:text-xl">
                 {getTitle(result)}
               </h2>
               <p className="text-sm md:text-base">
-                {" "}
-                {getReleaseDate(result) ? formatDate(getReleaseDate(result)!) : null}
+                {' '}
+                {getReleaseDate(result)
+                  ? formatDate(getReleaseDate(result)!)
+                  : null}
               </p>
               <DecoratedTextWithIcon
                 text={
                   result.vote_average === 0
-                    ? "No Rating"
-                    : result.vote_average.toFixed(1) + "/10" || "No Rating"
+                    ? 'No Rating'
+                    : result.vote_average.toFixed(1) + '/10' || 'No Rating'
                 }
                 icon={<FaStar className="text-yellow-500" />}
               />
@@ -48,7 +54,7 @@ function Show({ result, onClick }: ShowProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Show;
+export default Show
