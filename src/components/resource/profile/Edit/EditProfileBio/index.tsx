@@ -5,6 +5,7 @@ import type { SanitizedProfileData, ProfileState } from '~/utils/types/data'
 import UpdateProfileLayoutProvider from '~/components/layout/updateProfileLayoutProvider'
 
 import { useForm } from 'react-hook-form'
+import { revalidateProfile } from '~/app/profile/[slug]/actions'
 
 interface EditProfileBioProps {
   params: string

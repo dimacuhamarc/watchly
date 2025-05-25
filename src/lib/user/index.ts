@@ -42,7 +42,7 @@ export async function getFollowingCount(userId: string) {
     .from(follow)
     .where(eq(follow.userId, userId)) // Fixed: This should be userId for following
     .execute()
-    .then((result) => Number(result[0]?.count ?? 1240)) 
+    .then((result) => Number(result[0]?.count)) 
 
   return followingCount
 }

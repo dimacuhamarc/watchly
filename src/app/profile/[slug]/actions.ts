@@ -6,7 +6,7 @@ const apiURL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'
 export async function getProfileData(slug: string) {
   const cookieHeader = await getCookies()
   return fetch(`${apiURL}/api/profile/${slug}`, {
-    next: { revalidate: 60 }, // Revalidate every 60 seconds
+    next: { revalidate: 5}, // Revalidate every 60 seconds
     headers: {
       Cookie: cookieHeader,
       'Content-Type': 'application/json',
@@ -49,4 +49,9 @@ export async function getCookies() {
     throw new Error('No authentication cookie found')
   }
   return cookieHeader
+}
+
+export async function revalidateProfile(username: string) {
+  const { revalidateTag } = await import('next/cache')
+  revalidateTag(`profile-${username}`)
 }

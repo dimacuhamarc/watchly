@@ -152,10 +152,7 @@ const Profile = function Profile({ profileData }: ProfileProps) {
                 <div className="flex items-center gap-2 rounded-full border border-slate-700/50 bg-slate-800/50 px-3 py-1.5 backdrop-blur-sm">
                   <LuUsers className="h-4 w-4 text-primary" />
                   <span className="text-sm font-medium">
-                    {profileData?.followers == 0
-                      ? '1.4m'
-                      : profileData?.followers}{' '}
-                    Followers
+                    {profileData?.followers} Followers
                   </span>
                 </div>
                 <div className="flex items-center gap-2 rounded-full border border-slate-700/50 bg-slate-800/50 px-3 py-1.5 backdrop-blur-sm">
