@@ -6,7 +6,7 @@ import type { SanitizedProfileData } from '~/utils/types/data'
 interface ProfileState {
   status: string
   message: string
-  profileData: SanitizedProfileData
+  data: SanitizedProfileData
 }
 
 export function useProfile(username: string, currentUsername: string) {
@@ -26,7 +26,7 @@ export function useProfile(username: string, currentUsername: string) {
       if (data.status !== 'success') {
         return
       }
-      setProfileData(data.profileData)
+      setProfileData(data.data)
     } catch (error) {
       setProfileLoaded(false)
       console.error('Error fetching profile data:', error)

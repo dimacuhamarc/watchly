@@ -9,9 +9,9 @@ function AboutContent({ bio }: UserData) {
   return (
     <>
       <p className="text-md">{bio != '' ? bio : 'No bio available'}</p>
-      {/* <RectangleChip label="Horror" />
+      <RectangleChip label="Horror" />
       <RectangleChip label="Thriller" />
-      <RectangleChip label="Documentary" /> */}
+      <RectangleChip label="Documentary" />
     </>
   )
 }

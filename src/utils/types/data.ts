@@ -26,7 +26,7 @@ interface SanitizedUserData {
   id: string
   email: string
   username: string
-  bio?: string
+  bio: string
   first_name?: string
   last_name?: string
   created_at?: Date | string
@@ -38,8 +38,15 @@ interface SanitizedUserData {
 interface SanitizedProfileData extends SanitizedUserData {
   followers?: number
   following?: number
+  isCurrentUser?: boolean | null
 }
 
+interface ApiResponse<T> {
+  status: 'success' | 'error'
+  message: string
+  data?: T
+  error?: string
+}
 interface CookieUserData {
   id: string
   email: string
@@ -65,4 +72,5 @@ export type {
   UserFollowData,
   SanitizedProfileData,
   ProfileState,
+  ApiResponse,
 }
