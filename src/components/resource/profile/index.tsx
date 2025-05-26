@@ -39,7 +39,7 @@ const Profile = function Profile({ profileData }: ProfileProps) {
     }
   }, [profileData])
 
-  if (loading) {
+  if (loading && !error) {
     return LoadingScreen({
       loadingMessage: 'Loading Profile',
     })
@@ -57,7 +57,7 @@ const Profile = function Profile({ profileData }: ProfileProps) {
     })
   }
 
-  if (profileData === null && !error) {
+  if (profileData === null && error) {
     return UnauthorizedAccess({
       errorMessage: 'Profile Not Found',
       errorDetails: 'The requested profile could not be found.',

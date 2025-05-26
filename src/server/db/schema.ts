@@ -54,6 +54,7 @@ export const favorites = createTable('favorite', {
     .references(() => users.id)
     .unique(),
   movieIds: jsonb('movie_ids').array(),
+  public: boolean('public').notNull().default(false),
   createdAt: timestamp('created_at', { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),

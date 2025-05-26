@@ -1,7 +1,6 @@
 import React from 'react'
 import AuthLayoutProvider from '~/components/layout/authLayoutProvider'
-import Profile from '~/components/resource/profile/index'
-import { getProfileData } from './actions'
+import WatchlistDetail from '~/components/resource/watchlist/detail'
 
 export async function generateMetadata({
   params,
@@ -17,17 +16,13 @@ export async function generateMetadata({
 
 async function ProfilePage({ params }: { params: { slug: string } }) {
   const { slug }: { slug: string } = params
-  const profileData = await getProfileData(slug)
-  
-  // Transform null bio to undefined to match SanitizedUserData type
-  const transformedProfileData = profileData && typeof profileData === 'object' ? {
-    ...profileData,
-    bio: profileData.bio ?? undefined
-  } : null
   
   return (
     <AuthLayoutProvider>
-      <Profile profileData={transformedProfileData} />
+      <WatchlistDetail
+        isFullPage={true}
+        watchlistId={slug}
+      />
     </AuthLayoutProvider>
   )
 }

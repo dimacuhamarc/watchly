@@ -1,5 +1,5 @@
 import type { SanitizedProfileData } from '~/utils/types/data'
-import { cookies } from 'next/headers'
+import { getCookies } from '~/utils/api/apiRequests'
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'
 
@@ -11,7 +11,7 @@ export async function getProfileData(slug: string) {
       Cookie: cookieHeader,
       'Content-Type': 'application/json',
     },
-  }).then((res) => {
+  }).then(async (res) => {
     const response = res.json() as Promise<{
       status: string
       message: string
@@ -19,36 +19,15 @@ export async function getProfileData(slug: string) {
       error?: string
     }>
     if (!res.ok) {
-      return response.then((data) => {
-        throw new Error(data.error ?? 'Failed to fetch profile data')
-      })
+      const data = await response
+      return data.error
     }
-    return response.then((data) => {
-      if (data.status !== 'success') {
-        throw new Error(data.error ?? 'Failed to fetch profile data')
-      }
-      return data.data
-    })
+    const data_1 = await response
+    if (data_1.status !== 'success') {
+      throw new Error(data_1.error ?? 'Failed to fetch profile data')
+    }
+    return data_1.data
   })
-}
-
-export async function getCookies() {
-  const cookieStore = await cookies()
-  const cookieHeader = cookieStore
-    .getAll()
-    .map((cookie) => `${cookie.name}=${cookie.value}`)
-    .join('; ')
-
-  if (!cookieHeader) {
-    throw new Error('No cookies found')
-  }
-  if (
-    !cookieHeader.includes('next-auth.session-token') &&
-    !cookieHeader.includes('__Secure-next-auth.session-token')
-  ) {
-    throw new Error('No authentication cookie found')
-  }
-  return cookieHeader
 }
 
 export async function revalidateProfile(username: string) {

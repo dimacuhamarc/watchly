@@ -41,6 +41,29 @@ interface SanitizedProfileData extends SanitizedUserData {
   isCurrentUser?: boolean | null
 }
 
+interface SanitizedWatchlistCollection {
+  id: string
+  title: string
+  description?: string
+  public_watchlist: boolean
+  cover_image?: string
+  createdAt: Date | string
+  updatedAt: Date | string
+  items: SanitizedWatchlistItem[]
+  userId: string
+}
+
+interface SanitizedWatchlistItem {
+  id: string
+  watchlistId: string
+  itemId: string
+  mediaType: MediaType
+  status: WatchlistItemStatusType
+  notes?: string
+  created_at?: Date | string
+  updated_at?: Date | string
+}
+
 interface ApiResponse<T> {
   status: 'success' | 'error'
   message: string
@@ -73,4 +96,6 @@ export type {
   SanitizedProfileData,
   ProfileState,
   ApiResponse,
+  SanitizedWatchlistCollection,
+  SanitizedWatchlistItem,
 }

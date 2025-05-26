@@ -21,7 +21,6 @@ const WatchlistsContent = function WatchlistsContent({
   } = useWatchlist(userId)
 
   const handleCreateClick = useCallback(() => {
-    console.log('Create a watchlist')
     const modal = document.getElementById('my_modal_1') as HTMLDialogElement
     modal?.showModal()
   }, [])
@@ -56,7 +55,7 @@ const WatchlistsContent = function WatchlistsContent({
           watchlistLoaded &&
           SortedWatchlists.map((watchlist) =>
             !watchlist.public_watchlist && !isCurrentUser ? null : (
-              <WatchlistCard key={watchlist.id} watchlist={watchlist} />
+              <WatchlistCard key={watchlist.id} watchlist={watchlist} type='profile-page' />
             ),
           )}
       </div>

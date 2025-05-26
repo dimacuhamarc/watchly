@@ -26,6 +26,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json(
       {
+        status: 'success',
         message: 'Watchlists fetched successfully',
         watchlists: userWatchlists,
         count: count,

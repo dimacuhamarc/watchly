@@ -1,7 +1,19 @@
 .sidebar-wrapper {
-  @apply fixed z-50 h-screen max-h-screen w-24 p-4 shadow-sm transition-opacity;
+  @apply fixed z-50 h-screen max-h-screen w-24 p-4 shadow-sm transition-opacity flex flex-col items-center;
 }
 
 .sidebar {
-  @apply h-full rounded-xl border border-slate-700/50 bg-slate-900/50;
+  @apply h-full w-full flex flex-col items-center justify-start rounded-xl border border-slate-700/50 bg-slate-900/50 py-2.5 gap-2;
+}
+
+.sidebar-nav-item {
+  @apply flex items-center justify-center rounded-lg p-2 text-slate-400 transition-colors size-10;
+}
+
+.sidebar-nav-item:hover {
+  @apply bg-slate-800/50 text-slate-200;
+}
+
+.sidebar-nav-item.active {
+  @apply bg-slate-800 text-slate-200;
 }
