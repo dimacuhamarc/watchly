@@ -32,12 +32,7 @@ export async function getCookies() {
   if (!cookieHeader) {
     throw new Error('No cookies found')
   }
-  if (
-    !cookieHeader.includes('next-auth.session-token') &&
-    !cookieHeader.includes('__Secure-next-auth.session-token')
-  ) {
-    throw new Error('No authentication cookie found')
-  }
+  
   return cookieHeader
 }
 
