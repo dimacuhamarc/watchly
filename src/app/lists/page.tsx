@@ -1,6 +1,6 @@
 import React from 'react'
 import AuthLayoutProvider from '~/components/layout/authLayoutProvider'
-import { getWatchlistCollections } from './actions'
+import { getWatchlistCollections, getWatchlistData } from './actions'
 import ListPageContent from '~/components/resource/watchlists'
 
 export async function generateMetadata() {

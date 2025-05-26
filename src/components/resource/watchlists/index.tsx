@@ -1,12 +1,13 @@
 'use client'
 
 import { useState, useCallback, useEffect } from 'react'
-import type { SanitizedWatchlistCollection } from '~/utils/types/data'
+import type { SanitizedWatchlistCollection, WatchlistResponse } from '~/utils/types/data'
 import { LuPlus } from 'react-icons/lu'
 import ListView from '~/components/global/cards/watchlist/ListView'
 import dynamic from 'next/dynamic'
 import WatchlistModal from '~/components/resource/watchlist/modal'
 import { useRouter } from 'next/navigation'
+// import { getWatchlistData } from '~/app/lists/actions'
 
 const WatchlistDetail = dynamic(
   () => import('~/components/resource/watchlist/detail'),
@@ -21,16 +22,50 @@ interface ListPageContentProps {
 
 const ListPageContent = ({ watchlists: initialWatchlists }: ListPageContentProps) => {
   const router = useRouter()
-  const [selectedWatchlistId, setSelectedWatchlistId] = useState<string | null>(
-    null,
-  )
-  const [activeWatchlistData, setActiveWatchlistData] =
-    useState<SanitizedWatchlistCollection | null>(null)
+  const [selectedWatchlistId, setSelectedWatchlistId] = useState<string | null>(null)
+  const [activeWatchlistData, setActiveWatchlistData] = useState<WatchlistResponse | null>(null)
   const [watchlists, setWatchlists] = useState<SanitizedWatchlistCollection[]>(initialWatchlists)
-  
+
   useEffect(() => {
     setWatchlists(initialWatchlists)
   }, [initialWatchlists])
+
+  useEffect(() => {
+    if (selectedWatchlistId) {
+      const getWatchlistData = async ({ watchlistId }: { watchlistId: string }) => {
+        try {
+          const response = await fetch(`/api/watchlist/${watchlistId}`)
+          if (!response.ok) {
+            throw new Error('Network response was not ok')
+          }
+          return await response.json() as WatchlistResponse | null
+        }
+        catch (error) {
+          console.error("Failed to fetch watchlist data:", error)
+          return null
+        }
+      }
+
+      getWatchlistData({ watchlistId: selectedWatchlistId })
+        .then((data) => {
+          if (data) {
+            // If the API returns the full WatchlistResponse shape, set as is
+            if ('watchlistData' in data && 'watchlistItems' in data && 'metadata' in data) {
+              setActiveWatchlistData(data)
+            } else {
+              // fallback for legacy shape
+              setActiveWatchlistData(data as WatchlistResponse)
+            }
+          } else {
+            setActiveWatchlistData(null)
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching watchlist data:", error)
+          setActiveWatchlistData(null)
+        })
+    }
+  }, [selectedWatchlistId])
 
   const handleCreateClick = useCallback(() => {
     const modal = document.getElementById('my_modal_1') as HTMLDialogElement
@@ -71,14 +106,14 @@ const ListPageContent = ({ watchlists: initialWatchlists }: ListPageContentProps
           watchlists={watchlists}
           onWatchlistClick={handleWatchlistClick}
           activeWatchlistId={selectedWatchlistId}
-          setActiveWatchlistData={setActiveWatchlistData}
+          setActiveWatchlistData={() => {}}
         />
       </aside>
       <main className="p-6">
         {selectedWatchlistId ? (
           <WatchlistDetail
             watchlistId={selectedWatchlistId}
-            watchlistData={activeWatchlistData}
+            data={activeWatchlistData ? activeWatchlistData : null}
           />
         ) : (
           <div className="flex h-full flex-col items-center justify-center text-center">

@@ -35,3 +35,31 @@ export async function getWatchlistCollections() {
     })
   })
 }
+
+export async function getWatchlistData({ watchlistId }: { watchlistId: string }) {
+  const cookieHeader = await getCookies()
+  return fetch(`${apiURL}/api/watchlist/${watchlistId}`, {
+    headers: {
+      Cookie: cookieHeader,
+      'Content-Type': 'application/json',
+    },
+  }).then((res) => {
+    const response = res.json() as Promise<{
+      status: string
+      message: string
+      watchlist: SanitizedWatchlistCollection
+      error?: string
+    }>
+    if (!res.ok) {
+      return response.then((data) => {
+        throw new Error(data.error ?? 'Failed to fetch watchlist data')
+      })
+    }
+    return response.then((data) => {
+      if (data.status !== 'success') {
+        throw new Error(data.error ?? 'Failed to fetch watchlist data')
+      }
+      return data
+    })
+  })
+}

@@ -1,11 +1,11 @@
-import type { SanitizedWatchlistCollection } from '~/utils/types/data'
+import type { SanitizedWatchlistCollection, WatchlistResponse } from '~/utils/types/data'
 import WatchlistCard from '~/components/global/cards/watchlist'
 
 interface ListViewProps {
   watchlists: SanitizedWatchlistCollection[]
   onWatchlistClick: (watchlistId: string) => void
   activeWatchlistId?: string | null
-  setActiveWatchlistData: (data: SanitizedWatchlistCollection | null) => void
+  setActiveWatchlistData: (data: WatchlistResponse | null) => void
 }
 
 const ListView = ({ watchlists, onWatchlistClick, activeWatchlistId, setActiveWatchlistData }: ListViewProps) => {
@@ -20,7 +20,6 @@ const ListView = ({ watchlists, onWatchlistClick, activeWatchlistId, setActiveWa
   const handleOnClick = (watchlistId: string) => {
     onWatchlistClick(watchlistId)
     const selectedWatchlist = watchlists.find(w => w.id === watchlistId) ?? null
-    setActiveWatchlistData(selectedWatchlist)
   }
 
   return (

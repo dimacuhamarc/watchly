@@ -2,21 +2,21 @@
 
 import Link from 'next/link'
 import { LuExternalLink, LuArrowLeft } from 'react-icons/lu'
-import type { SanitizedWatchlistCollection } from '~/utils/types/data'
+import type { WatchlistResponse } from '~/utils/types/data'
 import { formatDate } from '~/helpers/date'
 
 interface WatchlistDetailProps {
   isFullPage?: boolean
   watchlistId: string
-  watchlistData?: SanitizedWatchlistCollection | null
+  data?: WatchlistResponse | null
 }
 
 const WatchlistDetail = ({
   isFullPage,
   watchlistId,
-  watchlistData,
+  data,
 }: WatchlistDetailProps) => {
-  if (!watchlistData) {
+  if (!data || !data.watchlistData) {
     return (
       <div className="text-center text-gray-500">
         No watchlist data available.
@@ -26,22 +26,23 @@ const WatchlistDetail = ({
   return (
     <div className="relative">
       <PageControls isFullPage={isFullPage} watchlistId={watchlistId} />
-      <h1 className="mb-4 text-2xl font-bold">{watchlistData?.title}</h1>
+      <h1 className="mb-4 text-2xl font-bold">{data?.watchlistData?.title}</h1>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
       <p className="mb-2 text-sm text-slate-200/50">
-        {watchlistData?.public_watchlist
+        {data?.watchlistData?.public_watchlist
           ? 'Public Watchlist'
           : 'Private Watchlist'}
       </p>
       <p className="mb-4 text-sm text-slate-200/50">
-        {watchlistData.createdAt === watchlistData.updatedAt && watchlistData?.createdAt && watchlistData?.updatedAt
-          ? `Created on ${formatDate(watchlistData.createdAt.toLocaleString())}`
-          : `Updated on ${formatDate(watchlistData.updatedAt.toLocaleString())}`}
+        {data?.watchlistData?.createdAt === data?.watchlistData?.updatedAt && data?.watchlistData?.createdAt && data?.watchlistData?.updatedAt
+          ? `Created on ${formatDate(data?.watchlistData?.createdAt.toLocaleString() ?? '')}`
+          : `Updated on ${formatDate(data?.watchlistData?.updatedAt?.toLocaleString() ?? '')}`}
       </p>
       <p className="mb-6 text-sm text-slate-200/50">
-        {watchlistData?.description
-          ? watchlistData.description.length > 100
-            ? `${watchlistData.description.slice(0, 100)}...`
-            : watchlistData.description
+        {data?.watchlistData?.description
+          ? data?.watchlistData?.description.length > 100
+            ? `${data?.watchlistData?.description.slice(0, 100)}...`
+            : data?.watchlistData?.description
           : 'No description provided.'}
       </p>
     </div>

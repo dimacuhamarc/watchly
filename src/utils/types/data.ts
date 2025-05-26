@@ -64,6 +64,17 @@ interface SanitizedWatchlistItem {
   updated_at?: Date | string
 }
 
+interface WatchlistMetadata {
+  count: number
+  owner: string
+}
+
+interface WatchlistResponse {
+  watchlistData: SanitizedWatchlistCollection | null
+  watchlistItems: SanitizedWatchlistItem[] | null
+  metadata: WatchlistMetadata
+}
+
 interface ApiResponse<T> {
   status: 'success' | 'error'
   message: string
@@ -98,4 +109,6 @@ export type {
   ApiResponse,
   SanitizedWatchlistCollection,
   SanitizedWatchlistItem,
+  WatchlistMetadata,
+  WatchlistResponse,
 }
