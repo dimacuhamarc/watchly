@@ -131,7 +131,8 @@ export async function POST(
     }
 
     const existingItem = await db.query.watchlistItems.findFirst({
-      where: eq(watchlistItems.itemId, itemId),
+      where: eq(watchlistItems.itemId, itemId) &&
+        eq(watchlistItems.watchlistId, watchlistId),
     })
     
     if (existingItem) {

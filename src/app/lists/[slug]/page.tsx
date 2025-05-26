@@ -23,12 +23,10 @@ async function ProfilePage({ params }: { params: { slug: string } }) {
   
   return (
     <AuthLayoutProvider>
-      {slug}
-      <pre>{JSON.stringify(watchlistData, null, 2)}</pre>
       <WatchlistDetail
         isFullPage={true}
         watchlistId={slug}
-        // watchlistData={watchlistData}
+        data={watchlistData}
       />
     </AuthLayoutProvider>
   )

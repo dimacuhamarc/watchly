@@ -28,10 +28,6 @@ export async function getCookies() {
     .getAll()
     .map((cookie) => `${cookie.name}=${cookie.value}`)
     .join('; ')
-
-  if (!cookieHeader) {
-    throw new Error('No cookies found')
-  }
   
   return cookieHeader
 }

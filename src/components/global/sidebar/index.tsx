@@ -8,8 +8,12 @@ import { useAuthenticated } from '~/hooks/useAuth'
 import { usePathname } from 'next/navigation'
 
 function Sidebar() {
-  const { username } = useAuthenticated()
+  const { username, isAuthenticated } = useAuthenticated()
   const pathname = usePathname()
+
+  if (!isAuthenticated || !username) {
+    return null
+  }
 
   return (
     <div className="sidebar-wrapper">

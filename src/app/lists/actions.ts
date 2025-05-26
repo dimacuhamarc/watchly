@@ -1,4 +1,4 @@
-import type { SanitizedWatchlistCollection } from '~/utils/types/data'
+import type { SanitizedWatchlistCollection, SanitizedWatchlistItem, WatchlistResponse } from '~/utils/types/data'
 import { getCookies } from '~/utils/api/apiRequests'
 import { getCurrentUser } from '~/lib/common/cookies'
 
@@ -47,7 +47,8 @@ export async function getWatchlistData({ watchlistId }: { watchlistId: string })
     const response = res.json() as Promise<{
       status: string
       message: string
-      watchlist: SanitizedWatchlistCollection
+      watchlistData: SanitizedWatchlistCollection
+      watchlistItems: SanitizedWatchlistItem[]
       error?: string
     }>
     if (!res.ok) {
@@ -59,7 +60,7 @@ export async function getWatchlistData({ watchlistId }: { watchlistId: string })
       if (data.status !== 'success') {
         throw new Error(data.error ?? 'Failed to fetch watchlist data')
       }
-      return data
+      return data as unknown as WatchlistResponse
     })
   })
 }
