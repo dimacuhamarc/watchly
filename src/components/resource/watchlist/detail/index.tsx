@@ -1,9 +1,14 @@
 'use client'
 
+import React from 'react'
 import Link from 'next/link'
-import { LuExternalLink, LuArrowLeft } from 'react-icons/lu'
+import Image from 'next/image'
+import { LuExternalLink, LuArrowLeft, LuLock } from 'react-icons/lu'
 import type { WatchlistResponse } from '~/utils/types/data'
 import { formatDate } from '~/helpers/date'
+import { getBatchMovieDetails } from '~/utils/api/tmdb'
+import { WatchItemCard } from '~/components/global/cards'
+import { movieDetails, show } from '~/utils/types/tmdb-types'
 
 interface WatchlistDetailProps {
   isFullPage?: boolean
@@ -16,6 +21,32 @@ const WatchlistDetail = ({
   watchlistId,
   data,
 }: WatchlistDetailProps) => {
+  const [movies, setMovies] = React.useState<movieDetails[]>([])
+  const [id, setId] = React.useState<string | null>(null)
+
+  React.useEffect(() => {
+    if (data?.watchlistData) {
+      setId(data.watchlistData.id)
+    }
+  }, [data])
+
+  React.useEffect(() => {
+    const fetchMovies = async () => {
+      if (data?.watchlistItems && data.watchlistItems.length > 0) {
+        const movieIds = data.watchlistItems
+          .filter((item) => item.mediaType === 'MOVIE')
+          .map((item) => item.itemId)
+
+        if (movieIds.length > 0) {
+          const details = await getBatchMovieDetails(movieIds)
+          setMovies(details)
+        }
+      }
+    }
+
+    fetchMovies()
+  }, [data])
+
   if (!data || !data.watchlistData) {
     return (
       <div className="text-center text-gray-500">
@@ -23,28 +54,108 @@ const WatchlistDetail = ({
       </div>
     )
   }
+
+  if (watchlistId !== id) {
+    setMovies([])
+    setId(watchlistId)
+  }
+
   return (
     <div className="relative">
-      <PageControls isFullPage={isFullPage} watchlistId={watchlistId} />
-      <h1 className="mb-4 text-2xl font-bold">{data?.watchlistData?.title}</h1>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-      <p className="mb-2 text-sm text-slate-200/50">
-        {data?.watchlistData?.public_watchlist
-          ? 'Public Watchlist'
-          : 'Private Watchlist'}
-      </p>
-      <p className="mb-4 text-sm text-slate-200/50">
-        {data?.watchlistData?.createdAt === data?.watchlistData?.updatedAt && data?.watchlistData?.createdAt && data?.watchlistData?.updatedAt
-          ? `Created on ${formatDate(data?.watchlistData?.createdAt.toLocaleString() ?? '')}`
-          : `Updated on ${formatDate(data?.watchlistData?.updatedAt?.toLocaleString() ?? '')}`}
-      </p>
-      <p className="mb-6 text-sm text-slate-200/50">
-        {data?.watchlistData?.description
-          ? data?.watchlistData?.description.length > 100
-            ? `${data?.watchlistData?.description.slice(0, 100)}...`
-            : data?.watchlistData?.description
-          : 'No description provided.'}
-      </p>
+      <div className="mb-4 flex items-center justify-between border-b border-b-slate-700 px-6 py-6">
+        <div className="flex flex-col gap-2">
+          <h1 className="inline-flex items-center gap-2 text-2xl font-bold">
+            {isFullPage && (
+              <Link
+                href={`/lists`}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/20 p-2 backdrop-blur-md transition-all hover:bg-black/30"
+              >
+                <LuArrowLeft className="text-lg" />
+              </Link>
+            )}
+            {data?.watchlistData?.title}{' '}
+            {data?.watchlistData?.public_watchlist ? (
+              ''
+            ) : (
+              <LuLock className="inline-block text-lg text-slate-400" />
+            )}
+            {!isFullPage && (
+              <Link
+                href={`/lists/${watchlistId}`}
+                target="_blank"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/20 p-2 backdrop-blur-md transition-all hover:bg-black/30"
+              >
+                <LuExternalLink className="text-lg" />
+              </Link>
+            )}
+          </h1>
+          <h2 className="text-sm text-slate-400">
+            {data?.watchlistData?.description
+              ? data?.watchlistData?.description
+              : 'No Description'}{' '}
+            | Last Updated at{' '}
+            {formatDate(data?.watchlistData?.updatedAt?.toString() || '')}
+          </h2>
+        </div>
+      </div>
+      <div>
+        {movies && movies.length > 0 ? (
+          <div className="flex flex-wrap gap-4 overflow-auto p-6">
+            {movies.map((movie) => {
+              const matchedItems = data.watchlistItems
+                ? data.watchlistItems.filter(
+                    (item) => item.itemId.toString() === movie.id.toString(),
+                  )
+                : []
+
+              return (
+                <div
+                  key={movie.id}
+                  className="min-md:max-w-[268px] card h-[600px] w-full max-w-[268px]"
+                  onClick={() => {}}
+                >
+                  {matchedItems.length > 0 &&
+                    matchedItems.map((item) => (
+                      <WatchItemCard
+                        key={item.id}
+                        tmdbItem={movie}
+                        watchlistItem={item}
+                      />
+                    ))}
+                </div>
+              )
+            })}
+            {movies.map((movie) => {
+              const matchedItems = data.watchlistItems
+                ? data.watchlistItems.filter(
+                    (item) => item.itemId.toString() === movie.id.toString(),
+                  )
+                : []
+
+              return (
+                <div
+                  key={movie.id}
+                  className="min-md:max-w-[268px] card h-[600px] w-full max-w-[268px]"
+                  onClick={() => {}}
+                >
+                  {matchedItems.length > 0 &&
+                    matchedItems.map((item) => (
+                      <WatchItemCard
+                        key={item.id}
+                        tmdbItem={movie}
+                        watchlistItem={item}
+                      />
+                    ))}
+                </div>
+              )
+            })}
+          </div>
+        ) : (
+          <div className="p-6 text-center text-gray-500">
+            No movies found in this watchlist.
+          </div>
+        )}
+      </div>
     </div>
   )
 }

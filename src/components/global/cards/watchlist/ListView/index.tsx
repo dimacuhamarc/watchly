@@ -1,4 +1,7 @@
-import type { SanitizedWatchlistCollection, WatchlistResponse } from '~/utils/types/data'
+import type {
+  SanitizedWatchlistCollection,
+  WatchlistResponse,
+} from '~/utils/types/data'
 import WatchlistCard from '~/components/global/cards/watchlist'
 
 interface ListViewProps {
@@ -8,7 +11,12 @@ interface ListViewProps {
   setActiveWatchlistData: (data: WatchlistResponse | null) => void
 }
 
-const ListView = ({ watchlists, onWatchlistClick, activeWatchlistId, setActiveWatchlistData }: ListViewProps) => {
+const ListView = ({
+  watchlists,
+  onWatchlistClick,
+  activeWatchlistId,
+  setActiveWatchlistData,
+}: ListViewProps) => {
   if (watchlists.length === 0) {
     return (
       <div className="text-center text-gray-500">
@@ -19,22 +27,30 @@ const ListView = ({ watchlists, onWatchlistClick, activeWatchlistId, setActiveWa
 
   const handleOnClick = (watchlistId: string) => {
     onWatchlistClick(watchlistId)
-    const selectedWatchlist = watchlists.find(w => w.id === watchlistId) ?? null
+    const selectedWatchlist =
+      watchlists.find((w) => w.id === watchlistId) ?? null
   }
 
   return (
     <div className="flex flex-col">
       {watchlists && (
-        <div className='flex flex-col gap-2'>
-          {watchlists.map((watchlist) => (
-            <WatchlistCard
-              key={watchlist.id}
-              type="list-page"
-              watchlist={watchlist}
-              onClick={() => handleOnClick(watchlist.id)}
-              active={watchlist.id === activeWatchlistId ? true : false}
-            />
-          ))}
+        <div className="flex flex-col gap-2">
+          {watchlists
+            .slice() // avoid mutating the original array
+            .sort(
+              (a, b) =>
+                new Date(b.updatedAt).getTime() -
+                new Date(a.updatedAt).getTime(),
+            )
+            .map((watchlist) => (
+              <WatchlistCard
+                key={watchlist.id}
+                type="list-page"
+                watchlist={watchlist}
+                onClick={() => handleOnClick(watchlist.id)}
+                active={watchlist.id === activeWatchlistId}
+              />
+            ))}
         </div>
       )}
     </div>

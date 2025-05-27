@@ -60,8 +60,8 @@ interface SanitizedWatchlistItem {
   mediaType: MediaType
   status: WatchlistItemStatusType
   notes?: string
-  created_at?: Date | string
-  updated_at?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 interface WatchlistMetadata {

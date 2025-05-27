@@ -7,7 +7,6 @@ import ListView from '~/components/global/cards/watchlist/ListView'
 import dynamic from 'next/dynamic'
 import WatchlistModal from '~/components/resource/watchlist/modal'
 import { useRouter } from 'next/navigation'
-// import { getWatchlistData } from '~/app/lists/actions'
 
 const WatchlistDetail = dynamic(
   () => import('~/components/resource/watchlist/detail'),
@@ -109,7 +108,7 @@ const ListPageContent = ({ watchlists: initialWatchlists }: ListPageContentProps
           setActiveWatchlistData={() => {}}
         />
       </aside>
-      <main className="p-6">
+      <main>
         {selectedWatchlistId ? (
           <WatchlistDetail
             watchlistId={selectedWatchlistId}
