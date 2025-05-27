@@ -6,9 +6,9 @@ import Image from 'next/image'
 import { LuExternalLink, LuArrowLeft, LuLock } from 'react-icons/lu'
 import type { WatchlistResponse } from '~/utils/types/data'
 import { formatDate } from '~/helpers/date'
-import { getBatchMovieDetails } from '~/utils/api/tmdb'
+import { getBatchMovieDetails, getBatchTvDetails } from '~/utils/api/tmdb'
 import { WatchItemCard } from '~/components/global/cards'
-import { movieDetails, show } from '~/utils/types/tmdb-types'
+import { movieDetails, tvDetails } from '~/utils/types/tmdb-types'
 
 interface WatchlistDetailProps {
   isFullPage?: boolean
@@ -22,6 +22,7 @@ const WatchlistDetail = ({
   data,
 }: WatchlistDetailProps) => {
   const [movies, setMovies] = React.useState<movieDetails[]>([])
+  const [shows, setShows] = React.useState<tvDetails[]>([])
   const [id, setId] = React.useState<string | null>(null)
 
   React.useEffect(() => {
@@ -47,6 +48,29 @@ const WatchlistDetail = ({
     fetchMovies()
   }, [data])
 
+  React.useEffect(() => {
+    const fetchShows = async () => {
+      if (data?.watchlistItems && data.watchlistItems.length > 0) {
+        const showIds = data.watchlistItems
+          .filter((item) => item.mediaType === 'TV_SHOW')
+          .map((item) => item.itemId)
+
+        if (showIds.length > 0) {
+          const details = await getBatchTvDetails(showIds)
+          setShows(details)
+        }
+      }
+    }
+
+    fetchShows()
+  }, [data])
+
+  const mergeMoviesAndShows = () => {
+    const allItems = [...movies, ...shows]
+    return allItems
+  }
+  const mergedItems = mergeMoviesAndShows()
+
   if (!data || !data.watchlistData) {
     return (
       <div className="text-center text-gray-500">
@@ -57,6 +81,7 @@ const WatchlistDetail = ({
 
   if (watchlistId !== id) {
     setMovies([])
+    setShows([])
     setId(watchlistId)
   }
 
@@ -99,18 +124,18 @@ const WatchlistDetail = ({
         </div>
       </div>
       <div>
-        {movies && movies.length > 0 ? (
+        {mergedItems && mergedItems.length > 0 ? (
           <div className="flex flex-wrap gap-4 overflow-auto p-6">
-            {movies.map((movie) => {
+            {mergedItems.map((tmdb) => {
               const matchedItems = data.watchlistItems
                 ? data.watchlistItems.filter(
-                    (item) => item.itemId.toString() === movie.id.toString(),
+                    (item) => item.itemId.toString() === tmdb.id.toString(),
                   )
                 : []
 
               return (
                 <div
-                  key={movie.id}
+                  key={tmdb.id}
                   className="min-md:max-w-[268px] card h-[600px] w-full max-w-[268px]"
                   onClick={() => {}}
                 >
@@ -118,31 +143,7 @@ const WatchlistDetail = ({
                     matchedItems.map((item) => (
                       <WatchItemCard
                         key={item.id}
-                        tmdbItem={movie}
-                        watchlistItem={item}
-                      />
-                    ))}
-                </div>
-              )
-            })}
-            {movies.map((movie) => {
-              const matchedItems = data.watchlistItems
-                ? data.watchlistItems.filter(
-                    (item) => item.itemId.toString() === movie.id.toString(),
-                  )
-                : []
-
-              return (
-                <div
-                  key={movie.id}
-                  className="min-md:max-w-[268px] card h-[600px] w-full max-w-[268px]"
-                  onClick={() => {}}
-                >
-                  {matchedItems.length > 0 &&
-                    matchedItems.map((item) => (
-                      <WatchItemCard
-                        key={item.id}
-                        tmdbItem={movie}
+                        tmdbItem={tmdb}
                         watchlistItem={item}
                       />
                     ))}

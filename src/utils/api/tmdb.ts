@@ -280,3 +280,22 @@ export const getBatchMovieDetails = async (ids: string[]) => {
   )
   return movies.filter((movie) => movie !== null) as movieDetails[]
 }
+
+export const getBatchTvDetails = async (ids: string[]) => {
+  if (!ids || ids.length === 0) return []
+
+  const shows = await Promise.all(
+    ids.map(async (id) => {
+      try {
+        const response = await tmdbApiLong.get(`/tv/${id}`, {
+          params: { language: 'en-US' },
+        })
+        return response.data as tvDetails
+      } catch (error) {
+        console.error(`Error fetching details for TV ID ${id}:`, error)
+        return null
+      }
+    }),
+  )
+  return shows.filter((show) => show !== null) as tvDetails[]
+}
