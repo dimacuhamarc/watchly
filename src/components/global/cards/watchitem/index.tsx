@@ -1,14 +1,16 @@
+/** @format */
+
 'use client'
 
 import React, { useState } from 'react'
 import Image from 'next/image'
 
-import { SanitizedWatchlistItem } from '~/utils/types/data'
-import { movieDetails, tvDetails } from '~/utils/types/tmdb-types'
+import type { SanitizedWatchlistItem } from '~/utils/types/data'
+import type { movieDetails, tvDetails } from '~/utils/types/tmdb-types'
 import { formatDate } from '~/helpers/date'
 import { RoundedChip } from '../../chips'
 import Link from 'next/link'
-import { LuArrowRight } from 'react-icons/lu'
+import { LuArrowRight, LuInfo } from 'react-icons/lu'
 
 const STATUS_MAP = {
   WANT_TO_WATCH: 'Want to Watch',
@@ -47,7 +49,7 @@ const WatchItem = ({ tmdbItem, watchlistItem }: WatchItemProps) => {
       >
         {isToggled && (
           <>
-            <h1 className="flex gap-2 items-center text-xl font-semibold">
+            <h1 className="flex items-center gap-2 text-xl font-semibold">
               {('title' in tmdbItem ? tmdbItem.title : tmdbItem.name) ?? ''}
               <RoundedChip
                 label={MEDIA_TYPE_MAP[watchlistItem.mediaType] || 'Unknown'}
@@ -71,16 +73,28 @@ const WatchItem = ({ tmdbItem, watchlistItem }: WatchItemProps) => {
             </span>
           </>
         )}
-        <Link
-          href={'#'}
-          className={`absolute bottom-10 right-2 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-gray-800/50 text-white transition-all duration-300 hover:bg-gray-800`}
-          onClick={(e) => {
-            e.stopPropagation()
-            setIsToggled(!isToggled)
-          }}
-        >
-          <LuArrowRight className="h-5 w-5" />
-        </Link>
+        <div className="absolute bottom-10 right-6 flex w-full items-center justify-end gap-2">
+          <Link
+            href={`/${watchlistItem.mediaType === 'MOVIE' ? 'movie' : 'tv'}/${watchlistItem.itemId}`}
+            className={` z-20 flex h-8 w-fit items-center justify-center rounded-full bg-gray-800/50 px-2 text-white transition-all duration-300 hover:bg-gray-800`}
+            onClick={(e) => {
+              e.stopPropagation()
+              setIsToggled(!isToggled)
+            }}
+          >
+            View Movie <LuArrowRight className="h-5 w-5" />
+          </Link>
+          <Link
+            href={`#`}
+            className={`z-20 flex h-8 w-8 items-center justify-center rounded-full bg-gray-800/50 text-white transition-all duration-300 hover:bg-gray-800`}
+            onClick={(e) => {
+              e.stopPropagation()
+              setIsToggled(!isToggled)
+            }}
+          >
+            <LuInfo className="h-5 w-5" />
+          </Link>
+        </div>
       </div>
       <Image
         src={`https://image.tmdb.org/t/p/w500/${tmdbItem.poster_path}`}

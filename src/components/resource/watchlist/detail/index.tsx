@@ -1,19 +1,20 @@
+/** @format */
+
 'use client'
 
 import React from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { LuExternalLink, LuArrowLeft, LuLock } from 'react-icons/lu'
 import type { WatchlistResponse } from '~/utils/types/data'
 import { formatDate } from '~/helpers/date'
 import { getBatchMovieDetails, getBatchTvDetails } from '~/utils/api/tmdb'
 import { WatchItemCard } from '~/components/global/cards'
-import { movieDetails, tvDetails } from '~/utils/types/tmdb-types'
+import type { movieDetails, tvDetails } from '~/utils/types/tmdb-types'
 
 interface WatchlistDetailProps {
   isFullPage?: boolean
   watchlistId: string
-  data?: WatchlistResponse | null
+  data: WatchlistResponse | null
 }
 
 const WatchlistDetail = ({
@@ -24,6 +25,7 @@ const WatchlistDetail = ({
   const [movies, setMovies] = React.useState<movieDetails[]>([])
   const [shows, setShows] = React.useState<tvDetails[]>([])
   const [id, setId] = React.useState<string | null>(null)
+
 
   React.useEffect(() => {
     if (data?.watchlistData) {
@@ -45,7 +47,7 @@ const WatchlistDetail = ({
       }
     }
 
-    fetchMovies()
+    void fetchMovies()
   }, [data])
 
   React.useEffect(() => {
@@ -62,7 +64,7 @@ const WatchlistDetail = ({
       }
     }
 
-    fetchShows()
+    void fetchShows()
   }, [data])
 
   const mergeMoviesAndShows = () => {
@@ -71,7 +73,7 @@ const WatchlistDetail = ({
   }
   const mergedItems = mergeMoviesAndShows()
 
-  if (!data || !data.watchlistData) {
+  if (!data) {
     return (
       <div className="text-center text-gray-500">
         No watchlist data available.
@@ -119,7 +121,7 @@ const WatchlistDetail = ({
               ? data?.watchlistData?.description
               : 'No Description'}{' '}
             | Last Updated at{' '}
-            {formatDate(data?.watchlistData?.updatedAt?.toString() || '')}
+            {formatDate(data?.watchlistData?.updatedAt?.toString() ?? '')}
           </h2>
         </div>
       </div>
@@ -137,7 +139,6 @@ const WatchlistDetail = ({
                 <div
                   key={tmdb.id}
                   className="min-md:max-w-[268px] card h-[600px] w-full max-w-[268px]"
-                  onClick={() => {}}
                 >
                   {matchedItems.length > 0 &&
                     matchedItems.map((item) => (
@@ -158,36 +159,6 @@ const WatchlistDetail = ({
         )}
       </div>
     </div>
-  )
-}
-
-const PageControls = ({
-  isFullPage,
-  watchlistId,
-}: {
-  isFullPage?: boolean
-  watchlistId: string
-}) => {
-  return (
-    <>
-      {isFullPage && (
-        <Link
-          href={`/lists`}
-          className="absolute left-0 top-0 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/20 p-2 backdrop-blur-md transition-all hover:bg-black/30"
-        >
-          <LuArrowLeft className="text-lg" />
-        </Link>
-      )}
-      {!isFullPage && (
-        <Link
-          href={`/lists/${watchlistId}`}
-          target="_blank"
-          className="absolute right-0 top-0 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/20 p-2 backdrop-blur-md transition-all hover:bg-black/30"
-        >
-          <LuExternalLink className="text-lg" />
-        </Link>
-      )}
-    </>
   )
 }
 
