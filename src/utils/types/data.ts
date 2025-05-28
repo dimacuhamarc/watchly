@@ -1,3 +1,5 @@
+/** @format */
+
 const WatchlistItemStatus = {
   WANT_TO_WATCH: 'WANT_TO_WATCH',
   WATCHING: 'WATCHING',
@@ -16,6 +18,7 @@ export { WatchlistItemStatus, type WatchlistItemStatusType }
 const Media = {
   MOVIE: 'MOVIE',
   TV_SHOW: 'TV_SHOW',
+  DEFAULT: '',
 } as const
 
 type MediaType = (typeof Media)[keyof typeof Media]
@@ -53,6 +56,13 @@ interface SanitizedWatchlistCollection {
   userId: string
 }
 
+type WatchlistItemForm = {
+  itemId: string
+  mediaType: MediaType
+  status: WatchlistItemStatusType
+  notes?: string
+}
+
 interface SanitizedWatchlistItem {
   id: string
   watchlistId: string
@@ -60,8 +70,21 @@ interface SanitizedWatchlistItem {
   mediaType: MediaType
   status: WatchlistItemStatusType
   notes?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
+  createdAt?: Date
+  updatedAt?: Date
+}
+
+interface SanitizedWatchlistItemRequest {
+  data: SanitizedWatchlistItem
+  message: string
+  status: string
+}
+
+interface WatchlistItemRequest {
+  itemId: string
+  mediaType: string
+  status: string
+  notes?: string
 }
 
 interface WatchlistMetadata {
@@ -111,4 +134,7 @@ export type {
   SanitizedWatchlistItem,
   WatchlistMetadata,
   WatchlistResponse,
+  WatchlistItemForm,
+  SanitizedWatchlistItemRequest,
+  WatchlistItemRequest
 }

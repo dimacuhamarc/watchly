@@ -1,9 +1,15 @@
+/* eslint-disable @typescript-eslint/await-thenable */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/** @format */
+
 import { NextResponse } from 'next/server'
 import { getCurrentUser } from '~/lib/common/cookies'
 import { getWatchlistById, getWatchlistItemsById } from '~/lib/watchlist'
 import { watchlistItems, watchlist } from '~/server/db/schema'
-import { eq } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import { db } from '~/server/db'
+import { SanitizedWatchlistItem, WatchlistItemRequest } from '~/utils/types/data'
 
 // localhost:3000/api/watchlist/[id]
 // http://localhost:3000/api/watchlist/29ea8795-9056-4bfe-b9be-4a589d3a8fb7
@@ -12,7 +18,7 @@ export async function GET(
   { params }: { params: { id: string } },
 ) {
   try {
-    const { id: watchlistId } = await params
+    const { id: watchlistId } = params
 
     if (!watchlistId) {
       return NextResponse.json(
@@ -109,7 +115,7 @@ export async function POST(
 
   try {
     const body = await request.json()
-    const { itemId, mediaType, status, notes } = body
+    const { itemId, mediaType, status, notes } = body 
 
     if (!itemId || !mediaType || !status) {
       return NextResponse.json(
@@ -125,16 +131,18 @@ export async function POST(
       itemId,
       mediaType,
       status,
-      notes: notes || null, // Optional notes
+      notes: notes ?? '',
       createdAt: new Date(),
       updatedAt: new Date(),
     }
 
     const existingItem = await db.query.watchlistItems.findFirst({
-      where: eq(watchlistItems.itemId, itemId) &&
+      where: and(
+        eq(watchlistItems.itemId, itemId),
         eq(watchlistItems.watchlistId, watchlistId),
+      ),
     })
-    
+
     if (existingItem) {
       return NextResponse.json(
         { error: 'Item already exists in the watchlist' },

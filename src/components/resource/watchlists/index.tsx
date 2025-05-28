@@ -105,7 +105,7 @@ const ListPageContent = ({ watchlists: initialWatchlists }: ListPageContentProps
           watchlists={watchlists}
           onWatchlistClick={handleWatchlistClick}
           activeWatchlistId={selectedWatchlistId}
-          setActiveWatchlistData={() => {}}
+          setActiveWatchlistData={() => {console.log('setActiveWatchlistData called')}}
         />
       </aside>
       <main>

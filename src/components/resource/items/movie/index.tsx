@@ -27,6 +27,7 @@ import {
   PosterModal,
 } from '~/components/global/modals'
 import { findBestVideo } from '~/helpers/item-data'
+import AddToWatchlistModal from '../../watchlist/AddToWatchlistModal'
 
 interface MoviePageComponentProps {
   id: string
@@ -82,6 +83,8 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
     void fetchData()
   }, [id, router])
 
+  const { title } = movie ?? {}
+
   return (
     <>
       {movie && credits && videos && (
@@ -118,6 +121,7 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
           posterPath={movie?.poster_path ?? ''}
         />
       )}
+      <AddToWatchlistModal tmdbId={id} title={title ?? ''} />
     </>
   )
 }

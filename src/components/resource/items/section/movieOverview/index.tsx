@@ -1,4 +1,6 @@
-import React from 'react'
+/** @format */
+
+import React, { useCallback } from 'react'
 import Image from 'next/image'
 import {
   FaStar,
@@ -39,9 +41,10 @@ function MovieOverview({
     setShowTrailerModal(true)
   }
 
-  const onWatchlistClick = () => {
-    // console.log("Watchlist clicked");
-  }
+  const onWatchlistClick = useCallback(() => {
+    const modal = document.getElementById('add_to_watchlist') as HTMLDialogElement
+    modal?.showModal()
+  }, [])
 
   const onWhereToWatchClick = () => {
     setShowWatchProviderModal(true)
@@ -111,8 +114,7 @@ function MovieOverview({
             <FaPlay /> Trailer
           </button>
           <button
-            className="btn-white btn btn-outline cursor-not-allowed"
-            disabled={true}
+            className="btn-white btn btn-outline"
             onClick={onWatchlistClick}
           >
             <FaHeart /> Add to Watchlist
