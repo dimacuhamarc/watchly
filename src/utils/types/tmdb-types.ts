@@ -1,3 +1,5 @@
+/** @format */
+
 type searchResult = {
   page: number
   results: show[] | tvShow[]
@@ -134,6 +136,13 @@ type keywords = {
 type keyword = {
   id: number
   name: string
+}
+
+type collection = {
+  id: number
+  name: string
+  poster_path: string
+  backdrop_path: string
 }
 
 type movieDetails = {
@@ -273,4 +282,5 @@ export type {
   watchProvider,
   tvShow,
   tvDetails,
+  collection,
 }

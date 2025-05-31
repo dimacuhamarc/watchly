@@ -1,3 +1,5 @@
+/** @format */
+
 'use client'
 
 import React, { useEffect, useState } from 'react'
@@ -7,6 +9,7 @@ import {
   type videos,
   type keywords,
   type watchProviders,
+  type collection,
 } from '~/utils/types/tmdb-types'
 import {
   getMovieDetails,
@@ -28,6 +31,7 @@ import {
 } from '~/components/global/modals'
 import { findBestVideo } from '~/helpers/item-data'
 import AddToWatchlistModal from '../../watchlist/AddToWatchlistModal'
+import Image from 'next/image'
 
 interface MoviePageComponentProps {
   id: string
@@ -41,6 +45,7 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
   const [watchProviders, setWatchProviders] = useState<watchProviders | null>(
     null,
   )
+  const [belongsToCollection, setBelongsToCollection] = useState<collection | null>(null)
   const [isTrailerModalOpen, setIsTrailerModalOpen] = useState(false)
   const [isWatchProviderModalOpen, setIsWatchProviderModalOpen] =
     useState(false)
@@ -74,6 +79,7 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
         setVideos(videosData)
         setKeywords(keywordsData)
         setWatchProviders(watchProvidersData)
+        setBelongsToCollection(movieData.belongs_to_collection ?? null)
       } catch (error) {
         console.error('Error fetching movie data:', error)
         router.push('/404')
@@ -85,8 +91,17 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
 
   const { title } = movie ?? {}
 
+  console.log(belongsToCollection)
   return (
     <>
+      <Image
+        src={`https://image.tmdb.org/t/p/original/${movie?.backdrop_path ?? ''}`}
+        alt={movie?.title ?? 'Movie Backdrop'}
+        className="fixed inset-0 -z-10 h-screen w-screen object-cover opacity-40"
+        width={1920}
+        height={1080}
+        priority
+      />
       {movie && credits && videos && (
         <MovieOverview
           movie={movie}
@@ -97,6 +112,25 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
           setShowExpandPosterModal={setIsExpandPosterModalOpen}
         />
       )}
+
+      <div>
+        {belongsToCollection && (
+          <div className="flex flex-col items-center justify-center gap-4 p-4">
+            <h2 className="text-2xl font-bold">Part of</h2>
+            <div className="flex flex-col items-center gap-4">
+              <Image
+                src={`https://image.tmdb.org/t/p/w500/${belongsToCollection.poster_path}`}
+                alt={belongsToCollection.name}
+                width={300/2}
+                height={450/2}
+                className="rounded-lg"
+              />
+              <span className="text-lg font-semibold">{belongsToCollection.name}</span>
+            </div>
+          </div>
+        )}
+      </div>
+
       {keywords && <KeywordsSection keywords={keywords} />}
       {credits && <CastSection credits={credits} />}
       {videos?.results?.length && isTrailerModalOpen && (

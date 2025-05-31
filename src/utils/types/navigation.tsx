@@ -17,12 +17,12 @@ const navigationLinks: NavLink[] = [
   {
     name: 'Home',
     href: '/',
-    showWhen: 'authenticated',
+    showWhen: 'unauthenticated',
   },
   {
     name: 'About',
     href: '/about',
-    showWhen: 'always',
+    showWhen: 'unauthenticated',
   },
   {
     name: 'Discover',
