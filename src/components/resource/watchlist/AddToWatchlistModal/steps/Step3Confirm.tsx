@@ -11,7 +11,7 @@ interface Step3ConfirmProps {
 
 function Step3Confirm({ title, errors, onCloseModal }: Step3ConfirmProps) {
   return (
-    <div className="flex flex-col items-center justify-center gap-4 p-2">
+    <div className="flex flex-col items-center justify-center gap-4 p-8">
       <h2 className="flex text-lg font-bold">
         {errors
           ? 'Error adding item to watchlist'

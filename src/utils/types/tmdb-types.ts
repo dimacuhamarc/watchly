@@ -133,6 +133,21 @@ type keywords = {
   keywords: keyword[]
 }
 
+type seasons = {
+  seasons: seasonItem[]
+}
+
+type seasonItem = {
+  air_date: string
+  episode_count: number
+  id: number
+  name: string
+  overview: string
+  poster_path: string
+  season_number: number
+  vote_average: number
+}
+
 type keyword = {
   id: number
   name: string
@@ -283,6 +298,7 @@ export type {
   tvShow,
   tvDetails,
   collection,
+  seasons,
 }
 
 // similar to the item
