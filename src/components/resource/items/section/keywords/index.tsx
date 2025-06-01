@@ -7,11 +7,17 @@ type KeywordsSectionProps = {
 }
 
 function KeywordsSection({ keywords }: KeywordsSectionProps) {
+  const [showAll, setShowAll] = React.useState(false)
+  const displayedKeywords = showAll ? keywords.keywords : keywords.keywords.slice(0, 3)
+  const handleShowAll = () => {
+    setShowAll(!showAll)
+  }
   return (
-    <div className="mt-4 flex flex-row flex-wrap justify-start gap-2 md:justify-center">
-      {keywords.keywords.map((keyword) => (
+    <div className="flex flex-row flex-wrap justify-start gap-2 self-start">
+      {displayedKeywords.map((keyword) => (
         <RectangleChip key={keyword.id} label={keyword.name} />
       ))}
+      <RectangleChip label={`${showAll ? 'Hide Tags' : 'Show All'}`} onClick={handleShowAll} className="cursor-pointer" />
     </div>
   )
 }

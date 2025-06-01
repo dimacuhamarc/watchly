@@ -15,7 +15,11 @@ interface AddToWatchlistModalProps {
   type: MediaType
 }
 
-function AddToWatchlistModal({ tmdbId, title, type }: AddToWatchlistModalProps) {
+function AddToWatchlistModal({
+  tmdbId,
+  title,
+  type,
+}: AddToWatchlistModalProps) {
   const [step, setStep] = useState(1)
   const [watchlistId, setWatchlistId] = useState<string | null>(null)
   const [formData, setFormData] = useState<WatchlistItemForm>({
@@ -28,21 +32,21 @@ function AddToWatchlistModal({ tmdbId, title, type }: AddToWatchlistModalProps) 
   const modal = document.getElementById('add_to_watchlist') as HTMLDialogElement
 
   const onStepChange = async (newStep: number) => {
-  if (newStep < 1 || newStep > 3) {
-    return
-  }
-  if (step === 2) {
-    const success = await addToWatchlist()
-    if (!success) {
-      setStep(3)
+    if (newStep < 1 || newStep > 3) {
       return
     }
+    if (step === 2) {
+      const success = await addToWatchlist()
+      if (!success) {
+        setStep(3)
+        return
+      }
+    }
+    if (step === 3) {
+      onCloseModal()
+    }
+    setStep(newStep)
   }
-  if (step === 3) {
-    onCloseModal()
-  }
-  setStep(newStep)
-}
 
   const onCloseModal = () => {
     modal?.close()
@@ -60,49 +64,49 @@ function AddToWatchlistModal({ tmdbId, title, type }: AddToWatchlistModalProps) 
     setFormData((prev) => ({ ...prev, ...data }))
   }
 
-const addToWatchlist = async () => {
-  try {
-    if (
-      !watchlistId ||
-      !formData.itemId ||
-      !formData.mediaType ||
-      !formData.status
-    ) {
-      console.error('Missing required data for watchlist item')
-      return
-    }
-
-    const response = await fetch(`/api/watchlist/${watchlistId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        itemId: formData.itemId,
-        mediaType: formData.mediaType,
-        status: formData.status,
-        notes: formData.notes,
-      }),
-      credentials: 'include',
-    })
-
-    const result = await response.json() as SanitizedWatchlistItemRequest
-    
-    if (!response.ok) {
-      setError(result.message || 'Failed to add item to watchlist')
-      if (response.status === 409) {
-        setError('This item already exists in your watchlist')
+  const addToWatchlist = async () => {
+    try {
+      if (
+        !watchlistId ||
+        !formData.itemId ||
+        !formData.mediaType ||
+        !formData.status
+      ) {
+        console.error('Missing required data for watchlist item')
+        return
       }
+
+      const response = await fetch(`/api/watchlist/${watchlistId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          itemId: formData.itemId,
+          mediaType: formData.mediaType,
+          status: formData.status,
+          notes: formData.notes,
+        }),
+        credentials: 'include',
+      })
+
+      const result = (await response.json()) as SanitizedWatchlistItemRequest
+
+      if (!response.ok) {
+        setError(result.message || 'Failed to add item to watchlist')
+        if (response.status === 409) {
+          setError('This item already exists in your watchlist')
+        }
+        return false
+      }
+
+      console.log('Successfully added item to watchlist:', result)
+      return true
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'An error occurred')
       return false
     }
-    
-    console.log('Successfully added item to watchlist:', result)
-    return true
-  } catch (error) {
-    setError(error instanceof Error ? error.message : 'An error occurred')
-    return false
   }
-}
 
   const renderControls = () => {
     return (
@@ -116,7 +120,7 @@ const addToWatchlist = async () => {
           </button>
         )}
         <button className="btn btn-outline" onClick={onCloseModal}>
-          Close
+          Cancel
         </button>
       </div>
     )
@@ -128,28 +132,30 @@ const addToWatchlist = async () => {
         <div className="max-h-xl modal-box flex w-11/12 max-w-xl flex-col gap-4 p-0">
           {!(step === 3) && (
             <h3 className="flex items-center justify-between px-8 pt-8 text-lg font-bold">
-              <>
-                Add {title} to a Watchlist{' '}
-                <ul className="steps overflow-hidden">
-                  <li className={`step ${step >= 1 ? 'step-primary' : ''}`} />
-                  <li className={`step ${step >= 2 ? 'step-primary' : ''}`} />
-                  <li className={`step ${step >= 3 ? 'step-primary' : ''}`} />
-                </ul>
-              </>
+              Add {title} to a Watchlist{' '}
             </h3>
           )}
-          <div className="flex max-h-96 flex-col gap-4 overflow-y-auto p-8">
+          <div className="flex max-h-96 flex-col gap-4 overflow-y-auto px-8">
             {step === 1 && (
               <Step1Selection
                 onStepChange={() => onStepChange(step + 1)}
                 setWatchlistId={setWatchlistId}
-                
               />
             )}
             {step === 2 && (
-              <Step2Details tmdbId={tmdbId} setFormData={updateFormData} type={type}/>
+              <Step2Details
+                tmdbId={tmdbId}
+                setFormData={updateFormData}
+                type={type}
+              />
             )}
-            {step === 3 && <Step3Confirm title={title} errors={error ?? ''} onCloseModal={onCloseModal} />}
+            {step === 3 && (
+              <Step3Confirm
+                title={title}
+                errors={error ?? ''}
+                onCloseModal={onCloseModal}
+              />
+            )}
           </div>
 
           {!(step === 3) && renderControls()}

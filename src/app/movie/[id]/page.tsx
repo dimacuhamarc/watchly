@@ -21,7 +21,7 @@ function MovieItemPage({ params }: MovieItemPageProps) {
 
   return (
     <MainLayoutProvider>
-      <div className="mx-auto flex min-h-screen max-w-screen-lg flex-col items-center justify-start gap-4 px-14 py-44 md:px-0">
+      <div className="mx-auto flex min-h-screen h-full max-h-fit max-w-screen-lg flex-col items-center justify-start gap-4 px-14 pt-44 md:px-0">
         <MovieItemComponent id={id} />
       </div>
     </MainLayoutProvider>

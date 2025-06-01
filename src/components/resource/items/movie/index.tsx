@@ -32,6 +32,7 @@ import {
 import { findBestVideo } from '~/helpers/item-data'
 import AddToWatchlistModal from '../../watchlist/AddToWatchlistModal'
 import Image from 'next/image'
+import { GeneralCard } from '~/components/global/cards'
 
 interface MoviePageComponentProps {
   id: string
@@ -45,13 +46,18 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
   const [watchProviders, setWatchProviders] = useState<watchProviders | null>(
     null,
   )
-  const [belongsToCollection, setBelongsToCollection] = useState<collection | null>(null)
+  const [belongsToCollection, setBelongsToCollection] =
+    useState<collection | null>(null)
   const [isTrailerModalOpen, setIsTrailerModalOpen] = useState(false)
   const [isWatchProviderModalOpen, setIsWatchProviderModalOpen] =
     useState(false)
   const [isExpandPosterModalOpen, setIsExpandPosterModalOpen] = useState(false)
-  const router = useRouter()
 
+  const [activeTab, setActiveTab] = useState<
+    'cast' | 'collection' | 'keywords'
+  >('cast')
+  const router = useRouter()
+  console.log(belongsToCollection)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -112,27 +118,47 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
           setShowExpandPosterModal={setIsExpandPosterModalOpen}
         />
       )}
-
-      <div>
-        {belongsToCollection && (
-          <div className="flex flex-col items-center justify-center gap-4 p-4">
-            <h2 className="text-2xl font-bold">Part of</h2>
-            <div className="flex flex-col items-center gap-4">
-              <Image
-                src={`https://image.tmdb.org/t/p/w500/${belongsToCollection.poster_path}`}
-                alt={belongsToCollection.name}
-                width={300/2}
-                height={450/2}
-                className="rounded-lg"
-              />
-              <span className="text-lg font-semibold">{belongsToCollection.name}</span>
-            </div>
-          </div>
-        )}
+      <div
+        role="tablist"
+        className="tabs tabs-bordered w-full self-start md:w-auto"
+      >
+        <a
+          role="tab"
+          className={`tab ${activeTab === 'cast' && 'tab-active'}`}
+          onClick={() => setActiveTab('cast')}
+        >
+          Cast
+        </a>
+        <a
+          role="tab"
+          className={`tab ${activeTab === 'keywords' && 'tab-active'}`}
+          onClick={() => setActiveTab('keywords')}
+        >
+          Keywords
+        </a>
+        <a
+          role="tab"
+          className={`tab ${activeTab === 'collection' && 'tab-active'}`}
+          onClick={() => setActiveTab('collection')}
+        >
+          Collection
+        </a>
       </div>
+      {keywords && activeTab === 'keywords' && (
+        <KeywordsSection keywords={keywords} />
+      )}
+      {credits && activeTab === 'cast' && <CastSection credits={credits} />}
+      {belongsToCollection && activeTab === 'collection' && (
+        <div>
+          {belongsToCollection && (
+            <GeneralCard
+              src={belongsToCollection.poster_path ?? ''}
+              label={belongsToCollection.name}
+            />
+          )}
+        </div>
+      )}
 
-      {keywords && <KeywordsSection keywords={keywords} />}
-      {credits && <CastSection credits={credits} />}
       {videos?.results?.length && isTrailerModalOpen && (
         <TrailerModal
           videoKey={findBestVideo(videos)}
@@ -155,7 +181,7 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
           posterPath={movie?.poster_path ?? ''}
         />
       )}
-      <AddToWatchlistModal tmdbId={id} title={title ?? ''} type='MOVIE' />
+      <AddToWatchlistModal tmdbId={id} title={title ?? ''} type="MOVIE" />
     </>
   )
 }

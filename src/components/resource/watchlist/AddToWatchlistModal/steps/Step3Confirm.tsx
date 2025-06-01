@@ -25,6 +25,9 @@ function Step3Confirm({ title, errors, onCloseModal }: Step3ConfirmProps) {
         <Link className="btn btn-outline" href="/search" onClick={onCloseModal}>
           Continue browsing
         </Link>
+        <Link className="btn btn-outline" href="#" onClick={onCloseModal}>
+          Close
+        </Link>
       </div>
     </div>
   )

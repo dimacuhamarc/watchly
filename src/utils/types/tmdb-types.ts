@@ -284,3 +284,74 @@ export type {
   tvDetails,
   collection,
 }
+
+// similar to the item
+
+// {
+//   "page": 1,
+//   "results": [
+//     {
+//       "adult": false,
+//       "backdrop_path": "/1RAxtBxslR4OZCZC1vxIRUxjR7a.jpg",
+//       "genre_ids": [
+//         9648,
+//         12,
+//         35
+//       ],
+//       "id": 9637,
+//       "original_language": "en",
+//       "original_title": "Scooby-Doo",
+//       "overview": "When the Mystery Inc. gang is invited to Spooky Island, a popular amusement park, they soon discover that the attractions aren't the only things that are spooky. Strange things are happening, and it's up to Scooby, Shaggy, Fred, Daphne, and Velma to uncover the truth behind the mysterious happenings.",
+//       "popularity": 9.5366,
+//       "poster_path": "/mTAiBJGg8mqEfnYHHbi37ZoRSZm.jpg",
+//       "release_date": "2002-06-14",
+//       "title": "Scooby-Doo",
+//       "video": false,
+//       "vote_average": 6.089,
+//       "vote_count": 4524
+//     },
+//     {
+//       "adult": false,
+//       "backdrop_path": "/ohcDvA5DfIuOrID3ZqsGQNv3AsI.jpg",
+//       "genre_ids": [
+//         10751,
+//         16,
+//         35,
+//         12
+//       ],
+//       "id": 9642,
+//       "original_language": "fr",
+//       "original_title": "Astérix et les Vikings",
+//       "overview": "Asterix and Obelix have been given a tough mission: Transform the chief's lazy nephew Justforkix into a warrior. When the Vikings abduct him and bring him back to their homeland, Asterix and Obelix must travel to Norway to rescue Justforkix.",
+//       "popularity": 2.3229,
+//       "poster_path": "/dW9h1Ez6PRx8PnZUVT27MnG8Wu5.jpg",
+//       "release_date": "2006-04-12",
+//       "title": "Asterix and the Vikings",
+//       "video": false,
+//       "vote_average": 6.1,
+//       "vote_count": 717
+//     },
+//     {
+//       "adult": false,
+//       "backdrop_path": "/6Cld2xtKYfWnWK3w3gfJRRA82vd.jpg",
+//       "genre_ids": [
+//         14,
+//         35,
+//         18
+//       ],
+//       "id": 9647,
+//       "original_language": "en",
+//       "original_title": "Scrooged",
+//       "overview": "Frank Cross is a wildly successful television executive whose cold ambition and curmudgeonly nature has driven away the love of his life. But after firing a staff member on Christmas Eve, Frank is visited by a series of ghosts who give him a chance to re-evaluate his actions and right the wrongs of his past.",
+//       "popularity": 4.7407,
+//       "poster_path": "/uO0znfB2ZzTXA1IS7jkrjNbpkYK.jpg",
+//       "release_date": "1988-11-22",
+//       "title": "Scrooged",
+//       "video": false,
+//       "vote_average": 6.8,
+//       "vote_count": 1573
+//     },
+//   ],
+//   "total_pages": 11230,
+//   "total_results": 224593
+// }
