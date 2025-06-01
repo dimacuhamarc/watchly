@@ -18,7 +18,7 @@ export { WatchlistItemStatus, type WatchlistItemStatusType }
 const Media = {
   MOVIE: 'MOVIE',
   TV_SHOW: 'TV_SHOW',
-  DEFAULT: '',
+  DEFAULT: 'Unknown',
 } as const
 
 type MediaType = (typeof Media)[keyof typeof Media]

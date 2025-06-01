@@ -25,6 +25,7 @@ const STATUS_MAP = {
 const MEDIA_TYPE_MAP = {
   MOVIE: 'Film',
   TV_SHOW: 'TV',
+  DEFAULT: 'Unknown',
 }
 
 interface WatchItemProps {
@@ -52,7 +53,7 @@ const WatchItem = ({ tmdbItem, watchlistItem }: WatchItemProps) => {
             <h1 className="flex items-center gap-2 text-xl font-semibold">
               {('title' in tmdbItem ? tmdbItem.title : tmdbItem.name) ?? ''}
               <RoundedChip
-                label={MEDIA_TYPE_MAP[watchlistItem.mediaType] || 'Unknown'}
+                label={watchlistItem.mediaType in MEDIA_TYPE_MAP ? MEDIA_TYPE_MAP[watchlistItem.mediaType as keyof typeof MEDIA_TYPE_MAP] : MEDIA_TYPE_MAP.DEFAULT}
               />
             </h1>
             <span className="text-sm text-gray-300">

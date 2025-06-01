@@ -1,12 +1,6 @@
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import { type DefaultSession, type NextAuthConfig } from 'next-auth'
 import { db } from '~/server/db'
-import {
-  accounts,
-  sessions,
-  users,
-  verificationTokens,
-} from '~/server/db/schema'
 
 declare module 'next-auth' {
   interface Session extends DefaultSession {

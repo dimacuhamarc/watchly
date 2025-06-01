@@ -32,6 +32,7 @@ function SearchPageComponent() {
     if (search) {
       void performSearch(search, page)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Update URL when state changes
@@ -63,7 +64,6 @@ function SearchPageComponent() {
     setShouldStartDelay(true)
     setSearch(searchQuery)
 
-    // Update URL with new search parameters
     updateURLParams(searchQuery, searchType, page)
 
     if (
@@ -102,12 +102,7 @@ function SearchPageComponent() {
       router.push(`/tv/${id}`)
     }
   }
-
-  const handleSetSearchType = (type: 'movie' | 'tv') => {
-    setSearchType(type)
-    updateURLParams(search, type, page)
-  }
-
+  
   const renderContent = () => {
     if (isLoading && shouldStartDelay) {
       return Array.from({ length: searchLength }).map((_, index) => (

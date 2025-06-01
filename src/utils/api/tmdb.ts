@@ -278,7 +278,7 @@ export const getBatchMovieDetails = async (ids: string[]) => {
       }
     }),
   )
-  return movies.filter((movie) => movie !== null) as movieDetails[]
+  return movies.filter((movie): movie is movieDetails => movie !== null)
 }
 
 export const getBatchTvDetails = async (ids: string[]) => {
@@ -297,5 +297,5 @@ export const getBatchTvDetails = async (ids: string[]) => {
       }
     }),
   )
-  return shows.filter((show) => show !== null) as tvDetails[]
+  return shows.filter((show): show is tvDetails => show !== null)
 }

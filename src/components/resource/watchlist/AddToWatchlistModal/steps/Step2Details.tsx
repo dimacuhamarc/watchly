@@ -3,17 +3,19 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { WatchlistItemStatus, type WatchlistItemForm } from '~/utils/types/data'
+import type { MediaType } from '~/utils/types/data'
 
 interface Step2DetailsProps {
   tmdbId?: string
   setFormData: (data: Partial<WatchlistItemForm>) => void
+  type: MediaType
 }
 
-function Step2Details({ tmdbId, setFormData }: Step2DetailsProps) {
+function Step2Details({ tmdbId, setFormData, type }: Step2DetailsProps) {
   const { register } = useForm<WatchlistItemForm>({
     defaultValues: {
       itemId: tmdbId ?? '',
-      mediaType: '',
+      mediaType: type,
       status: 'WANT_TO_WATCH',
       notes: '',
     },
@@ -29,19 +31,6 @@ function Step2Details({ tmdbId, setFormData }: Step2DetailsProps) {
   return (
     <div>
       <form>
-        <div className="mb-4">
-          <label className="mb-1 block text-sm font-medium">Media Type</label>
-          <select
-            className="select select-bordered w-full"
-            {...register('mediaType')}
-            onChange={handleChange}
-          >
-            <option value="">Select media type</option>
-            <option value="MOVIE">Movie</option>
-            <option value="TV_SHOW">TV Show</option>
-          </select>
-        </div>
-
         <div className="mb-4">
           <label className="mb-1 block text-sm font-medium">Status</label>
           <select

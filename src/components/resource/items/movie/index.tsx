@@ -155,7 +155,7 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
           posterPath={movie?.poster_path ?? ''}
         />
       )}
-      <AddToWatchlistModal tmdbId={id} title={title ?? ''} />
+      <AddToWatchlistModal tmdbId={id} title={title ?? ''} type='MOVIE' />
     </>
   )
 }

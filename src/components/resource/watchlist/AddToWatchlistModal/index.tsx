@@ -1,10 +1,10 @@
 /** @format */
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
-import type { WatchlistRequest } from '~/utils/types/watchlist'
 import { Step1Selection, Step2Details, Step3Confirm } from './steps'
 import type {
+  MediaType,
   SanitizedWatchlistItemRequest,
   WatchlistItemForm,
 } from '~/utils/types/data'
@@ -12,14 +12,15 @@ import type {
 interface AddToWatchlistModalProps {
   tmdbId: string
   title: string
+  type: MediaType
 }
 
-function AddToWatchlistModal({ tmdbId, title }: AddToWatchlistModalProps) {
+function AddToWatchlistModal({ tmdbId, title, type }: AddToWatchlistModalProps) {
   const [step, setStep] = useState(1)
   const [watchlistId, setWatchlistId] = useState<string | null>(null)
   const [formData, setFormData] = useState<WatchlistItemForm>({
     itemId: tmdbId ?? '',
-    mediaType: '',
+    mediaType: type,
     status: 'WANT_TO_WATCH',
     notes: '',
   })
@@ -33,7 +34,7 @@ function AddToWatchlistModal({ tmdbId, title }: AddToWatchlistModalProps) {
   if (step === 2) {
     const success = await addToWatchlist()
     if (!success) {
-      setStep(3) // Move to confirmation step even if there was an error
+      setStep(3)
       return
     }
   }
@@ -48,7 +49,7 @@ function AddToWatchlistModal({ tmdbId, title }: AddToWatchlistModalProps) {
     setStep(1)
     setFormData({
       itemId: tmdbId ?? '',
-      mediaType: '',
+      mediaType: type,
       status: 'WANT_TO_WATCH',
       notes: '',
     })
@@ -142,10 +143,11 @@ const addToWatchlist = async () => {
               <Step1Selection
                 onStepChange={() => onStepChange(step + 1)}
                 setWatchlistId={setWatchlistId}
+                
               />
             )}
             {step === 2 && (
-              <Step2Details tmdbId={tmdbId} setFormData={updateFormData} />
+              <Step2Details tmdbId={tmdbId} setFormData={updateFormData} type={type}/>
             )}
             {step === 3 && <Step3Confirm title={title} errors={error ?? ''} onCloseModal={onCloseModal} />}
           </div>

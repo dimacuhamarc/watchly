@@ -9,7 +9,6 @@ import { getWatchlistById, getWatchlistItemsById } from '~/lib/watchlist'
 import { watchlistItems, watchlist } from '~/server/db/schema'
 import { and, eq } from 'drizzle-orm'
 import { db } from '~/server/db'
-import { SanitizedWatchlistItem, WatchlistItemRequest } from '~/utils/types/data'
 
 // localhost:3000/api/watchlist/[id]
 // http://localhost:3000/api/watchlist/29ea8795-9056-4bfe-b9be-4a589d3a8fb7

@@ -15,7 +15,6 @@ const ListView = ({
   watchlists,
   onWatchlistClick,
   activeWatchlistId,
-  setActiveWatchlistData,
 }: ListViewProps) => {
   if (watchlists.length === 0) {
     return (
@@ -27,8 +26,6 @@ const ListView = ({
 
   const handleOnClick = (watchlistId: string) => {
     onWatchlistClick(watchlistId)
-    const selectedWatchlist =
-      watchlists.find((w) => w.id === watchlistId) ?? null
   }
 
   return (
