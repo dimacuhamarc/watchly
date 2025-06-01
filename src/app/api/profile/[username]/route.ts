@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
-import { db } from '~/server/db'
-import { users, follow } from '~/server/db/schema'
-import { eq, count } from 'drizzle-orm'
+import { getCurrentUser } from '~/lib/common/cookies'
+import { getFollowersCount, getFollowingCount, getUserByUsername } from '~/lib/user'
 
 export async function GET(
   request: Request,
@@ -13,49 +12,40 @@ export async function GET(
     return NextResponse.json({ error: 'Username is required' }, { status: 400 })
   }
 
-  try {
-    const userData = await db
-      .select()
-      .from(users)
-      .where(eq(users.username, username))
-      .execute()
+  const requestUserData = await getCurrentUser()
 
-    if (userData.length === 0) {
+  try {
+    const userData = await getUserByUsername(username)
+
+    if (userData === null) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
-    const userId = userData[0]!.id
+    const userId = userData?.id
 
-    const followersCount = await db
-      .select({ count: count() })
-      .from(follow)
-      .where(eq(follow.followedUserId, userId))
-      .execute()
-      .then((result) => Number(result[0]?.count))
+    const followersCount = await getFollowersCount(userId ?? '')
 
-    const followingCount = await db
-      .select({ count: count() })
-      .from(follow)
-      .where(eq(follow.userId, userId))
-      .execute()
-      .then((result) => Number(result[0]?.count))
+    const followingCount = await getFollowingCount(userData?.id ?? '')
+
+    const isCurrentUser = userData?.id === requestUserData?.id
 
     return NextResponse.json({
       status: 'success',
       message: 'User profile data fetched successfully',
-      profileData: {
-        id: userData[0]!.id,
-        username: userData[0]!.username,
-        first_name: userData[0]!.first_name,
-        last_name: userData[0]!.last_name,
-        profile_picture: userData[0]!.profile_picture,
-        email: userData[0]!.email,
-        bio: userData[0]!.bio,
-        public_profile: userData[0]!.public_profile,
-        created_at: userData[0]!.created_at,
+      data: {
+        id: userData?.id,
+        username: userData?.username,
+        first_name: userData?.first_name,
+        last_name: userData?.last_name,
+        profile_picture: userData?.profile_picture,
+        email: userData?.email,
+        bio: userData?.bio,
+        public_profile: userData?.public_profile,
+        created_at: userData?.created_at,
         followers: followersCount,
         following: followingCount,
-        location: userData[0]!.location,
+        location: userData?.location,
+        isCurrentUser: isCurrentUser,
       },
     })
   } catch (error) {

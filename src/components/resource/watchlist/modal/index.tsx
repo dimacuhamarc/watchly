@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import type { WatchlistRequest } from '~/utils/types/watchlist'
 
 interface WatchlistModalProps {
-  onAddWatchlist: () => void
+  onAddWatchlist?: () => void
 }
 
 function WatchlistModal({ onAddWatchlist }: WatchlistModalProps) {
@@ -74,7 +74,7 @@ function WatchlistModal({ onAddWatchlist }: WatchlistModalProps) {
             'Failed to create watchlist',
         )
       } else {
-        onAddWatchlist()
+        onAddWatchlist?.()
         const modal = document.getElementById('my_modal_1') as HTMLDialogElement
         modal?.close()
         reset()

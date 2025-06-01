@@ -121,7 +121,7 @@ export default function Navbar({ options }: NavbarProps) {
                 {isAuthenticated && (
                   <Link
                     key="signout"
-                    className={`btn btn-primary`}
+                    className={`btn btn-outline btn-sm text-sm`}
                     href="/api/auth/logout"
                     prefetch={false}
                   >

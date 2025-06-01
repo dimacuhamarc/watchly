@@ -19,7 +19,6 @@ function CastSection({ credits }: { credits: credits }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <h1 className="text-2xl font-bold">Cast</h1>
       <div
         className="flex w-full flex-row gap-2 overflow-x-scroll scrollbar-hide"
         ref={scrollContainerRef}

@@ -1,9 +1,13 @@
-interface NavLink {
-  name: string
+import { LuUser, LuLayers, LuHouse, LuSearch, LuGlobe } from 'react-icons/lu'
+interface BareNavLink {
+  icon?: React.ReactNode
   href: string
-  showWhen: 'always' | 'authenticated' | 'unauthenticated'
+  name: string
 }
 
+interface NavLink extends BareNavLink {
+  showWhen: 'always' | 'authenticated' | 'unauthenticated'
+}
 interface OnboardingLink extends NavLink {
   withStyle?: boolean
   type: 'signup' | 'signin' | 'signout'
@@ -13,12 +17,12 @@ const navigationLinks: NavLink[] = [
   {
     name: 'Home',
     href: '/',
-    showWhen: 'authenticated',
+    showWhen: 'unauthenticated',
   },
   {
     name: 'About',
     href: '/about',
-    showWhen: 'always',
+    showWhen: 'unauthenticated',
   },
   {
     name: 'Discover',
@@ -39,6 +43,34 @@ const navigationLinks: NavLink[] = [
     name: 'My Profile',
     href: '/p/',
     showWhen: 'authenticated',
+  },
+]
+
+const AUTH_NAV_LINKS: BareNavLink[] = [
+  {
+    name: 'Home',
+    href: '/',
+    icon: <LuHouse />,
+  },
+  {
+    name: 'My Profile',
+    href: `/p/`,
+    icon: <LuUser />,
+  },
+  {
+    name: 'My Lists',
+    href: '/lists',
+    icon: <LuLayers />,
+  },
+  {
+    name: 'Search',
+    href: '/search',
+    icon: <LuSearch />,
+  },
+  {
+    name: 'Discover',
+    href: '/discover',
+    icon: <LuGlobe />,
   },
 ]
 
@@ -82,4 +114,9 @@ const onboardingLinks: OnboardingLink[] = [
   },
 ]
 
-export { navigationLinks, onboardingLinks, footerLinks }
+export {
+  navigationLinks,
+  AUTH_NAV_LINKS,
+  onboardingLinks,
+  footerLinks,
+}

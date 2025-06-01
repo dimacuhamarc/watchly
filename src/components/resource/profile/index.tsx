@@ -1,83 +1,51 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState, useMemo, useCallback } from 'react'
-import React from 'react'
-import { useAuthenticated } from '~/hooks/useAuth'
-import { useProfile } from '~/hooks/useProfile'
+import { useEffect, useState } from 'react'
 
-import { formatToYearMonth } from '~/helpers/date'
-import { InitialAvatar, PhotoAvatar } from '~/components/global/avatars'
 import { FaLink } from 'react-icons/fa'
+import { InitialAvatar, PhotoAvatar } from '~/components/global/avatars'
+import { formatToYearMonth } from '~/helpers/date'
 
+import ButtonWithTooltip from '~/components/global/buttons/buttonWithTooltip'
+import copyToClipboard from '~/helpers/clipboard'
 import UserAbout from './About'
 import UserMilestones from './Milestones'
-import copyToClipboard from '~/helpers/clipboard'
-import ButtonWithTooltip from '~/components/global/buttons/buttonWithTooltip'
-import { useAuthStore } from '~/store/authStore'
-import type { SanitizedProfileData } from '~/utils/types/data'
+
+import { LuArrowLeft, LuCalendar, LuLock, LuUsers } from 'react-icons/lu'
 import {
+  InformationScreen,
   LoadingScreen,
   UnauthorizedAccess,
-  InformationScreen,
 } from '~/components/utility/screens'
-import { LuArrowLeft, LuCalendar, LuLock, LuUsers } from 'react-icons/lu'
+import type { SanitizedProfileData } from '~/utils/types/data'
 interface ProfileProps {
-  params: string
+  profileData?: SanitizedProfileData | null
 }
 
-const Profile = function Profile({ params }: ProfileProps) {
+const Profile = function Profile({ profileData }: ProfileProps) {
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [data, setData] = useState<SanitizedProfileData | null>(null)
-  const { username, cookiesLoaded } = useAuthenticated()
-  const currentUsername = username ?? ''
-
-  const { isCurrentUser, profileLoaded, profileData } = useProfile(
-    params,
-    currentUsername,
-  )
-
-  const { ownProfileData, fetchProfileData } = useAuthStore()
-
-  const userId = useMemo(() => profileData?.id ?? '', [profileData?.id])
-  // const { watchlists, watchlistLoaded, fetchWatchlistData } =
-  //   useWatchlist(userId);
-
-  const fetchData = useCallback(() => {
-    if (cookiesLoaded) {
-      void fetchProfileData(currentUsername)
-    }
-  }, [cookiesLoaded, currentUsername, fetchProfileData])
-
-  useEffect(() => {
-    fetchData()
-  }, [fetchData])
 
   useEffect(() => {
     if (profileData === null) {
       setError(true)
     }
-    if (!cookiesLoaded && !profileLoaded) {
+    if (!profileData) {
       setLoading(true)
     }
-    if (isCurrentUser) {
-      setData(ownProfileData)
-      setLoading(false)
-    } else {
-      setError(false)
-      setData(profileData)
+    if (profileData && profileData !== null) {
       setLoading(false)
     }
-  }, [profileData, cookiesLoaded, profileLoaded, isCurrentUser, ownProfileData])
+  }, [profileData])
 
-  if (!profileLoaded || loading) {
+  if (loading && !error) {
     return LoadingScreen({
       loadingMessage: 'Loading Profile',
     })
   }
 
-  if (profileData?.public_profile === false && !isCurrentUser) {
+  if (profileData?.public_profile === false && !profileData?.isCurrentUser) {
     return UnauthorizedAccess({
       errorMessage: 'Unauthorized Access',
       errorDetails: 'This profile is private.',
@@ -89,13 +57,13 @@ const Profile = function Profile({ params }: ProfileProps) {
     })
   }
 
-  if (profileData === null && !error) {
+  if (profileData === null && error) {
     return UnauthorizedAccess({
       errorMessage: 'Profile Not Found',
       errorDetails: 'The requested profile could not be found.',
       redirectLink: {
-        href: `/p/${currentUsername}`,
-        label: 'Go to your profile',
+        href: `/`,
+        label: 'Go back to home',
       },
       leftIcon: true,
     })
@@ -103,13 +71,13 @@ const Profile = function Profile({ params }: ProfileProps) {
 
   if (
     (profileData?.first_name === null || profileData?.last_name === null) &&
-    isCurrentUser
+    profileData?.isCurrentUser
   ) {
     return InformationScreen({
       message: 'Setup Your Profile',
       details: 'You need to set up your basic details to access your profile.',
       redirectLink: {
-        href: `/p/${currentUsername}/edit`,
+        href: `/p/${profileData.username}/edit`,
         label: 'Proceed to setup',
       },
       rightIcon: true,
@@ -118,14 +86,14 @@ const Profile = function Profile({ params }: ProfileProps) {
 
   if (
     (profileData?.first_name === null || profileData?.last_name === null) &&
-    !isCurrentUser
+    !profileData?.isCurrentUser
   ) {
     return UnauthorizedAccess({
       errorMessage: 'Profile Not Found',
       errorDetails: 'This user has not set up their profile yet.',
       redirectLink: {
-        href: `/p/${currentUsername}`,
-        label: 'Go to your profile',
+        href: `/`,
+        label: 'Go back to home',
       },
       leftIcon: true,
     })
@@ -146,46 +114,45 @@ const Profile = function Profile({ params }: ProfileProps) {
         </Link>
       </div>
 
-      {/* Profile section - Full width with contained content */}
       <div className="relative w-full max-w-full px-6 md:px-12 lg:px-24">
         <div className="-mt-24 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div className="z-10 flex flex-col items-start gap-6 md:flex-row md:items-end">
-            {data?.profile_picture && (
+            {profileData?.profile_picture && (
               <div className="h-36 w-36 rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-slate-700 to-slate-800 shadow-xl">
                 <PhotoAvatar
-                  src={data?.profile_picture}
-                  alt={data?.username}
+                  src={profileData?.profile_picture}
+                  alt={profileData?.username}
                   isAutoSized={true}
                   className="h-full w-full rounded-xl object-cover"
                 />
               </div>
             )}
-            {!data?.profile_picture && (
+            {!profileData?.profile_picture && (
               <div className="h-36 w-36 rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-slate-700 to-slate-800 shadow-xl">
                 <InitialAvatar
-                  name={data?.first_name + ' ' + data?.last_name}
+                  name={profileData?.first_name + ' ' + profileData?.last_name}
                 />
               </div>
             )}
 
             <div className="mb-2">
               <h1 className="flex flex-row items-center gap-4 text-3xl font-bold tracking-tight">
-                {!data?.first_name || !data?.last_name
+                {!profileData?.first_name || !profileData?.last_name
                   ? 'No Name Provided'
-                  : data?.first_name + ' ' + data?.last_name}{' '}
+                  : profileData?.first_name + ' ' + profileData?.last_name}{' '}
                 {!profileData?.public_profile && (
                   <LuLock className="text-lg text-slate-200/50" />
                 )}
               </h1>
               <p className="-mt-2 font-medium text-slate-400">
-                @{data?.username ?? ''}
+                @{profileData?.username ?? ''}
               </p>
 
               <div className="mt-4 flex flex-wrap items-center gap-4">
                 <div className="flex items-center gap-2 rounded-full border border-slate-700/50 bg-slate-800/50 px-3 py-1.5 backdrop-blur-sm">
                   <LuUsers className="h-4 w-4 text-primary" />
                   <span className="text-sm font-medium">
-                    {data?.followers == 0 ? '1.4m' : data?.followers} Followers
+                    {profileData?.followers} Followers
                   </span>
                 </div>
                 <div className="flex items-center gap-2 rounded-full border border-slate-700/50 bg-slate-800/50 px-3 py-1.5 backdrop-blur-sm">
@@ -193,7 +160,7 @@ const Profile = function Profile({ params }: ProfileProps) {
                   <span className="text-sm font-medium">
                     Joined{' '}
                     {formatToYearMonth(
-                      data?.created_at?.toLocaleString() ?? '',
+                      profileData?.created_at?.toLocaleString() ?? '',
                     )}
                   </span>
                 </div>
@@ -211,9 +178,9 @@ const Profile = function Profile({ params }: ProfileProps) {
             >
               <FaLink />
             </ButtonWithTooltip>
-            {isCurrentUser ? (
+            {profileData?.isCurrentUser ? (
               <Link
-                href={`/p/` + username + `/edit`}
+                href={`/p/` + profileData.username + `/edit`}
                 className="btn btn-primary btn-sm rounded-full"
               >
                 Edit Profile
@@ -230,7 +197,12 @@ const Profile = function Profile({ params }: ProfileProps) {
       {/* Profile details section */}
       <div className="mt-6 grid w-full max-w-full grid-cols-1 gap-16 px-6 md:px-12 lg:grid-cols-3 lg:px-24">
         <div className="lg:col-span-2">
-          <UserAbout isCurrentUser={isCurrentUser} userData={data} />
+          {profileData && (
+            <UserAbout
+              isCurrentUser={profileData.isCurrentUser}
+              userData={profileData}
+            />
+          )}
         </div>
         <div className="space-y-6">
           <UserMilestones />

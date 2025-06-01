@@ -1,3 +1,5 @@
+/** @format */
+
 'use client'
 
 import React, { useEffect, useState } from 'react'
@@ -7,6 +9,7 @@ import {
   type videos,
   type keywords,
   type watchProviders,
+  type collection,
 } from '~/utils/types/tmdb-types'
 import {
   getMovieDetails,
@@ -27,6 +30,9 @@ import {
   PosterModal,
 } from '~/components/global/modals'
 import { findBestVideo } from '~/helpers/item-data'
+import AddToWatchlistModal from '../../watchlist/AddToWatchlistModal'
+import Image from 'next/image'
+import { GeneralCard } from '~/components/global/cards'
 
 interface MoviePageComponentProps {
   id: string
@@ -40,12 +46,18 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
   const [watchProviders, setWatchProviders] = useState<watchProviders | null>(
     null,
   )
+  const [belongsToCollection, setBelongsToCollection] =
+    useState<collection | null>(null)
   const [isTrailerModalOpen, setIsTrailerModalOpen] = useState(false)
   const [isWatchProviderModalOpen, setIsWatchProviderModalOpen] =
     useState(false)
   const [isExpandPosterModalOpen, setIsExpandPosterModalOpen] = useState(false)
-  const router = useRouter()
 
+  const [activeTab, setActiveTab] = useState<
+    'cast' | 'collection' | 'keywords'
+  >('cast')
+  const router = useRouter()
+  console.log(belongsToCollection)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -73,6 +85,7 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
         setVideos(videosData)
         setKeywords(keywordsData)
         setWatchProviders(watchProvidersData)
+        setBelongsToCollection(movieData.belongs_to_collection ?? null)
       } catch (error) {
         console.error('Error fetching movie data:', error)
         router.push('/404')
@@ -82,8 +95,19 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
     void fetchData()
   }, [id, router])
 
+  const { title } = movie ?? {}
+
+  console.log(belongsToCollection)
   return (
     <>
+      <Image
+        src={`https://image.tmdb.org/t/p/original/${movie?.backdrop_path ?? ''}`}
+        alt={movie?.title ?? 'Movie Backdrop'}
+        className="fixed inset-0 -z-10 h-screen w-screen object-cover opacity-40"
+        width={1920}
+        height={1080}
+        priority
+      />
       {movie && credits && videos && (
         <MovieOverview
           movie={movie}
@@ -94,8 +118,47 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
           setShowExpandPosterModal={setIsExpandPosterModalOpen}
         />
       )}
-      {keywords && <KeywordsSection keywords={keywords} />}
-      {credits && <CastSection credits={credits} />}
+      <div
+        role="tablist"
+        className="tabs tabs-bordered w-full self-start md:w-auto"
+      >
+        <a
+          role="tab"
+          className={`tab ${activeTab === 'cast' && 'tab-active'}`}
+          onClick={() => setActiveTab('cast')}
+        >
+          Cast
+        </a>
+        <a
+          role="tab"
+          className={`tab ${activeTab === 'keywords' && 'tab-active'}`}
+          onClick={() => setActiveTab('keywords')}
+        >
+          Keywords
+        </a>
+        <a
+          role="tab"
+          className={`tab ${activeTab === 'collection' && 'tab-active'}`}
+          onClick={() => setActiveTab('collection')}
+        >
+          Collection
+        </a>
+      </div>
+      {keywords && activeTab === 'keywords' && (
+        <KeywordsSection keywords={keywords} />
+      )}
+      {credits && activeTab === 'cast' && <CastSection credits={credits} />}
+      {belongsToCollection && activeTab === 'collection' && (
+        <div>
+          {belongsToCollection && (
+            <GeneralCard
+              src={belongsToCollection.poster_path ?? ''}
+              label={belongsToCollection.name}
+            />
+          )}
+        </div>
+      )}
+
       {videos?.results?.length && isTrailerModalOpen && (
         <TrailerModal
           videoKey={findBestVideo(videos)}
@@ -118,6 +181,7 @@ function MoviePageComponent({ id }: MoviePageComponentProps) {
           posterPath={movie?.poster_path ?? ''}
         />
       )}
+      <AddToWatchlistModal tmdbId={id} title={title ?? ''} type="MOVIE" />
     </>
   )
 }

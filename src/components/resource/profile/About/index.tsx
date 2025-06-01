@@ -5,13 +5,11 @@ import AboutContent from './AboutContent'
 import FavoritesContent from './FavoritesContent'
 import ActivitiesContent from './ActivitiesContent'
 import WatchlistsContent from './WatchlistsContent'
+import type { SanitizedProfileData } from '~/utils/types/data'
 
 interface UserAboutProps {
-  userData: {
-    id: string
-    bio?: string
-  } | null
-  isCurrentUser?: boolean
+  userData: SanitizedProfileData
+  isCurrentUser?: boolean | null
 }
 
 const UserAbout = function UserAbout({

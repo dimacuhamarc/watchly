@@ -1,3 +1,5 @@
+/** @format */
+
 const WatchlistItemStatus = {
   WANT_TO_WATCH: 'WANT_TO_WATCH',
   WATCHING: 'WATCHING',
@@ -16,6 +18,7 @@ export { WatchlistItemStatus, type WatchlistItemStatusType }
 const Media = {
   MOVIE: 'MOVIE',
   TV_SHOW: 'TV_SHOW',
+  DEFAULT: 'Unknown',
 } as const
 
 type MediaType = (typeof Media)[keyof typeof Media]
@@ -26,7 +29,7 @@ interface SanitizedUserData {
   id: string
   email: string
   username: string
-  bio?: string
+  bio: string
   first_name?: string
   last_name?: string
   created_at?: Date | string
@@ -38,8 +41,69 @@ interface SanitizedUserData {
 interface SanitizedProfileData extends SanitizedUserData {
   followers?: number
   following?: number
+  isCurrentUser?: boolean | null
 }
 
+interface SanitizedWatchlistCollection {
+  id: string
+  title: string
+  description?: string
+  public_watchlist: boolean
+  cover_image?: string
+  createdAt: Date | string
+  updatedAt: Date | string
+  items: SanitizedWatchlistItem[]
+  userId: string
+}
+
+type WatchlistItemForm = {
+  itemId: string
+  mediaType: MediaType
+  status: WatchlistItemStatusType
+  notes?: string
+}
+
+interface SanitizedWatchlistItem {
+  id: string
+  watchlistId: string
+  itemId: string
+  mediaType: MediaType
+  status: WatchlistItemStatusType
+  notes?: string
+  createdAt?: Date
+  updatedAt?: Date
+}
+
+interface SanitizedWatchlistItemRequest {
+  data: SanitizedWatchlistItem
+  message: string
+  status: string
+}
+
+interface WatchlistItemRequest {
+  itemId: string
+  mediaType: string
+  status: string
+  notes?: string
+}
+
+interface WatchlistMetadata {
+  count: number
+  owner: string
+}
+
+interface WatchlistResponse {
+  watchlistData: SanitizedWatchlistCollection | null
+  watchlistItems: SanitizedWatchlistItem[] | null
+  metadata: WatchlistMetadata
+}
+
+interface ApiResponse<T> {
+  status: 'success' | 'error'
+  message: string
+  data?: T
+  error?: string
+}
 interface CookieUserData {
   id: string
   email: string
@@ -65,4 +129,12 @@ export type {
   UserFollowData,
   SanitizedProfileData,
   ProfileState,
+  ApiResponse,
+  SanitizedWatchlistCollection,
+  SanitizedWatchlistItem,
+  WatchlistMetadata,
+  WatchlistResponse,
+  WatchlistItemForm,
+  SanitizedWatchlistItemRequest,
+  WatchlistItemRequest
 }

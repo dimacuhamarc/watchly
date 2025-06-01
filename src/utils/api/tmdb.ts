@@ -243,3 +243,59 @@ export const getTvDetails = async (id: string) => {
     return null
   }
 }
+
+
+
+// const tmdbIds = [1242, 13335, 550];
+// const apiKey = 'YOUR_TMDB_API_KEY';
+
+// async function fetchMovieDetails() {
+//   const results = await Promise.all(
+//     tmdbIds.map(id =>
+//       fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}&language=en-US`)
+//         .then(res => res.json())
+//     )
+//   );
+
+//   console.log(results); // Array of movie objects
+// }
+
+// fetchMovieDetails();
+
+export const getBatchMovieDetails = async (ids: string[]) => {
+  if (!ids || ids.length === 0) return []
+
+  const movies = await Promise.all(
+    ids.map(async (id) => {
+      try {
+        const response = await tmdbApiLong.get(`/movie/${id}`, {
+          params: { language: 'en-US' },
+        })
+        return response.data as movieDetails
+      } catch (error) {
+        console.error(`Error fetching details for movie ID ${id}:`, error)
+        return null
+      }
+    }),
+  )
+  return movies.filter((movie): movie is movieDetails => movie !== null)
+}
+
+export const getBatchTvDetails = async (ids: string[]) => {
+  if (!ids || ids.length === 0) return []
+
+  const shows = await Promise.all(
+    ids.map(async (id) => {
+      try {
+        const response = await tmdbApiLong.get(`/tv/${id}`, {
+          params: { language: 'en-US' },
+        })
+        return response.data as tvDetails
+      } catch (error) {
+        console.error(`Error fetching details for TV ID ${id}:`, error)
+        return null
+      }
+    }),
+  )
+  return shows.filter((show): show is tvDetails => show !== null)
+}
